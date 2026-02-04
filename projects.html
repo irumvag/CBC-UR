@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore projects built by Claude Builder Club members at University of Rwanda. See real AI applications solving local challenges.">
+  <title>Projects - Claude Builder Club | University of Rwanda</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    .project-filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .filter-btn {
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: var(--radius-full);
+      font-weight: 500;
+      background: var(--gray-100);
+      color: var(--gray-600);
+      transition: all var(--transition-fast);
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .project-card-large {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    }
+
+    .project-card-large:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .project-card-large .project-image {
+      height: 220px;
+    }
+
+    .project-card-large .project-content {
+      padding: var(--space-xl);
+    }
+
+    .project-status {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: var(--space-sm);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .status-active .status-dot { background: var(--success); }
+    .status-completed .status-dot { background: var(--primary); }
+    .status-development .status-dot { background: var(--warning); }
+
+    .project-links {
+      display: flex;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+      padding-top: var(--space-lg);
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .project-links a {
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <nav class="nav">
+        <a href="index.html" class="logo">
+          <span class="logo-icon">CB</span>
+          <span>Claude Builder Club</span>
+        </a>
+
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About</a></li>
+          <li><a href="events.html" class="nav-link">Events</a></li>
+          <li><a href="projects.html" class="nav-link active">Projects</a></li>
+          <li><a href="resources.html" class="nav-link">Resources</a></li>
+          <li><a href="join.html" class="nav-cta">Join Us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <nav class="breadcrumbs">
+          <a href="index.html">Home</a>
+          <span>/</span>
+          <span>Projects</span>
+        </nav>
+        <h1>Project Showcase</h1>
+        <p>Real solutions built by our members using Claude AI</p>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="section">
+      <div class="container">
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-number">25+</div>
+            <div class="stat-label">Projects Built</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">8</div>
+            <div class="stat-label">Active Projects</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">60+</div>
+            <div class="stat-label">Students Involved</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">5</div>
+            <div class="stat-label">Categories</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Project -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge badge-primary">Featured Project</span>
+          <h2 style="margin-top: var(--space-md);">Project of the Month</h2>
+        </div>
+
+        <div class="card" style="max-width: 900px; margin: 0 auto;">
+          <div class="grid grid-2" style="align-items: center; gap: var(--space-2xl);">
+            <div class="project-image" style="height: 250px; border-radius: var(--radius-md);">&#x1F33E;</div>
+            <div>
+              <span class="project-status status-active">
+                <span class="status-dot"></span> Active Development
+              </span>
+              <h3>AgriAssist Rwanda</h3>
+              <p>An intelligent agricultural advisory chatbot that provides personalized farming recommendations based on Rwanda's climate, soil conditions, and crop cycles.</p>
+              <p><strong>Impact:</strong> Already being tested with 50+ farmers in Eastern Province, helping optimize planting schedules and pest management.</p>
+              <div class="project-tags">
+                <span class="project-tag">Agriculture</span>
+                <span class="project-tag">Chatbot</span>
+                <span class="project-tag">Local Impact</span>
+              </div>
+              <div class="project-author" style="border: none; padding-top: var(--space-md);">
+                <span class="author-avatar">AM</span>
+                <div>
+                  <strong>Alice M. & Team</strong>
+                  <span class="text-muted" style="display: block; font-size: 0.8rem;">Computer Science, Year 3</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Gallery -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>All Projects</h2>
+          <p>Browse projects by category or see them all</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="project-filters">
+          <button class="filter-btn active" data-filter="all">All Projects</button>
+          <button class="filter-btn" data-filter="education">Education</button>
+          <button class="filter-btn" data-filter="agriculture">Agriculture</button>
+          <button class="filter-btn" data-filter="healthcare">Healthcare</button>
+          <button class="filter-btn" data-filter="business">Business</button>
+          <button class="filter-btn" data-filter="other">Other</button>
+        </div>
+
+        <div class="grid grid-3">
+          <!-- Project 1 -->
+          <article class="project-card-large" data-category="education">
+            <div class="project-image">&#x1F4DA;</div>
+            <div class="project-content">
+              <span class="project-status status-active">
+                <span class="status-dot"></span> Active
+              </span>
+              <h3>Kinyarwanda Study Buddy</h3>
+              <p>An AI-powered tutor that helps students learn Kinyarwanda through interactive conversation practice and grammar exercises.</p>
+              <div class="project-tags">
+                <span class="project-tag">Education</span>
+                <span class="project-tag">Language</span>
+              </div>
+              <div class="project-author">
+                <span class="author-avatar">JM</span>
+                <span>Jean Marie N.</span>
+              </div>
+              <div class="project-links">
+                <a href="#">View Demo</a>
+                <a href="#">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="project-card-large" data-category="agriculture">
+            <div class="project-image">&#x1F33E;</div>
+            <div class="project-content">
+              <span class="project-status status-active">
+                <span class="status-dot"></span> Active
+              </span>
+              <h3>AgriAssist Rwanda</h3>
+              <p>Chatbot providing farming advice tailored to Rwanda's climate, seasons, and common crops grown in different regions.</p>
+              <div class="project-tags">
+                <span class="project-tag">Agriculture</span>
+                <span class="project-tag">Chatbot</span>
+              </div>
+              <div class="project-author">
+                <span class="author-avatar">AM</span>
+                <span>Alice M.</span>
+              </div>
+              <div class="project-links">
+                <a href="#">View Demo</a>
+                <a href="#">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="project-card-large" data-category="healthcare">
+            <div class="project-image">&#x1F3E5;</div>
+            <div class="project-content">
+              <span class="project-status status-completed">
+                <span class="status-dot"></span> Completed
+              </span>
+              <h3>Health Info Assistant</h3>
+              <p>Accessible health information chatbot providing basic medical guidance in both English and Kinyarwanda.</p>
+              <div class="project-tags">
+                <span class="project-tag">Healthcare</span>
+                <span class="project-tag">Accessibility</span>
+              </div>
+              <div class="project-author">
+                <span class="author-avatar">PU</span>
+                <span>Patrick U.</span>
+              </div>
+              <div class="project-links">
+                <a href="#">View Demo</a>
+                <a href="#">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 4 -->
+          <article class="project-card-large" data-category="education">
+            <div class="project-image">&#x1F4DD;</div>
+            <div class="project-content">
+              <span class="project-status status-completed">
+                <span class="status-dot"></span> Completed
+              </span>
+              <h3>Essay Writing Coach</h3>
+              <p>AI assistant that helps students improve their academic writing with feedback on structure, clarity, and argumentation.</p>
+              <div class="project-tags">
+                <span class="project-tag">Education</span>
+                <span class="project-tag">Writing</span>
+              </div>
+              <div class="project-author">
+                <span class="author-avatar">EN</span>
+                <span>Emile N.</span>
+              </div>
+              <div class="project-links">
+                <a href="#">View Demo</a>
+                <a href="#">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 5 -->
+          <article class="project-card-large" data-category="business">
+            <div class="project-image">&#x1F4BC;</div>
+            <div class="project-content">
+              <span class="project-status status-development">
+                <span class="status-dot"></span> In Development
+              </span>
+              <h3>SME Business Advisor</h3>
+              <p>Business planning assistant for small and medium enterprises, offering guidance on registration, finance, and marketing.</p>
+              <div class="project-tags">
+                <span class="project-tag">Business</span>
+                <span class="project-tag">Entrepreneurship</span>
+              </div>
+              <div class="project-author">
+                <span class="author-avatar">GK</span>
+                <span>Grace K.</span>
+              </div>
+              <div class="project-links">
+                <a href="#">Coming Soon</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 6 -->
+          <article class="project-card-large" data-category="education">
+            <div class="project-image">&#x1F52C;</div>
+            <div class="project-content">
+              <span class="project-status status-completed">
+                <span class="status-dot"></span> Completed
+              </span>
+              <h3>Science Lab Simulator</h3>
+              <p>Virtual lab assistant that explains scientific concepts and simulates experiments for secondary school students.</p>
+              <div class="project-tags">
+                <span class="project-tag">Education</span>
+                <span class="project-tag">Science</span>
+              </div>
+              <div class="project-author">
+                <span class="author-avatar">DM</span>
+                <span>David M.</span>
+              </div>
+              <div class="project-links">
+                <a href="#">View Demo</a>
+                <a href="#">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 7 -->
+          <article class="project-card-large" data-category="other">
+            <div class="project-image">&#x1F4F0;</div>
+            <div class="project-content">
+              <span class="project-status status-active">
+                <span class="status-dot"></span> Active
+              </span>
+              <h3>News Summarizer</h3>
+              <p>Tool that summarizes Rwandan news articles and provides key insights in both English and Kinyarwanda.</p>
+              <div class="project-tags">
+                <span class="project-tag">Media</span>
+                <span class="project-tag">NLP</span>
+              </div>
+              <div class="project-author">
+                <span class="author-avatar">SK</span>
+                <span>Solange K.</span>
+              </div>
+              <div class="project-links">
+                <a href="#">View Demo</a>
+                <a href="#">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 8 -->
+          <article class="project-card-large" data-category="healthcare">
+            <div class="project-image">&#x1F9E0;</div>
+            <div class="project-content">
+              <span class="project-status status-development">
+                <span class="status-dot"></span> In Development
+              </span>
+              <h3>Mental Health Companion</h3>
+              <p>Supportive chatbot offering mental health resources and coping strategies, with referrals to professional services.</p>
+              <div class="project-tags">
+                <span class="project-tag">Healthcare</span>
+                <span class="project-tag">Wellness</span>
+              </div>
+              <div class="project-author">
+                <span class="author-avatar">MJ</span>
+                <span>Marie Josee R.</span>
+              </div>
+              <div class="project-links">
+                <a href="#">Coming Soon</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 9 -->
+          <article class="project-card-large" data-category="business">
+            <div class="project-image">&#x1F4B0;</div>
+            <div class="project-content">
+              <span class="project-status status-completed">
+                <span class="status-dot"></span> Completed
+              </span>
+              <h3>Budget Buddy</h3>
+              <p>Personal finance assistant helping students manage their budgets and develop good financial habits.</p>
+              <div class="project-tags">
+                <span class="project-tag">Finance</span>
+                <span class="project-tag">Personal</span>
+              </div>
+              <div class="project-author">
+                <span class="author-avatar">JK</span>
+                <span>Joseph K.</span>
+              </div>
+              <div class="project-links">
+                <a href="#">View Demo</a>
+                <a href="#">GitHub</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Start Your Project -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Start Your Own Project</h2>
+          <p>We support members at every stage of their project journey</p>
+        </div>
+
+        <div class="grid grid-4">
+          <div class="card text-center">
+            <div class="card-icon" style="margin: 0 auto var(--space-md);">&#x1F4A1;</div>
+            <h4>1. Ideate</h4>
+            <p>Brainstorm ideas with peers. What problem do you want to solve?</p>
+          </div>
+          <div class="card text-center">
+            <div class="card-icon" style="margin: 0 auto var(--space-md);">&#x1F527;</div>
+            <h4>2. Build</h4>
+            <p>Get hands-on support in workshops and office hours.</p>
+          </div>
+          <div class="card text-center">
+            <div class="card-icon" style="margin: 0 auto var(--space-md);">&#x1F50D;</div>
+            <h4>3. Test</h4>
+            <p>Get feedback from the community and refine your solution.</p>
+          </div>
+          <div class="card text-center">
+            <div class="card-icon" style="margin: 0 auto var(--space-md);">&#x1F3A4;</div>
+            <h4>4. Showcase</h4>
+            <p>Present at Demo Day and inspire others!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Submit Project CTA -->
+    <section class="cta-section">
+      <div class="container">
+        <h2>Have a Project to Share?</h2>
+        <p>Built something with Claude? We'd love to feature it! Submit your project for our showcase.</p>
+        <a href="join.html" class="btn btn-primary">Submit Your Project</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span class="logo-icon">CB</span>
+            <span>Claude Builder Club</span>
+          </div>
+          <p>Empowering University of Rwanda students to build the future with AI. Learn, create, and innovate together.</p>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Twitter">&#x1D54F;</a>
+            <a href="#" class="social-link" aria-label="LinkedIn">in</a>
+            <a href="#" class="social-link" aria-label="GitHub">&#x2316;</a>
+            <a href="#" class="social-link" aria-label="Instagram">&#x25A3;</a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="resources.html">Resources</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Resources</h4>
+          <ul class="footer-links">
+            <li><a href="resources.html#getting-started">Getting Started</a></li>
+            <li><a href="resources.html#tutorials">Tutorials</a></li>
+            <li><a href="resources.html#documentation">Documentation</a></li>
+            <li><a href="resources.html#community">Community</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Contact</h4>
+          <ul class="footer-links">
+            <li>University of Rwanda</li>
+            <li>Kigali, Rwanda</li>
+            <li><a href="mailto:claude.builders@ur.ac.rw">claude.builders@ur.ac.rw</a></li>
+            <li><a href="https://wa.me/250780000000">WhatsApp</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Claude Builder Club - University of Rwanda. All rights reserved.</p>
+        <p>Built with curiosity and Claude AI</p>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/250780000000" class="whatsapp-float" aria-label="Contact us on WhatsApp" target="_blank" rel="noopener">
+    &#x260E;
+  </a>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
