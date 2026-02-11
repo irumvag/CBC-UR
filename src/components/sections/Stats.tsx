@@ -3,9 +3,9 @@ import { cn } from '@/lib/utils'
 
 const stats = [
   { value: '100+', label: 'Active Members' },
-  { value: '25+', label: 'Projects Built' },
-  { value: '12', label: 'Workshops' },
-  { value: '5', label: 'Hackathons' },
+  { value: '5+', label: 'Projects Built' },
+  { value: '3', label: 'Workshops' },
+  { value: '0', label: 'Hackathons' },
 ]
 
 export function Stats() {
