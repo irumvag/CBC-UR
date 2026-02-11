@@ -1,32 +1,153 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CheckCircle, Users, Wrench, Trophy, Briefcase, Globe, Mail, Phone, MapPin } from 'lucide-react'
-import { SectionHeader } from '@/components/ui/SectionHeader'
-import { Card, CardTitle, CardDescription } from '@/components/ui/Card'
+import { CheckCircle, Cpu, Calendar, Users, Award, Rocket, GraduationCap } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { cn } from '@/lib/utils'
 
 const benefits = [
-  { icon: Users, title: 'Free Learning', desc: 'Access all workshops, tutorials, and resources at no cost.' },
-  { icon: Wrench, title: 'Hands-On Projects', desc: 'Build real applications with guidance from peers.' },
-  { icon: Trophy, title: 'Recognition', desc: 'Showcase projects at Demo Days and compete in hackathons.' },
-  { icon: Briefcase, title: 'Career Opportunities', desc: 'Connect with tech companies and access internships.' },
-  { icon: Globe, title: 'Global Network', desc: 'Connect with other Claude Builder Clubs worldwide.' },
-  { icon: CheckCircle, title: 'Community Support', desc: 'Join 150+ members ready to help you learn and grow.' },
+  { icon: Cpu, text: 'Access to Claude API credits' },
+  { icon: Calendar, text: 'Weekly workshops and build sessions' },
+  { icon: Users, text: 'Mentorship from experienced builders' },
+  { icon: Rocket, text: 'Networking with Anthropic community' },
+  { icon: Award, text: 'Project showcase opportunities' },
+  { icon: GraduationCap, text: 'Certificate of participation' },
 ]
+
+const yearOptions = [
+  { value: '', label: 'Select year' },
+  { value: '1', label: 'Year 1' },
+  { value: '2', label: 'Year 2' },
+  { value: '3', label: 'Year 3' },
+  { value: '4', label: 'Year 4' },
+  { value: '5+', label: 'Year 5+' },
+  { value: 'postgrad', label: 'Postgraduate' },
+]
+
+const departmentOptions = [
+  { value: '', label: 'Select department' },
+  { value: 'cs', label: 'Computer Science' },
+  { value: 'it', label: 'Information Technology' },
+  { value: 'se', label: 'Software Engineering' },
+  { value: 'ee', label: 'Electrical Engineering' },
+  { value: 'ce', label: 'Computer Engineering' },
+  { value: 'business', label: 'Business Administration' },
+  { value: 'economics', label: 'Economics' },
+  { value: 'medicine', label: 'Medicine & Health Sciences' },
+  { value: 'agriculture', label: 'Agriculture' },
+  { value: 'arts', label: 'Arts & Social Sciences' },
+  { value: 'education', label: 'Education' },
+  { value: 'other', label: 'Other' },
+]
+
+interface FormData {
+  fullName: string
+  email: string
+  studentId: string
+  yearOfStudy: string
+  department: string
+  whyJoin: string
+  aiExperience: string
+}
+
+interface FormErrors {
+  fullName?: string
+  email?: string
+  studentId?: string
+  yearOfStudy?: string
+  department?: string
+}
 
 export default function Join() {
   const [submitted, setSubmitted] = useState(false)
+  const [formData, setFormData] = useState<FormData>({
+    fullName: '',
+    email: '',
+    studentId: '',
+    yearOfStudy: '',
+    department: '',
+    whyJoin: '',
+    aiExperience: '',
+  })
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [touched, setTouched] = useState<Record<string, boolean>>({})
+  const { ref: benefitsRef, isVisible: benefitsVisible } = useScrollReveal()
+
+  const validateField = (name: string, value: string): string | undefined => {
+    switch (name) {
+      case 'fullName':
+        if (!value.trim()) return 'Full name is required'
+        if (value.trim().length < 2) return 'Name must be at least 2 characters'
+        break
+      case 'email':
+        if (!value.trim()) return 'Email is required'
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Please enter a valid email'
+        break
+      case 'studentId':
+        if (!value.trim()) return 'Student ID is required'
+        break
+      case 'yearOfStudy':
+        if (!value) return 'Please select your year of study'
+        break
+      case 'department':
+        if (!value) return 'Please select your department'
+        break
+    }
+    return undefined
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+
+    if (touched[name]) {
+      const error = validateField(name, value)
+      setErrors((prev) => ({ ...prev, [name]: error }))
+    }
+  }
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setTouched((prev) => ({ ...prev, [name]: true }))
+    const error = validateField(name, value)
+    setErrors((prev) => ({ ...prev, [name]: error }))
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Validate all fields
+    const newErrors: FormErrors = {}
+    const requiredFields: (keyof FormErrors)[] = ['fullName', 'email', 'studentId', 'yearOfStudy', 'department']
+
+    requiredFields.forEach((field) => {
+      const error = validateField(field, formData[field])
+      if (error) newErrors[field] = error
+    })
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors)
+      setTouched(requiredFields.reduce((acc, field) => ({ ...acc, [field]: true }), {}))
+      return
+    }
+
     setSubmitted(true)
   }
+
+  const getInputClassName = (fieldName: keyof FormErrors) => cn(
+    'w-full px-4 py-3 rounded-xl border-2 bg-white transition-all',
+    'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20',
+    touched[fieldName] && errors[fieldName]
+      ? 'border-red-400 focus:border-red-400'
+      : touched[fieldName] && !errors[fieldName] && formData[fieldName]
+      ? 'border-sage focus:border-sage'
+      : 'border-pampas-warm focus:border-claude-terracotta'
+  )
 
   return (
     <>
       {/* Page Header */}
-      <section className="bg-pampas py-16 md:py-24">
+      <section className="bg-pampas-warm py-16 md:py-20">
         <div className="container-main">
           <nav className="flex items-center gap-2 text-sm text-stone mb-6">
             <Link to="/" className="hover:text-claude-terracotta transition-colors">Home</Link>
@@ -34,246 +155,249 @@ export default function Join() {
             <span className="text-ink">Join</span>
           </nav>
           <div className="max-w-3xl">
-            <h1 className="font-serif font-semibold text-ink mb-6">
+            <p className="text-claude-terracotta font-sans font-bold text-xs uppercase tracking-widest mb-3">
+              Become a Member
+            </p>
+            <h1 className="font-serif font-semibold text-ink text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
               Join Claude Builder Club
             </h1>
-            <p className="text-stone text-xl leading-relaxed">
-              Start your AI journey with a community that supports you
+            <p className="text-stone text-lg md:text-xl leading-relaxed">
+              Start your AI journey with a community that supports you. Learn to build with Claude,
+              collaborate on real projects, and shape the future of AI in Rwanda.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Benefits */}
-      <section className="section-padding bg-surface">
+      {/* Two Column: Benefits + Form */}
+      <section className="py-16 md:py-20 bg-surface">
         <div className="container-main">
-          <SectionHeader
-            eyebrow="Why Join"
-            title="Member Benefits"
-            subtitle="Everything you need to learn, build, and grow"
-          />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {benefits.map((benefit) => (
-              <Card key={benefit.title}>
-                <div className="w-12 h-12 rounded-xl bg-pampas flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6 text-claude-terracotta" />
-                </div>
-                <CardTitle className="text-lg">{benefit.title}</CardTitle>
-                <CardDescription className="mt-2">{benefit.desc}</CardDescription>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Registration Form */}
-      <section className="section-padding bg-pampas">
-        <div className="container-main">
-          <div className="max-w-2xl mx-auto">
-            <SectionHeader
-              eyebrow="Register"
-              title="Join the Club"
-              subtitle="Fill out the form below and we'll add you to the community"
-            />
-
-            <Card hover={false} className="bg-white">
-              {submitted ? (
-                <div className="text-center py-8">
-                  <div className="w-16 h-16 rounded-full bg-sage/10 flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="w-8 h-8 text-sage" />
-                  </div>
-                  <h3 className="font-serif text-2xl font-semibold text-ink mb-2">
-                    Registration Successful!
-                  </h3>
-                  <p className="text-stone">
-                    Thank you for joining Claude Builder Club! You'll receive a WhatsApp
-                    message within 24 hours with next steps.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid sm:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block font-sans font-semibold text-ink mb-2">
-                        Full Name *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        className={cn(
-                          'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                          'focus:border-claude-terracotta focus:outline-none transition-colors'
-                        )}
-                        placeholder="Enter your name"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-sans font-semibold text-ink mb-2">
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        className={cn(
-                          'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                          'focus:border-claude-terracotta focus:outline-none transition-colors'
-                        )}
-                        placeholder="your.email@ur.ac.rw"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block font-sans font-semibold text-ink mb-2">
-                        WhatsApp Number *
-                      </label>
-                      <input
-                        type="tel"
-                        required
-                        className={cn(
-                          'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                          'focus:border-claude-terracotta focus:outline-none transition-colors'
-                        )}
-                        placeholder="+250 7XX XXX XXX"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-sans font-semibold text-ink mb-2">
-                        Faculty *
-                      </label>
-                      <select
-                        required
-                        className={cn(
-                          'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                          'focus:border-claude-terracotta focus:outline-none transition-colors'
-                        )}
-                      >
-                        <option value="">Select faculty</option>
-                        <option value="cst">College of Science and Technology</option>
-                        <option value="cbe">College of Business and Economics</option>
-                        <option value="cavm">College of Agriculture</option>
-                        <option value="cmhs">College of Medicine</option>
-                        <option value="cass">College of Arts and Social Sciences</option>
-                        <option value="ce">College of Education</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block font-sans font-semibold text-ink mb-2">
-                        Year of Study *
-                      </label>
-                      <select
-                        required
-                        className={cn(
-                          'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                          'focus:border-claude-terracotta focus:outline-none transition-colors'
-                        )}
-                      >
-                        <option value="">Select year</option>
-                        <option value="1">Year 1</option>
-                        <option value="2">Year 2</option>
-                        <option value="3">Year 3</option>
-                        <option value="4">Year 4</option>
-                        <option value="5+">Year 5+</option>
-                        <option value="postgrad">Postgraduate</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block font-sans font-semibold text-ink mb-2">
-                        Experience Level
-                      </label>
-                      <select
-                        className={cn(
-                          'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                          'focus:border-claude-terracotta focus:outline-none transition-colors'
-                        )}
-                      >
-                        <option value="">Select level</option>
-                        <option value="none">Complete Beginner</option>
-                        <option value="beginner">Some Basic Knowledge</option>
-                        <option value="intermediate">Intermediate</option>
-                        <option value="advanced">Advanced</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block font-sans font-semibold text-ink mb-2">
-                      Why do you want to join? (Optional)
-                    </label>
-                    <textarea
-                      rows={3}
-                      className={cn(
-                        'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white resize-none',
-                        'focus:border-claude-terracotta focus:outline-none transition-colors'
-                      )}
-                      placeholder="Tell us about yourself..."
-                    />
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <input
-                      type="checkbox"
-                      required
-                      className="mt-1 w-4 h-4 rounded border-stone text-claude-terracotta focus:ring-claude-terracotta"
-                    />
-                    <span className="text-stone text-sm">
-                      I agree to be added to the Claude Builder Club WhatsApp group and
-                      email list for updates about events and resources.
-                    </span>
-                  </div>
-
-                  <Button type="submit" variant="primary" size="lg" className="w-full">
-                    Submit Registration
-                  </Button>
-                </form>
-              )}
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact */}
-      <section className="section-padding bg-surface">
-        <div className="container-main">
-          <SectionHeader
-            eyebrow="Get in Touch"
-            title="Contact Us"
-            subtitle="Have questions? Reach out!"
-          />
-          <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-            <Card className="text-center">
-              <div className="w-14 h-14 rounded-2xl bg-green-500 flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-7 h-7 text-white" />
-              </div>
-              <CardTitle className="text-lg">WhatsApp</CardTitle>
-              <a href="https://wa.me/250780000000" className="text-stone hover:text-claude-terracotta transition-colors text-sm">
-                +250 780 000 000
-              </a>
-            </Card>
-            <Card className="text-center">
-              <div className="w-14 h-14 rounded-2xl bg-claude-terracotta flex items-center justify-center mx-auto mb-4">
-                <Mail className="w-7 h-7 text-white" />
-              </div>
-              <CardTitle className="text-lg">Email</CardTitle>
-              <a href="mailto:claude.builders@ur.ac.rw" className="text-stone hover:text-claude-terracotta transition-colors text-sm">
-                claude.builders@ur.ac.rw
-              </a>
-            </Card>
-            <Card className="text-center">
-              <div className="w-14 h-14 rounded-2xl bg-teal flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-7 h-7 text-white" />
-              </div>
-              <CardTitle className="text-lg">Location</CardTitle>
-              <p className="text-stone text-sm">
-                CST Building, Room 201<br />
-                University of Rwanda
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+            {/* Left: Benefits */}
+            <div ref={benefitsRef}>
+              <p className="text-claude-terracotta font-sans font-bold text-xs uppercase tracking-widest mb-3">
+                Member Benefits
               </p>
-            </Card>
+              <h2 className="font-serif font-semibold text-ink text-2xl md:text-3xl mb-6">
+                What You'll Get
+              </h2>
+              <p className="text-stone leading-relaxed mb-8">
+                As a CBC-UR member, you'll have access to resources, mentorship, and opportunities
+                designed to help you become a confident AI builder.
+              </p>
+
+              <ul className="space-y-4">
+                {benefits.map((benefit, index) => {
+                  const Icon = benefit.icon
+                  return (
+                    <li
+                      key={benefit.text}
+                      className={cn(
+                        'flex items-center gap-4 p-4 rounded-xl bg-white border border-pampas-warm',
+                        'transition-all duration-500 ease-out',
+                        'opacity-0 translate-x-4',
+                        benefitsVisible && 'opacity-100 translate-x-0'
+                      )}
+                      style={{ transitionDelay: benefitsVisible ? `${index * 100}ms` : '0ms' }}
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-claude-terracotta flex items-center justify-center flex-shrink-0">
+                        <Icon className="w-5 h-5 text-white" />
+                      </div>
+                      <span className="text-ink font-medium">{benefit.text}</span>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+
+            {/* Right: Application Form */}
+            <div>
+              <div className="bg-white rounded-2xl border border-pampas-warm p-6 md:p-8">
+                {submitted ? (
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 rounded-full bg-sage/10 flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle className="w-8 h-8 text-sage" />
+                    </div>
+                    <h3 className="font-serif text-2xl font-semibold text-ink mb-2">
+                      Application Submitted!
+                    </h3>
+                    <p className="text-stone mb-6">
+                      Thank you for applying to Claude Builder Club! We'll review your application
+                      and get back to you within 48 hours with next steps.
+                    </p>
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        setSubmitted(false)
+                        setFormData({
+                          fullName: '',
+                          email: '',
+                          studentId: '',
+                          yearOfStudy: '',
+                          department: '',
+                          whyJoin: '',
+                          aiExperience: '',
+                        })
+                        setTouched({})
+                        setErrors({})
+                      }}
+                    >
+                      Submit Another Application
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className="font-serif font-semibold text-ink text-xl mb-6">
+                      Application Form
+                    </h3>
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                      {/* Full Name */}
+                      <div>
+                        <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                          Full Name <span className="text-claude-terracotta">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="fullName"
+                          value={formData.fullName}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          placeholder="Enter your full name"
+                          className={getInputClassName('fullName')}
+                        />
+                        {touched.fullName && errors.fullName && (
+                          <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
+                        )}
+                      </div>
+
+                      {/* Email */}
+                      <div>
+                        <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                          Email <span className="text-claude-terracotta">*</span>
+                        </label>
+                        <input
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          placeholder="your.email@ur.ac.rw"
+                          className={getInputClassName('email')}
+                        />
+                        {touched.email && errors.email && (
+                          <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                        )}
+                      </div>
+
+                      {/* Student ID */}
+                      <div>
+                        <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                          Student ID <span className="text-claude-terracotta">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="studentId"
+                          value={formData.studentId}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          placeholder="e.g., 220XXXXX"
+                          className={getInputClassName('studentId')}
+                        />
+                        {touched.studentId && errors.studentId && (
+                          <p className="text-red-500 text-sm mt-1">{errors.studentId}</p>
+                        )}
+                      </div>
+
+                      {/* Year of Study & Department */}
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                            Year of Study <span className="text-claude-terracotta">*</span>
+                          </label>
+                          <select
+                            name="yearOfStudy"
+                            value={formData.yearOfStudy}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={getInputClassName('yearOfStudy')}
+                          >
+                            {yearOptions.map((opt) => (
+                              <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                          </select>
+                          {touched.yearOfStudy && errors.yearOfStudy && (
+                            <p className="text-red-500 text-sm mt-1">{errors.yearOfStudy}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                            Department <span className="text-claude-terracotta">*</span>
+                          </label>
+                          <select
+                            name="department"
+                            value={formData.department}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            className={getInputClassName('department')}
+                          >
+                            {departmentOptions.map((opt) => (
+                              <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                          </select>
+                          {touched.department && errors.department && (
+                            <p className="text-red-500 text-sm mt-1">{errors.department}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Why do you want to join? */}
+                      <div>
+                        <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                          Why do you want to join?
+                        </label>
+                        <textarea
+                          name="whyJoin"
+                          value={formData.whyJoin}
+                          onChange={handleChange}
+                          rows={3}
+                          placeholder="Tell us what excites you about AI and what you hope to learn..."
+                          className={cn(
+                            'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white resize-none',
+                            'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta transition-all'
+                          )}
+                        />
+                      </div>
+
+                      {/* AI Experience */}
+                      <div>
+                        <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                          What's your experience with AI?
+                        </label>
+                        <textarea
+                          name="aiExperience"
+                          value={formData.aiExperience}
+                          onChange={handleChange}
+                          rows={3}
+                          placeholder="Any experience with AI tools, programming, or related technologies..."
+                          className={cn(
+                            'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white resize-none',
+                            'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta transition-all'
+                          )}
+                        />
+                      </div>
+
+                      <Button type="submit" variant="primary" size="lg" className="w-full">
+                        Submit Application
+                      </Button>
+
+                      <p className="text-stone text-xs text-center">
+                        By submitting, you agree to join our WhatsApp group and receive event updates.
+                      </p>
+                    </form>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </section>

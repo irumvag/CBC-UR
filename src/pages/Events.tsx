@@ -1,29 +1,140 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, Users, Presentation, Table2, Code, MessageCircle } from 'lucide-react'
-import { SectionHeader } from '@/components/ui/SectionHeader'
-import { Card, CardTitle, CardDescription } from '@/components/ui/Card'
+import { Calendar, MapPin, Clock, Users, Code, Presentation, Megaphone, Mail } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
-import { CTA } from '@/components/sections/CTA'
+import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { cn } from '@/lib/utils'
 
-const schedule = [
-  { week: 1, date: 'Feb 9', activities: [{ type: 'Tabling', icon: Table2 }, { type: 'Social Post', icon: MessageCircle }] },
-  { week: 2, date: 'Feb 16', activities: [{ type: 'CBC Meeting #1', icon: Users }, { type: 'Mini Demo', icon: Presentation }] },
-  { week: 3, date: 'Feb 23', activities: [{ type: 'Hackathon Planning #1', icon: Calendar }, { type: 'Mini Demo', icon: Presentation }] },
-  { week: 4, date: 'Mar 2', activities: [{ type: 'CBC Meeting #2', icon: Users }, { type: 'Tabling', icon: Table2 }] },
-  { week: 5, date: 'Mar 9', activities: [{ type: 'Social Post', icon: MessageCircle }, { type: '2 Mini Demos', icon: Presentation }] },
-  { week: 6, date: 'Mar 16', activities: [{ type: 'CBC Meeting #3', icon: Users }, { type: 'Hackathon Planning #2', icon: Calendar }] },
-  { week: 7, date: 'Mar 23', activities: [{ type: 'Tabling', icon: Table2 }, { type: 'Mini Demo', icon: Presentation }] },
-  { week: 8, date: 'Mar 30', activities: [{ type: 'CBC Meeting #4', icon: Users }, { type: 'Social Post', icon: MessageCircle }] },
-  { week: 9, date: 'Apr 6', activities: [{ type: 'CBC Meeting #5', icon: Users }, { type: 'Hackathon Planning #3', icon: Calendar }] },
-  { week: 10, date: 'Apr 13', activities: [{ type: 'HACKATHON', icon: Code, highlight: true }, { type: 'Social Post', icon: MessageCircle }], highlight: true },
+type EventType = 'Workshop' | 'Hackathon' | 'Meetup' | 'Demo Day'
+type FilterType = 'upcoming' | 'past' | 'all'
+
+interface Event {
+  id: string
+  title: string
+  description: string
+  date: string
+  day: string
+  month: string
+  time: string
+  location: string
+  type: EventType
+  isPast: boolean
+}
+
+const events: Event[] = [
+  {
+    id: '1',
+    title: 'Introduction to Claude AI',
+    description: 'Learn the fundamentals of Claude AI and discover what makes it unique. Perfect for beginners.',
+    date: '2026-02-16',
+    day: '16',
+    month: 'Feb',
+    time: '2:00 PM - 5:00 PM',
+    location: 'CST Building, Room 201',
+    type: 'Workshop',
+    isPast: false,
+  },
+  {
+    id: '2',
+    title: 'Prompt Engineering Masterclass',
+    description: 'Deep dive into advanced prompting techniques to get the best results from Claude.',
+    date: '2026-02-23',
+    day: '23',
+    month: 'Feb',
+    time: '2:00 PM - 5:00 PM',
+    location: 'CST Building, Room 201',
+    type: 'Workshop',
+    isPast: false,
+  },
+  {
+    id: '3',
+    title: 'CBC Weekly Meetup #3',
+    description: 'Join us for our weekly gathering to share progress, get feedback, and connect with fellow builders.',
+    date: '2026-03-16',
+    day: '16',
+    month: 'Mar',
+    time: '2:00 PM - 4:00 PM',
+    location: 'CST Building, Room 201',
+    type: 'Meetup',
+    isPast: false,
+  },
+  {
+    id: '4',
+    title: 'Build for Rwanda Hackathon',
+    description: 'Our flagship 24-hour hackathon where teams build AI solutions for real Rwandan challenges.',
+    date: '2026-04-13',
+    day: '13',
+    month: 'Apr',
+    time: '9:00 AM - 9:00 PM',
+    location: 'University Main Hall',
+    type: 'Hackathon',
+    isPast: false,
+  },
+  {
+    id: '5',
+    title: 'Project Showcase Demo Day',
+    description: 'Celebrate our achievements! Members present their AI projects to the university community.',
+    date: '2026-04-20',
+    day: '20',
+    month: 'Apr',
+    time: '3:00 PM - 6:00 PM',
+    location: 'University Auditorium',
+    type: 'Demo Day',
+    isPast: false,
+  },
+  {
+    id: '6',
+    title: 'Club Kickoff Event',
+    description: 'The official launch of Claude Builder Club with tabling and introductory demonstrations.',
+    date: '2026-02-09',
+    day: '09',
+    month: 'Feb',
+    time: '10:00 AM - 4:00 PM',
+    location: 'Campus Main Square',
+    type: 'Meetup',
+    isPast: true,
+  },
 ]
 
+const typeColors: Record<EventType, string> = {
+  Workshop: 'bg-claude-terracotta/10 text-claude-terracotta',
+  Hackathon: 'bg-sage/10 text-sage',
+  Meetup: 'bg-teal/10 text-teal',
+  'Demo Day': 'bg-stone/10 text-stone',
+}
+
+const typeIcons: Record<EventType, typeof Calendar> = {
+  Workshop: Presentation,
+  Hackathon: Code,
+  Meetup: Users,
+  'Demo Day': Megaphone,
+}
+
 export default function Events() {
+  const [filter, setFilter] = useState<FilterType>('upcoming')
+  const [email, setEmail] = useState('')
+  const [subscribed, setSubscribed] = useState(false)
+  const { ref: eventsRef, isVisible: eventsVisible } = useScrollReveal()
+
+  const filteredEvents = events.filter((event) => {
+    if (filter === 'upcoming') return !event.isPast
+    if (filter === 'past') return event.isPast
+    return true
+  })
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (email) {
+      setSubscribed(true)
+      setEmail('')
+    }
+  }
+
   return (
     <>
       {/* Page Header */}
-      <section className="bg-pampas py-16 md:py-24">
+      <section className="bg-pampas-warm py-16 md:py-20">
         <div className="container-main">
           <nav className="flex items-center gap-2 text-sm text-stone mb-6">
             <Link to="/" className="hover:text-claude-terracotta transition-colors">Home</Link>
@@ -31,165 +142,157 @@ export default function Events() {
             <span className="text-ink">Events</span>
           </nav>
           <div className="max-w-3xl">
-            <h1 className="font-serif font-semibold text-ink mb-6">
-              Events & Schedule
+            <p className="text-claude-terracotta font-sans font-bold text-xs uppercase tracking-widest mb-3">
+              Events & Workshops
+            </p>
+            <h1 className="font-serif font-semibold text-ink text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
+              Learn, Build, and Connect
             </h1>
-            <p className="text-stone text-xl leading-relaxed">
-              10-week program starting February 9, 2026
+            <p className="text-stone text-lg md:text-xl leading-relaxed">
+              Join our workshops, meetups, and hackathons. From beginner-friendly introductions to advanced
+              build sessions — there's something for everyone.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Activity Types */}
-      <section className="section-padding bg-surface">
+      {/* Filter Tabs & Events Grid */}
+      <section className="py-16 md:py-20 bg-surface">
         <div className="container-main">
-          <SectionHeader
-            eyebrow="What We Do"
-            title="Activity Types"
-            subtitle="Different formats for different learning styles"
-          />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Users, title: 'CBC Meetings', desc: 'Regular club gatherings for learning and collaboration.' },
-              { icon: Code, title: 'Hackathon', desc: 'Build projects using Claude in Week 10.' },
-              { icon: Presentation, title: 'Mini Demos', desc: '5-10 minute Claude demonstrations.' },
-              { icon: Table2, title: 'Tabling', desc: 'Campus outreach and engagement.' },
-            ].map((item) => (
-              <Card key={item.title} className="text-center">
-                <div className="w-14 h-14 rounded-2xl bg-pampas flex items-center justify-center mx-auto mb-4">
-                  <item.icon className="w-7 h-7 text-claude-terracotta" />
-                </div>
-                <CardTitle className="text-lg">{item.title}</CardTitle>
-                <CardDescription className="mt-2 text-sm">{item.desc}</CardDescription>
-              </Card>
-            ))}
+          {/* Filter Tabs */}
+          <div className="flex justify-center mb-10">
+            <div className="inline-flex bg-pampas rounded-full p-1">
+              {(['upcoming', 'past', 'all'] as FilterType[]).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setFilter(tab)}
+                  className={cn(
+                    'px-6 py-2 rounded-full text-sm font-medium transition-all',
+                    filter === tab
+                      ? 'bg-claude-terracotta text-white shadow-sm'
+                      : 'text-stone hover:text-ink'
+                  )}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* 10-Week Schedule */}
-      <section className="section-padding bg-pampas">
-        <div className="container-main">
-          <SectionHeader
-            eyebrow="Full Schedule"
-            title="10-Week Program"
-            subtitle="From kickoff to hackathon — mark your calendar"
-          />
-
-          <div className="max-w-4xl mx-auto space-y-3">
-            {schedule.map((week) => (
-              <div
-                key={week.week}
-                className={cn(
-                  'rounded-2xl overflow-hidden',
-                  week.highlight && 'ring-2 ring-claude-terracotta'
-                )}
-              >
-                <div className={cn(
-                  'flex items-center justify-between px-6 py-4',
-                  week.highlight ? 'bg-claude-terracotta text-white' : 'bg-white border border-pampas-warm'
-                )}>
-                  <div className="flex items-center gap-4">
-                    <span className={cn(
-                      'w-10 h-10 rounded-full flex items-center justify-center font-serif font-semibold',
-                      week.highlight ? 'bg-white text-claude-terracotta' : 'bg-pampas text-ink'
-                    )}>
-                      {week.week}
-                    </span>
-                    <div>
-                      <span className="font-sans font-semibold">Week {week.week}</span>
-                      <span className={cn(
-                        'ml-2 text-sm',
-                        week.highlight ? 'text-white/80' : 'text-stone'
-                      )}>
-                        {week.date}, 2026
-                      </span>
+          {/* Events Grid */}
+          <div ref={eventsRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredEvents.map((event, index) => {
+              const TypeIcon = typeIcons[event.type]
+              return (
+                <div
+                  key={event.id}
+                  className={cn(
+                    'bg-white rounded-2xl border border-pampas-warm overflow-hidden',
+                    'transition-all duration-500 ease-out',
+                    'hover:shadow-lg hover:-translate-y-1',
+                    'opacity-0 translate-y-4',
+                    eventsVisible && 'opacity-100 translate-y-0',
+                    event.isPast && 'opacity-75'
+                  )}
+                  style={{ transitionDelay: eventsVisible ? `${index * 100}ms` : '0ms' }}
+                >
+                  {/* Date Badge */}
+                  <div className="flex items-start p-5 pb-0">
+                    <div className="bg-claude-terracotta text-white rounded-xl p-3 text-center min-w-[60px]">
+                      <span className="block text-2xl font-serif font-bold leading-none">{event.day}</span>
+                      <span className="block text-xs font-medium uppercase mt-1">{event.month}</span>
+                    </div>
+                    <div className="ml-4 flex-1">
+                      <Badge className={typeColors[event.type]}>
+                        <TypeIcon size={12} className="mr-1" />
+                        {event.type}
+                      </Badge>
+                      <h3 className="font-serif font-semibold text-ink text-lg mt-2 leading-tight">
+                        {event.title}
+                      </h3>
                     </div>
                   </div>
-                  {week.highlight && (
-                    <Badge className="bg-white/20 text-white border-0">
-                      Grand Finale
-                    </Badge>
-                  )}
-                </div>
-                <div className="bg-white p-4 border border-t-0 border-pampas-warm rounded-b-2xl">
-                  <div className="flex flex-wrap gap-3">
-                    {week.activities.map((activity, i) => (
-                      <div
-                        key={i}
-                        className={cn(
-                          'flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium',
-                          'highlight' in activity && activity.highlight
-                            ? 'bg-claude-terracotta/10 text-claude-terracotta'
-                            : 'bg-pampas text-charcoal'
-                        )}
-                      >
-                        <activity.icon size={16} />
-                        {activity.type}
+
+                  {/* Content */}
+                  <div className="p-5">
+                    <p className="text-stone text-sm leading-relaxed mb-4">
+                      {event.description}
+                    </p>
+                    <div className="space-y-2 text-sm text-stone">
+                      <div className="flex items-center gap-2">
+                        <Clock size={14} className="text-claude-terracotta" />
+                        <span>{event.time}</span>
                       </div>
-                    ))}
+                      <div className="flex items-center gap-2">
+                        <MapPin size={14} className="text-claude-terracotta" />
+                        <span>{event.location}</span>
+                      </div>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-pampas">
+                      <Button
+                        variant={event.isPast ? 'secondary' : 'primary'}
+                        size="sm"
+                        className="w-full"
+                        disabled={event.isPast}
+                      >
+                        {event.isPast ? 'Event Passed' : 'Register Now'}
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
+
+          {filteredEvents.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-stone text-lg">No events found for this filter.</p>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Regular Schedule */}
-      <section className="section-padding bg-surface">
+      {/* Subscribe CTA */}
+      <section className="py-16 md:py-20 bg-pampas">
         <div className="container-main">
-          <SectionHeader
-            eyebrow="Recurring"
-            title="Regular Schedule"
-            subtitle="Weekly activities throughout the program"
-          />
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <Card>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-claude-terracotta flex items-center justify-center">
-                  <Calendar className="w-6 h-6 text-white" />
-                </div>
-                <CardTitle className="text-lg">Weekly Meetings</CardTitle>
+          <div className="max-w-2xl mx-auto text-center">
+            <div className="w-16 h-16 rounded-2xl bg-claude-terracotta/10 flex items-center justify-center mx-auto mb-6">
+              <Mail className="w-8 h-8 text-claude-terracotta" />
+            </div>
+            <h2 className="font-serif font-semibold text-ink text-2xl md:text-3xl mb-4">
+              Never Miss an Event
+            </h2>
+            <p className="text-stone mb-8">
+              Subscribe to get notified about upcoming workshops, hackathons, and meetups.
+            </p>
+
+            {subscribed ? (
+              <div className="bg-sage/10 text-sage rounded-xl p-4 inline-block">
+                <p className="font-medium">You're subscribed! We'll keep you updated.</p>
               </div>
-              <p className="text-stone">
-                <strong className="text-ink">Every Saturday</strong><br />
-                2:00 PM - 5:00 PM<br />
-                <span className="text-sm">CST Building, Room 201</span>
-              </p>
-            </Card>
-            <Card>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-teal flex items-center justify-center">
-                  <Presentation className="w-6 h-6 text-white" />
-                </div>
-                <CardTitle className="text-lg">Mini Demos</CardTitle>
-              </div>
-              <p className="text-stone">
-                <strong className="text-ink">Various Times</strong><br />
-                5-10 minutes each<br />
-                <span className="text-sm">Multiple campus locations</span>
-              </p>
-            </Card>
-            <Card>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-sage flex items-center justify-center">
-                  <Table2 className="w-6 h-6 text-white" />
-                </div>
-                <CardTitle className="text-lg">Tabling</CardTitle>
-              </div>
-              <p className="text-stone">
-                <strong className="text-ink">Weekdays</strong><br />
-                10:00 AM - 2:00 PM<br />
-                <span className="text-sm">High-traffic campus areas</span>
-              </p>
-            </Card>
+            ) : (
+              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  className={cn(
+                    'flex-1 px-4 py-3 rounded-xl border border-pampas-warm',
+                    'bg-white text-ink placeholder:text-stone',
+                    'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
+                    'transition-all'
+                  )}
+                />
+                <Button type="submit" variant="primary">
+                  Subscribe
+                </Button>
+              </form>
+            )}
           </div>
         </div>
       </section>
-
-      <CTA />
     </>
   )
 }
