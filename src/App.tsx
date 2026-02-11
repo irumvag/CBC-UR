@@ -1,0 +1,26 @@
+import { Routes, Route } from 'react-router-dom'
+import { Layout } from '@/components/layout/Layout'
+import { ScrollToTop } from '@/components/ScrollToTop'
+import { ToastProvider } from '@/components/ui/Toast'
+import Home from '@/pages/Home'
+import About from '@/pages/About'
+import Events from '@/pages/Events'
+import Projects from '@/pages/Projects'
+import Join from '@/pages/Join'
+
+export default function App() {
+  return (
+    <ToastProvider>
+      <Layout>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/join" element={<Join />} />
+        </Routes>
+      </Layout>
+    </ToastProvider>
+  )
+}
