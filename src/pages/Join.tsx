@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { CheckCircle, Cpu, Calendar, Users, Award, Rocket, GraduationCap } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { useMembers } from '@/hooks/useMembers'
+import { useToast } from '@/components/ui/Toast'
 import { cn } from '@/lib/utils'
 
 const benefits = [
@@ -72,6 +74,8 @@ export default function Join() {
   const [errors, setErrors] = useState<FormErrors>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const { ref: benefitsRef, isVisible: benefitsVisible } = useScrollReveal()
+  const { submitApplication, isLoading } = useMembers()
+  const { showToast } = useToast()
 
   const validateField = (name: string, value: string): string | undefined => {
     switch (name) {
@@ -113,7 +117,7 @@ export default function Join() {
     setErrors((prev) => ({ ...prev, [name]: error }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     // Validate all fields
@@ -131,7 +135,22 @@ export default function Join() {
       return
     }
 
-    setSubmitted(true)
+    // Submit to Supabase
+    const result = await submitApplication({
+      email: formData.email,
+      full_name: formData.fullName,
+      student_id: formData.studentId,
+      year_of_study: formData.yearOfStudy,
+      department: formData.department,
+      bio: `Why join: ${formData.whyJoin}\n\nAI Experience: ${formData.aiExperience}`,
+    })
+
+    if (result.success) {
+      setSubmitted(true)
+      showToast('Application submitted successfully!', 'success')
+    } else {
+      showToast(result.error || 'Failed to submit application', 'error')
+    }
   }
 
   const getInputClassName = (fieldName: keyof FormErrors) => cn(
@@ -264,6 +283,7 @@ export default function Join() {
                           onBlur={handleBlur}
                           placeholder="Enter your full name"
                           className={getInputClassName('fullName')}
+                          disabled={isLoading}
                         />
                         {touched.fullName && errors.fullName && (
                           <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
@@ -283,6 +303,7 @@ export default function Join() {
                           onBlur={handleBlur}
                           placeholder="your.email@ur.ac.rw"
                           className={getInputClassName('email')}
+                          disabled={isLoading}
                         />
                         {touched.email && errors.email && (
                           <p className="text-red-500 text-sm mt-1">{errors.email}</p>
@@ -302,6 +323,7 @@ export default function Join() {
                           onBlur={handleBlur}
                           placeholder="e.g., 220XXXXX"
                           className={getInputClassName('studentId')}
+                          disabled={isLoading}
                         />
                         {touched.studentId && errors.studentId && (
                           <p className="text-red-500 text-sm mt-1">{errors.studentId}</p>
@@ -320,6 +342,7 @@ export default function Join() {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             className={getInputClassName('yearOfStudy')}
+                            disabled={isLoading}
                           >
                             {yearOptions.map((opt) => (
                               <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -339,6 +362,7 @@ export default function Join() {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             className={getInputClassName('department')}
+                            disabled={isLoading}
                           >
                             {departmentOptions.map((opt) => (
                               <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -365,6 +389,7 @@ export default function Join() {
                             'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white resize-none',
                             'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta transition-all'
                           )}
+                          disabled={isLoading}
                         />
                       </div>
 
@@ -383,11 +408,12 @@ export default function Join() {
                             'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white resize-none',
                             'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta transition-all'
                           )}
+                          disabled={isLoading}
                         />
                       </div>
 
-                      <Button type="submit" variant="primary" size="lg" className="w-full">
-                        Submit Application
+                      <Button type="submit" variant="primary" size="lg" className="w-full" disabled={isLoading}>
+                        {isLoading ? 'Submitting...' : 'Submit Application'}
                       </Button>
 
                       <p className="text-stone text-xs text-center">

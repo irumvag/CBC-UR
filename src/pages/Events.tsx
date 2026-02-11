@@ -1,135 +1,80 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Calendar, MapPin, Clock, Users, Code, Presentation, Megaphone, Mail } from 'lucide-react'
+import { MapPin, Clock, Users, Code, Presentation, Megaphone, Mail } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
-import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { EventCardSkeleton } from '@/components/ui/Skeleton'
+import { useEvents } from '@/hooks/useEvents'
+import { useSubscribe } from '@/hooks/useSubscribe'
+import { useToast } from '@/components/ui/Toast'
 import { cn } from '@/lib/utils'
+import type { EventType } from '@/types/database'
 
-type EventType = 'Workshop' | 'Hackathon' | 'Meetup' | 'Demo Day'
 type FilterType = 'upcoming' | 'past' | 'all'
 
-interface Event {
-  id: string
-  title: string
-  description: string
-  date: string
-  day: string
-  month: string
-  time: string
-  location: string
-  type: EventType
-  isPast: boolean
-}
-
-const events: Event[] = [
-  {
-    id: '1',
-    title: 'Introduction to Claude AI',
-    description: 'Learn the fundamentals of Claude AI and discover what makes it unique. Perfect for beginners.',
-    date: '2026-02-16',
-    day: '16',
-    month: 'Feb',
-    time: '2:00 PM - 5:00 PM',
-    location: 'CST Building, Room 201',
-    type: 'Workshop',
-    isPast: false,
-  },
-  {
-    id: '2',
-    title: 'Prompt Engineering Masterclass',
-    description: 'Deep dive into advanced prompting techniques to get the best results from Claude.',
-    date: '2026-02-23',
-    day: '23',
-    month: 'Feb',
-    time: '2:00 PM - 5:00 PM',
-    location: 'CST Building, Room 201',
-    type: 'Workshop',
-    isPast: false,
-  },
-  {
-    id: '3',
-    title: 'CBC Weekly Meetup #3',
-    description: 'Join us for our weekly gathering to share progress, get feedback, and connect with fellow builders.',
-    date: '2026-03-16',
-    day: '16',
-    month: 'Mar',
-    time: '2:00 PM - 4:00 PM',
-    location: 'CST Building, Room 201',
-    type: 'Meetup',
-    isPast: false,
-  },
-  {
-    id: '4',
-    title: 'Build for Rwanda Hackathon',
-    description: 'Our flagship 24-hour hackathon where teams build AI solutions for real Rwandan challenges.',
-    date: '2026-04-13',
-    day: '13',
-    month: 'Apr',
-    time: '9:00 AM - 9:00 PM',
-    location: 'University Main Hall',
-    type: 'Hackathon',
-    isPast: false,
-  },
-  {
-    id: '5',
-    title: 'Project Showcase Demo Day',
-    description: 'Celebrate our achievements! Members present their AI projects to the university community.',
-    date: '2026-04-20',
-    day: '20',
-    month: 'Apr',
-    time: '3:00 PM - 6:00 PM',
-    location: 'University Auditorium',
-    type: 'Demo Day',
-    isPast: false,
-  },
-  {
-    id: '6',
-    title: 'Club Kickoff Event',
-    description: 'The official launch of Claude Builder Club with tabling and introductory demonstrations.',
-    date: '2026-02-09',
-    day: '09',
-    month: 'Feb',
-    time: '10:00 AM - 4:00 PM',
-    location: 'Campus Main Square',
-    type: 'Meetup',
-    isPast: true,
-  },
-]
-
 const typeColors: Record<EventType, string> = {
-  Workshop: 'bg-claude-terracotta/10 text-claude-terracotta',
-  Hackathon: 'bg-sage/10 text-sage',
-  Meetup: 'bg-teal/10 text-teal',
-  'Demo Day': 'bg-stone/10 text-stone',
+  workshop: 'bg-claude-terracotta/10 text-claude-terracotta',
+  hackathon: 'bg-sage/10 text-sage',
+  meetup: 'bg-teal/10 text-teal',
+  demo_day: 'bg-stone/10 text-stone',
 }
 
-const typeIcons: Record<EventType, typeof Calendar> = {
-  Workshop: Presentation,
-  Hackathon: Code,
-  Meetup: Users,
-  'Demo Day': Megaphone,
+const typeLabels: Record<EventType, string> = {
+  workshop: 'Workshop',
+  hackathon: 'Hackathon',
+  meetup: 'Meetup',
+  demo_day: 'Demo Day',
+}
+
+const typeIcons: Record<EventType, typeof Users> = {
+  workshop: Presentation,
+  hackathon: Code,
+  meetup: Users,
+  demo_day: Megaphone,
 }
 
 export default function Events() {
   const [filter, setFilter] = useState<FilterType>('upcoming')
   const [email, setEmail] = useState('')
-  const [subscribed, setSubscribed] = useState(false)
-  const { ref: eventsRef, isVisible: eventsVisible } = useScrollReveal()
 
-  const filteredEvents = events.filter((event) => {
-    if (filter === 'upcoming') return !event.isPast
-    if (filter === 'past') return event.isPast
-    return true
-  })
+  const { events, isLoading, error } = useEvents(filter === 'all' ? undefined : filter)
+  const { subscribe, isLoading: isSubscribing } = useSubscribe()
+  const { showToast } = useToast()
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (email) {
-      setSubscribed(true)
+    if (!email) return
+
+    const result = await subscribe(email)
+    if (result.success) {
+      showToast("You're subscribed! We'll keep you updated.", 'success')
       setEmail('')
+    } else {
+      showToast(result.error || 'Failed to subscribe', 'error')
     }
   }
+
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr)
+    return {
+      day: date.getDate().toString().padStart(2, '0'),
+      month: date.toLocaleString('en-US', { month: 'short' }),
+    }
+  }
+
+  const formatTime = (startDate: string, endDate?: string | null) => {
+    const start = new Date(startDate)
+    const startTime = start.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+
+    if (endDate) {
+      const end = new Date(endDate)
+      const endTime = end.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+      return `${startTime} - ${endTime}`
+    }
+    return startTime
+  }
+
+  const isPastEvent = (dateStr: string) => new Date(dateStr) < new Date()
 
   return (
     <>
@@ -179,72 +124,93 @@ export default function Events() {
             </div>
           </div>
 
+          {/* Error State */}
+          {error && (
+            <div className="text-center py-8 text-stone">
+              <p>{error}</p>
+            </div>
+          )}
+
+          {/* Loading State */}
+          {isLoading && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <EventCardSkeleton key={i} />
+              ))}
+            </div>
+          )}
+
           {/* Events Grid */}
-          <div ref={eventsRef} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredEvents.map((event, index) => {
-              const TypeIcon = typeIcons[event.type]
-              return (
-                <div
-                  key={event.id}
-                  className={cn(
-                    'bg-white rounded-2xl border border-pampas-warm overflow-hidden',
-                    'transition-all duration-500 ease-out',
-                    'hover:shadow-lg hover:-translate-y-1',
-                    'opacity-0 translate-y-4',
-                    eventsVisible && 'opacity-100 translate-y-0',
-                    event.isPast && 'opacity-75'
-                  )}
-                  style={{ transitionDelay: eventsVisible ? `${index * 100}ms` : '0ms' }}
-                >
-                  {/* Date Badge */}
-                  <div className="flex items-start p-5 pb-0">
-                    <div className="bg-claude-terracotta text-white rounded-xl p-3 text-center min-w-[60px]">
-                      <span className="block text-2xl font-serif font-bold leading-none">{event.day}</span>
-                      <span className="block text-xs font-medium uppercase mt-1">{event.month}</span>
-                    </div>
-                    <div className="ml-4 flex-1">
-                      <Badge className={typeColors[event.type]}>
-                        <TypeIcon size={12} className="mr-1" />
-                        {event.type}
-                      </Badge>
-                      <h3 className="font-serif font-semibold text-ink text-lg mt-2 leading-tight">
-                        {event.title}
-                      </h3>
-                    </div>
-                  </div>
+          {!isLoading && !error && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {events.map((event) => {
+                const { day, month } = formatDate(event.date)
+                const eventType = event.event_type || 'meetup'
+                const TypeIcon = typeIcons[eventType]
+                const isPast = isPastEvent(event.date)
 
-                  {/* Content */}
-                  <div className="p-5">
-                    <p className="text-stone text-sm leading-relaxed mb-4">
-                      {event.description}
-                    </p>
-                    <div className="space-y-2 text-sm text-stone">
-                      <div className="flex items-center gap-2">
-                        <Clock size={14} className="text-claude-terracotta" />
-                        <span>{event.time}</span>
+                return (
+                  <div
+                    key={event.id}
+                    className={cn(
+                      'bg-white rounded-2xl border border-pampas-warm overflow-hidden',
+                      'transition-all duration-300 ease-out',
+                      'hover:shadow-lg hover:-translate-y-1',
+                      isPast && 'opacity-75'
+                    )}
+                  >
+                    {/* Date Badge */}
+                    <div className="flex items-start p-5 pb-0">
+                      <div className="bg-claude-terracotta text-white rounded-xl p-3 text-center min-w-[60px]">
+                        <span className="block text-2xl font-serif font-bold leading-none">{day}</span>
+                        <span className="block text-xs font-medium uppercase mt-1">{month}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin size={14} className="text-claude-terracotta" />
-                        <span>{event.location}</span>
+                      <div className="ml-4 flex-1">
+                        <Badge className={typeColors[eventType]}>
+                          <TypeIcon size={12} className="mr-1" />
+                          {typeLabels[eventType]}
+                        </Badge>
+                        <h3 className="font-serif font-semibold text-ink text-lg mt-2 leading-tight">
+                          {event.title}
+                        </h3>
                       </div>
                     </div>
-                    <div className="mt-4 pt-4 border-t border-pampas">
-                      <Button
-                        variant={event.isPast ? 'secondary' : 'primary'}
-                        size="sm"
-                        className="w-full"
-                        disabled={event.isPast}
-                      >
-                        {event.isPast ? 'Event Passed' : 'Register Now'}
-                      </Button>
+
+                    {/* Content */}
+                    <div className="p-5">
+                      <p className="text-stone text-sm leading-relaxed mb-4">
+                        {event.description}
+                      </p>
+                      <div className="space-y-2 text-sm text-stone">
+                        <div className="flex items-center gap-2">
+                          <Clock size={14} className="text-claude-terracotta" />
+                          <span>{formatTime(event.date, event.end_date)}</span>
+                        </div>
+                        {event.location && (
+                          <div className="flex items-center gap-2">
+                            <MapPin size={14} className="text-claude-terracotta" />
+                            <span>{event.location}</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="mt-4 pt-4 border-t border-pampas">
+                        <Button
+                          variant={isPast ? 'secondary' : 'primary'}
+                          size="sm"
+                          className="w-full"
+                          disabled={isPast}
+                        >
+                          {isPast ? 'Event Passed' : 'Register Now'}
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )
-            })}
-          </div>
+                )
+              })}
+            </div>
+          )}
 
-          {filteredEvents.length === 0 && (
+          {!isLoading && !error && events.length === 0 && (
             <div className="text-center py-12">
               <p className="text-stone text-lg">No events found for this filter.</p>
             </div>
@@ -266,30 +232,24 @@ export default function Events() {
               Subscribe to get notified about upcoming workshops, hackathons, and meetups.
             </p>
 
-            {subscribed ? (
-              <div className="bg-sage/10 text-sage rounded-xl p-4 inline-block">
-                <p className="font-medium">You're subscribed! We'll keep you updated.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                  className={cn(
-                    'flex-1 px-4 py-3 rounded-xl border border-pampas-warm',
-                    'bg-white text-ink placeholder:text-stone',
-                    'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                    'transition-all'
-                  )}
-                />
-                <Button type="submit" variant="primary">
-                  Subscribe
-                </Button>
-              </form>
-            )}
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                className={cn(
+                  'flex-1 px-4 py-3 rounded-xl border border-pampas-warm',
+                  'bg-white text-ink placeholder:text-stone',
+                  'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
+                  'transition-all'
+                )}
+              />
+              <Button type="submit" variant="primary" disabled={isSubscribing}>
+                {isSubscribing ? 'Subscribing...' : 'Subscribe'}
+              </Button>
+            </form>
           </div>
         </div>
       </section>
