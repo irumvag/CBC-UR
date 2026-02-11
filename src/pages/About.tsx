@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Target, Eye, BookOpen, Wrench, Users, Globe, MessageSquare, Sprout, Scale } from 'lucide-react'
+import { Target, Eye, Wrench, Users, Globe, MessageSquare, Sprout, Scale } from 'lucide-react'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { Card, CardTitle, CardDescription } from '@/components/ui/Card'
-import { Button } from '@/components/ui/Button'
 import { CTA } from '@/components/sections/CTA'
 
 const values = [

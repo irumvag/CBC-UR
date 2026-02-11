@@ -1,34 +1,44 @@
-import { SectionHeader } from '@/components/ui/SectionHeader'
+import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { cn } from '@/lib/utils'
 
 const stats = [
-  { value: '10', label: 'Weeks of Learning', description: 'Comprehensive program' },
-  { value: '5+', label: 'Club Meetings', description: 'Regular gatherings' },
-  { value: '6', label: 'Mini Demos', description: 'Hands-on sessions' },
-  { value: '1', label: 'Grand Hackathon', description: 'Build for Rwanda' },
+  { value: '100+', label: 'Active Members' },
+  { value: '25+', label: 'Projects Built' },
+  { value: '12', label: 'Workshops' },
+  { value: '5', label: 'Hackathons' },
 ]
 
 export function Stats() {
-  return (
-    <section className="section-padding bg-surface">
-      <div className="container-main">
-        <SectionHeader
-          eyebrow="By the Numbers"
-          title="A 10-Week Journey"
-          subtitle="From introduction to innovation — our program is designed to take you from curious beginner to confident builder."
-        />
+  const { ref, isVisible } = useScrollReveal()
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+  return (
+    <section className="py-16 md:py-20 bg-surface">
+      <div className="container-main">
+        <div
+          ref={ref}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+        >
           {stats.map((stat, index) => (
             <div
               key={stat.label}
-              className="text-center p-6 md:p-8 rounded-2xl bg-pampas border border-pampas-warm"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className={cn(
+                'group text-center p-6 md:p-8 rounded-2xl',
+                'bg-white border border-pampas-warm',
+                'transition-all duration-300 ease-out',
+                'hover:shadow-lg hover:-translate-y-1 hover:border-claude-terracotta-light',
+                'opacity-0 translate-y-4',
+                isVisible && 'opacity-100 translate-y-0'
+              )}
+              style={{
+                transitionDelay: isVisible ? `${index * 100}ms` : '0ms'
+              }}
             >
-              <p className="font-serif text-4xl md:text-5xl font-semibold text-claude-terracotta mb-2">
+              <p className="font-serif text-4xl md:text-5xl font-semibold text-claude-terracotta-deep mb-2 group-hover:text-claude-terracotta transition-colors">
                 {stat.value}
               </p>
-              <p className="font-sans font-semibold text-ink mb-1">{stat.label}</p>
-              <p className="text-stone text-sm">{stat.description}</p>
+              <p className="font-sans text-stone text-sm md:text-base">
+                {stat.label}
+              </p>
             </div>
           ))}
         </div>

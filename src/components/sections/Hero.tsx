@@ -1,68 +1,206 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight, Star, Activity } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/Badge'
+import { cn } from '@/lib/utils'
+
+// Typing animation hook
+function useTypingAnimation(text: string, delay: number = 2000, speed: number = 50) {
+  const [displayText, setDisplayText] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+
+  useEffect(() => {
+    const startTimer = setTimeout(() => {
+      setIsTyping(true)
+      let index = 0
+      const typeTimer = setInterval(() => {
+        if (index < text.length) {
+          setDisplayText(text.slice(0, index + 1))
+          index++
+        } else {
+          clearInterval(typeTimer)
+          setIsTyping(false)
+        }
+      }, speed)
+
+      return () => clearInterval(typeTimer)
+    }, delay)
+
+    return () => clearTimeout(startTimer)
+  }, [text, delay, speed])
+
+  return { displayText, isTyping, isComplete: displayText === text }
+}
+
+// Claude starburst icon component
+function ClaudeStarburst({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 36 36" className={className} fill="none">
+      <circle cx="18" cy="6" r="2.5" fill="currentColor" />
+      <circle cx="26.5" cy="9.5" r="2.5" fill="currentColor" />
+      <circle cx="30" cy="18" r="2.5" fill="currentColor" />
+      <circle cx="26.5" cy="26.5" r="2.5" fill="currentColor" />
+      <circle cx="18" cy="30" r="2.5" fill="currentColor" />
+      <circle cx="9.5" cy="26.5" r="2.5" fill="currentColor" />
+      <circle cx="6" cy="18" r="2.5" fill="currentColor" />
+      <circle cx="9.5" cy="9.5" r="2.5" fill="currentColor" />
+      <circle cx="18" cy="18" r="3.5" fill="currentColor" />
+    </svg>
+  )
+}
 
 export function Hero() {
+  const { displayText, isComplete } = useTypingAnimation(
+    "Let's create something remarkable together",
+    3000,
+    40
+  )
+
   return (
-    <section className="relative overflow-hidden bg-pampas">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-20 right-20 w-64 h-64 bg-claude-terracotta/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-20 w-96 h-96 bg-sage/10 rounded-full blur-3xl" />
+    <section className="relative overflow-hidden bg-pampas min-h-[calc(100vh-5rem)]">
+      {/* Background decorations */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-claude-terracotta/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-sage/5 rounded-full blur-3xl" />
       </div>
 
       <div className="container-main relative">
-        <div className="py-20 md:py-28 lg:py-36 max-w-4xl mx-auto text-center">
-          {/* Eyebrow Badge */}
-          <div className="flex justify-center mb-6">
-            <Badge variant="terracotta" className="gap-2">
-              <Sparkles size={14} />
-              Program starts February 9, 2026
-            </Badge>
-          </div>
+        <div className="py-16 md:py-20 lg:py-24">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Left side: Content */}
+            <div className="order-2 lg:order-1">
+              {/* Badge */}
+              <div
+                className={cn(
+                  'inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8',
+                  'bg-claude-terracotta/10 border border-claude-terracotta/20',
+                  'opacity-0 animate-fade-in'
+                )}
+                style={{ animationDelay: '100ms', animationFillMode: 'forwards' }}
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75 animate-ping" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                </span>
+                <span className="text-claude-terracotta font-medium text-sm">
+                  Now accepting members
+                </span>
+              </div>
 
-          {/* Main Heading */}
-          <h1 className="font-serif font-semibold text-ink mb-6 animate-fade-in">
-            Build the Future
-            <span className="block text-claude-terracotta">with Claude AI</span>
-          </h1>
+              {/* Title */}
+              <h1
+                className={cn(
+                  'font-serif font-semibold text-ink mb-6',
+                  'text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.1]',
+                  'opacity-0 animate-fade-in'
+                )}
+                style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
+              >
+                Build the future with{' '}
+                <span className="text-claude-terracotta italic">Claude AI</span>
+              </h1>
 
-          {/* Subtitle */}
-          <p className="text-stone text-lg md:text-xl leading-relaxed max-w-2xl mx-auto mb-10 animate-fade-in animate-delay-100">
-            Join the Claude Builder Club at University of Rwanda. Learn to create
-            real-world AI solutions through hands-on workshops, collaborative projects,
-            and a supportive community of curious minds.
-          </p>
+              {/* Subtitle */}
+              <p
+                className={cn(
+                  'text-stone text-lg md:text-xl leading-relaxed mb-8 max-w-xl',
+                  'opacity-0 animate-fade-in'
+                )}
+                style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
+              >
+                The Claude Builder Club at the University of Rwanda empowers students to explore,
+                create, and innovate with Anthropic's AI — from first prompt to production-ready project.
+              </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in animate-delay-200">
-            <Link to="/join">
-              <Button variant="primary" size="lg">
-                Join the Club
-                <ArrowRight size={18} />
-              </Button>
-            </Link>
-            <Link to="/about">
-              <Button variant="secondary" size="lg">
-                Learn More
-              </Button>
-            </Link>
-          </div>
-
-          {/* Stats Preview */}
-          <div className="mt-16 pt-12 border-t border-pampas-warm flex flex-wrap justify-center gap-8 md:gap-16 animate-fade-in animate-delay-300">
-            <div className="text-center">
-              <p className="font-serif text-3xl md:text-4xl font-semibold text-ink">10</p>
-              <p className="text-stone text-sm mt-1">Week Program</p>
+              {/* CTA Buttons */}
+              <div
+                className={cn(
+                  'flex flex-col sm:flex-row items-start sm:items-center gap-4',
+                  'opacity-0 animate-fade-in'
+                )}
+                style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
+              >
+                <Link to="/join">
+                  <Button variant="primary" size="lg">
+                    Get Started
+                    <ArrowRight size={18} />
+                  </Button>
+                </Link>
+                <Link to="/about">
+                  <Button variant="secondary" size="lg">
+                    Learn More
+                  </Button>
+                </Link>
+              </div>
             </div>
-            <div className="text-center">
-              <p className="font-serif text-3xl md:text-4xl font-semibold text-ink">5+</p>
-              <p className="text-stone text-sm mt-1">CBC Meetings</p>
-            </div>
-            <div className="text-center">
-              <p className="font-serif text-3xl md:text-4xl font-semibold text-ink">1</p>
-              <p className="text-stone text-sm mt-1">Major Hackathon</p>
+
+            {/* Right side: Claude card */}
+            <div className="order-1 lg:order-2 relative">
+              {/* Main card */}
+              <div
+                className={cn(
+                  'relative bg-white rounded-3xl shadow-lg shadow-ink/5 overflow-hidden',
+                  'opacity-0 animate-fade-in'
+                )}
+                style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
+              >
+                {/* Terracotta gradient bar */}
+                <div className="h-1 bg-gradient-to-r from-claude-terracotta via-claude-terracotta-light to-claude-terracotta" />
+
+                <div className="p-6 md:p-8">
+                  {/* Avatar and name */}
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-claude-terracotta to-claude-terracotta-deep flex items-center justify-center">
+                      <ClaudeStarburst className="w-7 h-7 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-serif font-semibold text-ink text-lg">Claude</h3>
+                      <p className="text-stone text-sm">AI Assistant by Anthropic</p>
+                    </div>
+                  </div>
+
+                  {/* Message body */}
+                  <div className="space-y-4">
+                    <p className="text-charcoal leading-relaxed">
+                      Welcome to CBC-UR! I'm here to help you learn AI development,
+                      build meaningful projects, and prepare for the future of technology.
+                    </p>
+
+                    {/* Typing animation line */}
+                    <p className="text-claude-terracotta-deep font-medium">
+                      {displayText}
+                      {!isComplete && <span className="typing-cursor" />}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating badges - hidden on mobile */}
+              <div
+                className={cn(
+                  'absolute -top-4 -left-4 md:-left-8',
+                  'hidden md:flex items-center gap-2 px-4 py-2.5',
+                  'bg-white rounded-full shadow-lg shadow-ink/10',
+                  'float opacity-0 animate-fade-in'
+                )}
+                style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
+              >
+                <Star className="w-4 h-4 text-claude-terracotta fill-claude-terracotta" />
+                <span className="text-sm font-semibold text-ink">100+ Members</span>
+              </div>
+
+              <div
+                className={cn(
+                  'absolute -bottom-4 -right-4 md:-right-8',
+                  'hidden md:flex items-center gap-2 px-4 py-2.5',
+                  'bg-white rounded-full shadow-lg shadow-ink/10',
+                  'float-delayed opacity-0 animate-fade-in'
+                )}
+                style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}
+              >
+                <Activity className="w-4 h-4 text-sage" />
+                <span className="text-sm font-semibold text-ink">Active Projects</span>
+              </div>
             </div>
           </div>
         </div>

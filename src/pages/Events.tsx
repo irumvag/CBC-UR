@@ -120,7 +120,7 @@ export default function Events() {
                         key={i}
                         className={cn(
                           'flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium',
-                          activity.highlight
+                          'highlight' in activity && activity.highlight
                             ? 'bg-claude-terracotta/10 text-claude-terracotta'
                             : 'bg-pampas text-charcoal'
                         )}
