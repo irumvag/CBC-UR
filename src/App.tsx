@@ -15,6 +15,9 @@ const About = lazy(() => import('@/pages/About'))
 const Events = lazy(() => import('@/pages/Events'))
 const Projects = lazy(() => import('@/pages/Projects'))
 const Join = lazy(() => import('@/pages/Join'))
+const Blog = lazy(() => import('@/pages/Blog'))
+const Article = lazy(() => import('@/pages/Article'))
+const ArticleEditor = lazy(() => import('@/pages/ArticleEditor'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 
 // Dashboard pages
@@ -44,6 +47,18 @@ export default function App() {
                 <Route path="/events" element={<Events />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/join" element={<Join />} />
+
+                {/* Blog Routes */}
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<Article />} />
+                <Route
+                  path="/blog/new"
+                  element={
+                    <ProtectedRoute>
+                      <ArticleEditor />
+                    </ProtectedRoute>
+                  }
+                />
 
                 {/* Protected Dashboard Routes */}
                 <Route

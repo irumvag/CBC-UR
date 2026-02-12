@@ -4,6 +4,7 @@ export type MemberRole = 'member' | 'lead' | 'admin'
 export type MemberStatus = 'pending' | 'approved' | 'rejected'
 export type EventType = 'workshop' | 'hackathon' | 'meetup' | 'demo_day'
 export type RSVPStatus = 'registered' | 'attended' | 'cancelled'
+export type ArticleCategory = 'tutorial' | 'project' | 'news' | 'event' | 'general'
 
 export interface Member {
   id: string
@@ -68,6 +69,20 @@ export interface Subscriber {
   subscribed_at: string
 }
 
+export interface Article {
+  id: string
+  title: string
+  slug: string
+  content: string
+  excerpt: string | null
+  author_id: string
+  category: ArticleCategory
+  cover_image_url: string | null
+  published: boolean
+  created_at: string
+  updated_at: string
+}
+
 // Join types for queries with relations
 export interface ProjectWithMembers extends Project {
   project_members: (ProjectMember & { member: Member })[]
@@ -76,6 +91,10 @@ export interface ProjectWithMembers extends Project {
 export interface EventWithRSVPs extends Event {
   event_rsvps: EventRSVP[]
   rsvp_count?: number
+}
+
+export interface ArticleWithAuthor extends Article {
+  author: Pick<Member, 'id' | 'full_name' | 'avatar_url'>
 }
 
 // Input types for mutations
@@ -95,6 +114,16 @@ export interface SubscriberInput {
 export interface EventRSVPInput {
   event_id: string
   member_id: string
+}
+
+export interface ArticleInput {
+  title: string
+  slug: string
+  content: string
+  excerpt?: string
+  category: ArticleCategory
+  cover_image_url?: string
+  published?: boolean
 }
 
 // Database schema type for Supabase client
@@ -146,6 +175,15 @@ export interface Database {
           subscribed_at?: string
         }
         Update: Partial<Omit<Subscriber, 'id'>>
+      }
+      articles: {
+        Row: Article
+        Insert: Omit<Article, 'id' | 'created_at' | 'updated_at'> & {
+          id?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: Partial<Omit<Article, 'id'>>
       }
     }
   }
