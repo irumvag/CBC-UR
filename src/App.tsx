@@ -5,6 +5,7 @@ import { Layout } from '@/components/layout/Layout'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { ToastProvider } from '@/components/ui/Toast'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 import { AdminRoute } from '@/components/auth/AdminRoute'
 import { RouteLoader } from '@/components/ui/PageLoader'
@@ -35,9 +36,10 @@ const AdminProjects = lazy(() => import('@/pages/admin/AdminProjects'))
 export default function App() {
   return (
     <HelmetProvider>
-      <AuthProvider>
-        <ToastProvider>
-          <Layout>
+      <ThemeProvider>
+        <AuthProvider>
+          <ToastProvider>
+            <Layout>
             <ScrollToTop />
             <Suspense fallback={<RouteLoader />}>
               <Routes>
@@ -131,10 +133,11 @@ export default function App() {
                 {/* 404 Catch-all Route */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
-            </Suspense>
-          </Layout>
-        </ToastProvider>
-      </AuthProvider>
+              </Suspense>
+            </Layout>
+          </ToastProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </HelmetProvider>
   )
 }

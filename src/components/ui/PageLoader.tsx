@@ -48,7 +48,7 @@ export function PageLoader({ className }: PageLoaderProps) {
         </div>
       </div>
 
-      <p className="mt-4 text-stone text-sm font-medium animate-pulse">
+      <p className="mt-4 text-stone dark:text-dark-muted text-sm font-medium animate-pulse">
         Loading...
       </p>
     </div>
@@ -58,7 +58,7 @@ export function PageLoader({ className }: PageLoaderProps) {
 // Full page loader for Suspense fallback
 export function FullPageLoader() {
   return (
-    <div className="fixed inset-0 bg-surface z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-surface dark:bg-dark-bg z-50 flex items-center justify-center transition-colors">
       <PageLoader />
     </div>
   )
@@ -67,7 +67,7 @@ export function FullPageLoader() {
 // Route transition loader
 export function RouteLoader() {
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-surface dark:bg-dark-bg transition-colors">
       <PageLoader className="min-h-screen" />
     </div>
   )

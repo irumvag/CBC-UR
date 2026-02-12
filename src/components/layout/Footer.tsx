@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 export function Footer() {
   return (
-    <footer className="border-t border-pampas-warm bg-surface">
+    <footer className="border-t border-pampas-warm dark:border-dark-border bg-surface dark:bg-dark-bg transition-colors duration-300">
       <div className="container-main py-12 md:py-16">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
           {/* Logo & Description */}
@@ -26,7 +26,7 @@ export function Footer() {
                 <span className="text-claude-terracotta">Claude Builder Club</span>
               </span>
             </Link>
-            <p className="text-stone text-sm max-w-xs">
+            <p className="text-stone dark:text-dark-muted text-sm max-w-xs">
               University of Rwanda
             </p>
           </div>
@@ -37,7 +37,7 @@ export function Footer() {
               href="https://www.anthropic.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-stone hover:text-claude-terracotta transition-colors text-sm font-medium"
+              className="text-stone dark:text-dark-muted hover:text-claude-terracotta transition-colors text-sm font-medium"
             >
               Anthropic
             </a>
@@ -45,7 +45,7 @@ export function Footer() {
               href="https://docs.anthropic.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-stone hover:text-claude-terracotta transition-colors text-sm font-medium"
+              className="text-stone dark:text-dark-muted hover:text-claude-terracotta transition-colors text-sm font-medium"
             >
               Claude Docs
             </a>
@@ -53,13 +53,13 @@ export function Footer() {
               href="https://claude.ai"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-stone hover:text-claude-terracotta transition-colors text-sm font-medium"
+              className="text-stone dark:text-dark-muted hover:text-claude-terracotta transition-colors text-sm font-medium"
             >
               Try Claude
             </a>
             <Link
               to="/join"
-              className="text-stone hover:text-claude-terracotta transition-colors text-sm font-medium"
+              className="text-stone dark:text-dark-muted hover:text-claude-terracotta transition-colors text-sm font-medium"
             >
               Contact
             </Link>
@@ -67,11 +67,11 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-pampas-warm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <p className="text-cloudy text-sm">
+        <div className="mt-12 pt-8 border-t border-pampas-warm dark:border-dark-border flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <p className="text-cloudy dark:text-dark-muted text-sm">
             &copy; 2026 Claude Builder Club — University of Rwanda
           </p>
-          <p className="text-cloudy text-sm">
+          <p className="text-cloudy dark:text-dark-muted text-sm">
             Built with curiosity and Claude
           </p>
         </div>
