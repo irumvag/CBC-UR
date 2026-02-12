@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import { ProjectCardSkeleton } from '@/components/ui/Skeleton'
 import { useProjects, projectCategories, categoryGradients } from '@/hooks/useProjects'
+import { ProjectsSEO } from '@/components/SEO'
 import { cn } from '@/lib/utils'
 
 type Category = 'All' | 'Web Apps' | 'Chatbots' | 'Data Analysis' | 'Education' | 'Healthcare'
@@ -20,6 +21,7 @@ export default function Projects() {
 
   return (
     <>
+      <ProjectsSEO />
       {/* Page Header */}
       <section className="bg-pampas-warm py-16 md:py-20">
         <div className="container-main">

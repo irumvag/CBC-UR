@@ -7,6 +7,7 @@ import { EventCardSkeleton } from '@/components/ui/Skeleton'
 import { useEvents } from '@/hooks/useEvents'
 import { useSubscribe } from '@/hooks/useSubscribe'
 import { useToast } from '@/components/ui/Toast'
+import { EventsSEO } from '@/components/SEO'
 import { cn } from '@/lib/utils'
 import type { EventType } from '@/types/database'
 
@@ -78,6 +79,7 @@ export default function Events() {
 
   return (
     <>
+      <EventsSEO />
       {/* Page Header */}
       <section className="bg-pampas-warm py-16 md:py-20">
         <div className="container-main">
