@@ -1,30 +1,35 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Menu, X, ChevronDown, LayoutDashboard, FolderKanban, Settings, LogOut, Sun, Moon } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
 import { AuthModal } from '@/components/auth/AuthModal'
 import { cn } from '@/lib/utils'
+import { languages, changeLanguage } from '@/lib/i18n'
 
 const navLinks = [
-  { name: 'About', href: '/about' },
-  { name: 'Activities', href: '/events' },
-  { name: 'Projects', href: '/projects' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Community', href: '/join' },
+  { key: 'about', href: '/about' },
+  { key: 'events', href: '/events' },
+  { key: 'projects', href: '/projects' },
+  { key: 'blog', href: '/blog' },
+  { key: 'community', href: '/join' },
 ]
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [langMenuOpen, setLangMenuOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [authModalTab, setAuthModalTab] = useState<'signin' | 'signup'>('signin')
   const userMenuRef = useRef<HTMLDivElement>(null)
+  const langMenuRef = useRef<HTMLDivElement>(null)
   const location = useLocation()
   const navigate = useNavigate()
   const { user, member, signOut, loading } = useAuth()
   const { theme, toggleTheme } = useTheme()
+  const { t, i18n } = useTranslation()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,11 +55,14 @@ export function Navbar() {
     }
   }, [location.state])
 
-  // Close user menu when clicking outside
+  // Close user menu and lang menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setUserMenuOpen(false)
+      }
+      if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
+        setLangMenuOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -134,7 +142,7 @@ export function Navbar() {
             <div className="hidden md:flex items-center gap-8">
               {navLinks.map((link) => (
                 <Link
-                  key={link.name}
+                  key={link.key}
                   to={link.href}
                   className={cn(
                     'font-sans font-medium text-sm transition-colors',
@@ -143,9 +151,48 @@ export function Navbar() {
                       : 'text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text'
                   )}
                 >
-                  {link.name}
+                  {t(`nav.${link.key}`)}
                 </Link>
               ))}
+
+              {/* Language Toggle */}
+              <div className="relative" ref={langMenuRef}>
+                <button
+                  onClick={() => setLangMenuOpen(!langMenuOpen)}
+                  className={cn(
+                    'flex items-center gap-1.5 px-2 py-1.5 rounded-full transition-all duration-300',
+                    'text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text',
+                    'hover:bg-pampas-warm dark:hover:bg-dark-card',
+                    'text-sm font-medium'
+                  )}
+                  aria-label="Change language"
+                >
+                  <span>{i18n.language === 'rw' ? '🇷🇼' : '🇬🇧'}</span>
+                  <span className="uppercase">{i18n.language === 'rw' ? 'RW' : 'EN'}</span>
+                </button>
+                {langMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-dark-card rounded-xl shadow-lg border border-pampas-warm dark:border-dark-border py-1 animate-fade-in">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => {
+                          changeLanguage(lang.code as 'en' | 'rw')
+                          setLangMenuOpen(false)
+                        }}
+                        className={cn(
+                          'flex items-center gap-3 px-4 py-2.5 text-sm w-full transition-colors',
+                          i18n.language === lang.code
+                            ? 'text-claude-terracotta bg-claude-terracotta/5'
+                            : 'text-ink dark:text-dark-text hover:bg-pampas-warm dark:hover:bg-dark-surface'
+                        )}
+                      >
+                        <span>{lang.flag}</span>
+                        <span>{lang.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Theme Toggle */}
               <button
@@ -220,21 +267,21 @@ export function Navbar() {
                               className="flex items-center gap-3 px-4 py-2.5 text-sm text-ink dark:text-dark-text hover:bg-pampas-warm dark:hover:bg-dark-surface transition-colors"
                             >
                               <LayoutDashboard size={18} className="text-stone dark:text-dark-muted" />
-                              Dashboard
+                              {t('nav.dashboard')}
                             </Link>
                             <Link
                               to="/dashboard/projects"
                               className="flex items-center gap-3 px-4 py-2.5 text-sm text-ink dark:text-dark-text hover:bg-pampas-warm dark:hover:bg-dark-surface transition-colors"
                             >
                               <FolderKanban size={18} className="text-stone dark:text-dark-muted" />
-                              My Projects
+                              {t('nav.myProjects')}
                             </Link>
                             <Link
                               to="/dashboard/settings"
                               className="flex items-center gap-3 px-4 py-2.5 text-sm text-ink dark:text-dark-text hover:bg-pampas-warm dark:hover:bg-dark-surface transition-colors"
                             >
                               <Settings size={18} className="text-stone dark:text-dark-muted" />
-                              Settings
+                              {t('nav.settings')}
                             </Link>
                           </div>
 
@@ -245,7 +292,7 @@ export function Navbar() {
                               className="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors w-full"
                             >
                               <LogOut size={18} />
-                              Sign Out
+                              {t('common.signOut')}
                             </button>
                           </div>
                         </div>
@@ -262,15 +309,31 @@ export function Navbar() {
                         'hover:bg-claude-terracotta hover:text-white hover:-translate-y-0.5 hover:shadow-lg'
                       )}
                     >
-                      Join the Club
+                      {t('common.joinTheClub')}
                     </button>
                   )}
                 </>
               )}
             </div>
 
-            {/* Mobile: Theme Toggle + Menu Button */}
-            <div className="md:hidden flex items-center gap-2">
+            {/* Mobile: Language + Theme Toggle + Menu Button */}
+            <div className="md:hidden flex items-center gap-1">
+              {/* Mobile Language Toggle */}
+              <button
+                onClick={() => {
+                  const newLang = i18n.language === 'en' ? 'rw' : 'en'
+                  changeLanguage(newLang)
+                }}
+                className={cn(
+                  'flex items-center gap-1 px-2 py-1.5 rounded-full transition-all duration-300',
+                  'text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text',
+                  'hover:bg-pampas-warm dark:hover:bg-dark-card',
+                  'text-xs font-medium'
+                )}
+                aria-label="Change language"
+              >
+                <span>{i18n.language === 'rw' ? '🇷🇼' : '🇬🇧'}</span>
+              </button>
               <button
                 onClick={toggleTheme}
                 className={cn(
@@ -299,7 +362,7 @@ export function Navbar() {
               <div className="flex flex-col gap-1 pt-4 border-t border-pampas-warm dark:border-dark-border">
                 {navLinks.map((link) => (
                   <Link
-                    key={link.name}
+                    key={link.key}
                     to={link.href}
                     className={cn(
                       'font-sans font-medium px-4 py-3 rounded-xl transition-colors',
@@ -308,7 +371,7 @@ export function Navbar() {
                         : 'text-stone dark:text-dark-muted hover:bg-pampas dark:hover:bg-dark-card hover:text-ink dark:hover:text-dark-text'
                     )}
                   >
-                    {link.name}
+                    {t(`nav.${link.key}`)}
                   </Link>
                 ))}
 
@@ -346,28 +409,28 @@ export function Navbar() {
                           className="flex items-center gap-3 px-4 py-3 text-stone dark:text-dark-muted hover:bg-pampas dark:hover:bg-dark-card hover:text-ink dark:hover:text-dark-text rounded-xl transition-colors"
                         >
                           <LayoutDashboard size={18} />
-                          Dashboard
+                          {t('nav.dashboard')}
                         </Link>
                         <Link
                           to="/dashboard/projects"
                           className="flex items-center gap-3 px-4 py-3 text-stone dark:text-dark-muted hover:bg-pampas dark:hover:bg-dark-card hover:text-ink dark:hover:text-dark-text rounded-xl transition-colors"
                         >
                           <FolderKanban size={18} />
-                          My Projects
+                          {t('nav.myProjects')}
                         </Link>
                         <Link
                           to="/dashboard/settings"
                           className="flex items-center gap-3 px-4 py-3 text-stone dark:text-dark-muted hover:bg-pampas dark:hover:bg-dark-card hover:text-ink dark:hover:text-dark-text rounded-xl transition-colors"
                         >
                           <Settings size={18} />
-                          Settings
+                          {t('nav.settings')}
                         </Link>
                         <button
                           onClick={handleSignOut}
                           className="flex items-center gap-3 px-4 py-3 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors"
                         >
                           <LogOut size={18} />
-                          Sign Out
+                          {t('common.signOut')}
                         </button>
                       </>
                     ) : (
@@ -380,7 +443,7 @@ export function Navbar() {
                             'hover:bg-pampas dark:hover:bg-dark-card transition-colors'
                           )}
                         >
-                          Sign In
+                          {t('common.signIn')}
                         </button>
                         <button
                           onClick={openSignUp}
@@ -390,7 +453,7 @@ export function Navbar() {
                             'hover:bg-claude-terracotta hover:text-white transition-colors'
                           )}
                         >
-                          Join the Club
+                          {t('common.joinTheClub')}
                         </button>
                       </>
                     )}

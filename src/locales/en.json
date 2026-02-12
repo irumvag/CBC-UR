@@ -1,0 +1,224 @@
+{
+  "common": {
+    "joinTheClub": "Join the Club",
+    "learnMore": "Learn More",
+    "viewAll": "View All",
+    "getStarted": "Get Started",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "loading": "Loading...",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "close": "Close",
+    "readMore": "Read More",
+    "seeAll": "See All"
+  },
+  "nav": {
+    "about": "About",
+    "events": "Activities",
+    "projects": "Projects",
+    "blog": "Blog",
+    "community": "Community",
+    "dashboard": "Dashboard",
+    "myProjects": "My Projects",
+    "settings": "Settings"
+  },
+  "home": {
+    "hero": {
+      "tagline": "AI Builders Community",
+      "title": "Build the future with Claude AI",
+      "subtitle": "Join Rwanda's first Claude Builder Club. Learn AI development, collaborate on impactful projects, and be part of a vibrant community of innovators at University of Rwanda.",
+      "cta": "Join Now",
+      "secondaryCta": "Learn More"
+    },
+    "stats": {
+      "members": "Active Members",
+      "projects": "Projects Built",
+      "workshops": "Workshops Held",
+      "partners": "Industry Partners"
+    },
+    "features": {
+      "tagline": "What We Do",
+      "title": "Building AI Solutions for Rwanda",
+      "subtitle": "We bring together curious minds to explore, build, and deploy AI solutions that address real challenges in our community.",
+      "learn": {
+        "title": "Learn AI Development",
+        "description": "Master prompt engineering, Claude API integration, and build intelligent applications through hands-on workshops."
+      },
+      "build": {
+        "title": "Build Real Projects",
+        "description": "Work on meaningful projects that solve local challenges in healthcare, education, agriculture, and more."
+      },
+      "connect": {
+        "title": "Connect & Grow",
+        "description": "Network with fellow builders, industry professionals, and Anthropic's global community of developers."
+      },
+      "showcase": {
+        "title": "Showcase Your Work",
+        "description": "Present your projects at demo days, hackathons, and gain recognition for your innovative solutions."
+      }
+    },
+    "events": {
+      "tagline": "Upcoming Events",
+      "title": "Join Our Next Session",
+      "subtitle": "From workshops to hackathons, there's always something happening at CBC-UR.",
+      "viewAll": "View All Events"
+    },
+    "projects": {
+      "tagline": "Featured Projects",
+      "title": "What We're Building",
+      "subtitle": "Explore innovative AI solutions created by our community members.",
+      "viewAll": "View All Projects"
+    },
+    "cta": {
+      "title": "Ready to Start Building?",
+      "subtitle": "Join Claude Builder Club and be part of Rwanda's AI innovation community. Whether you're a beginner or experienced developer, there's a place for you.",
+      "button": "Apply for Membership"
+    }
+  },
+  "about": {
+    "header": {
+      "tagline": "About Us",
+      "title": "Empowering Rwanda's AI Builders",
+      "subtitle": "Claude Builder Club at University of Rwanda is a student-led community dedicated to learning, building, and innovating with AI technology."
+    },
+    "mission": {
+      "tagline": "Our Mission",
+      "title": "Why We Exist",
+      "description": "We believe every student deserves access to cutting-edge AI education and the opportunity to build solutions that matter. Our mission is to create a supportive environment where curious minds can explore AI technology, develop practical skills, and create impact in their communities.",
+      "vision": {
+        "title": "Our Vision",
+        "description": "To be the leading student AI community in East Africa, producing innovative solutions and skilled AI practitioners who drive positive change."
+      },
+      "values": {
+        "title": "Our Values",
+        "curiosity": "Curiosity-Driven Learning",
+        "collaboration": "Collaborative Building",
+        "impact": "Community Impact",
+        "inclusivity": "Inclusive Innovation"
+      }
+    },
+    "team": {
+      "tagline": "Leadership",
+      "title": "Meet Our Team",
+      "subtitle": "Passionate students leading the charge in AI education and innovation."
+    },
+    "timeline": {
+      "tagline": "Our Journey",
+      "title": "How We Got Here",
+      "subtitle": "From an idea to a thriving community of AI builders."
+    },
+    "partners": {
+      "tagline": "Our Partners",
+      "title": "Supported By",
+      "subtitle": "We're grateful to work with organizations that share our vision for AI education."
+    }
+  },
+  "events": {
+    "header": {
+      "tagline": "Events & Activities",
+      "title": "Learn, Build, Connect",
+      "subtitle": "Join our workshops, hackathons, and meetups to level up your AI skills and connect with fellow builders."
+    },
+    "filters": {
+      "all": "All Events",
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "workshop": "Workshops",
+      "hackathon": "Hackathons",
+      "meetup": "Meetups"
+    },
+    "card": {
+      "register": "Register Now",
+      "registered": "Registered",
+      "full": "Event Full",
+      "completed": "Completed",
+      "spotsLeft": "{{count}} spots left",
+      "attendees": "{{count}} attendees"
+    },
+    "empty": {
+      "title": "No events found",
+      "description": "Check back soon for upcoming events!"
+    }
+  },
+  "join": {
+    "header": {
+      "tagline": "Become a Member",
+      "title": "Join Claude Builder Club",
+      "subtitle": "Start your AI journey with a community that supports you. Learn to build with Claude, collaborate on real projects, and shape the future of AI in Rwanda."
+    },
+    "benefits": {
+      "tagline": "Member Benefits",
+      "title": "What You'll Get",
+      "description": "As a CBC-UR member, you'll have access to resources, mentorship, and opportunities designed to help you become a confident AI builder.",
+      "apiCredits": "Access to Claude API credits",
+      "workshops": "Weekly workshops and build sessions",
+      "mentorship": "Mentorship from experienced builders",
+      "networking": "Networking with Anthropic community",
+      "showcase": "Project showcase opportunities",
+      "certificate": "Certificate of participation"
+    },
+    "form": {
+      "title": "Application Form",
+      "fullName": "Full Name",
+      "email": "Email",
+      "studentId": "Student ID",
+      "yearOfStudy": "Year of Study",
+      "department": "Department",
+      "whyJoin": "Why do you want to join?",
+      "whyJoinPlaceholder": "Tell us what excites you about AI and what you hope to learn...",
+      "aiExperience": "What's your experience with AI?",
+      "aiExperiencePlaceholder": "Any experience with AI tools, programming, or related technologies...",
+      "submit": "Submit Application",
+      "submitting": "Submitting...",
+      "disclaimer": "By submitting, you agree to join our WhatsApp group and receive event updates.",
+      "success": {
+        "title": "Application Submitted!",
+        "description": "Thank you for applying to Claude Builder Club! We'll review your application and get back to you within 48 hours with next steps.",
+        "another": "Submit Another Application"
+      }
+    },
+    "yearOptions": {
+      "select": "Select year",
+      "year1": "Year 1",
+      "year2": "Year 2",
+      "year3": "Year 3",
+      "year4": "Year 4",
+      "year5": "Year 5+",
+      "postgrad": "Postgraduate"
+    },
+    "departmentOptions": {
+      "select": "Select department",
+      "cs": "Computer Science",
+      "it": "Information Technology",
+      "se": "Software Engineering",
+      "ee": "Electrical Engineering",
+      "ce": "Computer Engineering",
+      "business": "Business Administration",
+      "economics": "Economics",
+      "medicine": "Medicine & Health Sciences",
+      "agriculture": "Agriculture",
+      "arts": "Arts & Social Sciences",
+      "education": "Education",
+      "other": "Other"
+    },
+    "validation": {
+      "fullNameRequired": "Full name is required",
+      "fullNameMin": "Name must be at least 2 characters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email",
+      "studentIdRequired": "Student ID is required",
+      "yearRequired": "Please select your year of study",
+      "departmentRequired": "Please select your department"
+    }
+  },
+  "footer": {
+    "universityOf": "University of Rwanda",
+    "copyright": "© 2026 Claude Builder Club — University of Rwanda",
+    "builtWith": "Built with curiosity and Claude"
+  }
+}

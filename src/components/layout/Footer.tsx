@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 export function Footer() {
+  const { t } = useTranslation()
+
   return (
     <footer className="border-t border-pampas-warm dark:border-dark-border bg-surface dark:bg-dark-bg transition-colors duration-300">
       <div className="container-main py-12 md:py-16">
@@ -27,7 +30,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-stone dark:text-dark-muted text-sm max-w-xs">
-              University of Rwanda
+              {t('footer.universityOf')}
             </p>
           </div>
 
@@ -61,7 +64,7 @@ export function Footer() {
               to="/join"
               className="text-stone dark:text-dark-muted hover:text-claude-terracotta transition-colors text-sm font-medium"
             >
-              Contact
+              {t('nav.community')}
             </Link>
           </div>
         </div>
@@ -69,10 +72,10 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-pampas-warm dark:border-dark-border flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <p className="text-cloudy dark:text-dark-muted text-sm">
-            &copy; 2026 Claude Builder Club — University of Rwanda
+            {t('footer.copyright')}
           </p>
           <p className="text-cloudy dark:text-dark-muted text-sm">
-            Built with curiosity and Claude
+            {t('footer.builtWith')}
           </p>
         </div>
       </div>
