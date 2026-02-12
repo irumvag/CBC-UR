@@ -32,6 +32,7 @@ const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'))
 const AdminMembers = lazy(() => import('@/pages/admin/AdminMembers'))
 const AdminEvents = lazy(() => import('@/pages/admin/AdminEvents'))
 const AdminProjects = lazy(() => import('@/pages/admin/AdminProjects'))
+const AdminContent = lazy(() => import('@/pages/admin/AdminContent'))
 
 export default function App() {
   return (
@@ -126,6 +127,14 @@ export default function App() {
                   element={
                     <AdminRoute>
                       <AdminProjects />
+                    </AdminRoute>
+                  }
+                />
+                <Route
+                  path="/admin/content"
+                  element={
+                    <AdminRoute>
+                      <AdminContent />
                     </AdminRoute>
                   }
                 />

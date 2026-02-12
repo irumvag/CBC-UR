@@ -5,6 +5,8 @@ export type MemberStatus = 'pending' | 'approved' | 'rejected'
 export type EventType = 'workshop' | 'hackathon' | 'meetup' | 'demo_day'
 export type RSVPStatus = 'registered' | 'attended' | 'cancelled'
 export type ArticleCategory = 'tutorial' | 'project' | 'news' | 'event' | 'general'
+export type PartnerTier = 'platinum' | 'gold' | 'silver' | 'partner'
+export type ContentCategory = 'home' | 'about' | 'events' | 'join' | 'footer' | 'general'
 
 export interface Member {
   id: string
@@ -83,6 +85,86 @@ export interface Article {
   updated_at: string
 }
 
+// CMS Content Types
+export interface SiteContent {
+  id: string
+  key: string
+  language: string
+  value: string
+  category: ContentCategory
+  created_at: string
+  updated_at: string
+}
+
+export interface Feature {
+  id: string
+  icon: string
+  title_en: string
+  title_rw: string | null
+  description_en: string
+  description_rw: string | null
+  sort_order: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface TeamMember {
+  id: string
+  name: string
+  role_en: string
+  role_rw: string | null
+  bio_en: string | null
+  bio_rw: string | null
+  image_url: string | null
+  linkedin_url: string | null
+  twitter_url: string | null
+  github_url: string | null
+  sort_order: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface Partner {
+  id: string
+  name: string
+  logo_url: string | null
+  website_url: string | null
+  description_en: string | null
+  description_rw: string | null
+  tier: PartnerTier
+  sort_order: number
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface Milestone {
+  id: string
+  date: string
+  title_en: string
+  title_rw: string | null
+  description_en: string | null
+  description_rw: string | null
+  icon: string
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface SiteStat {
+  id: string
+  key: string
+  value: number
+  label_en: string
+  label_rw: string | null
+  icon: string
+  sort_order: number
+  is_active: boolean
+  updated_at: string
+}
+
 // Join types for queries with relations
 export interface ProjectWithMembers extends Project {
   project_members: (ProjectMember & { member: Member })[]
@@ -124,6 +206,68 @@ export interface ArticleInput {
   category: ArticleCategory
   cover_image_url?: string
   published?: boolean
+}
+
+export interface SiteContentInput {
+  key: string
+  language: string
+  value: string
+  category: ContentCategory
+}
+
+export interface FeatureInput {
+  icon: string
+  title_en: string
+  title_rw?: string
+  description_en: string
+  description_rw?: string
+  sort_order?: number
+  is_active?: boolean
+}
+
+export interface TeamMemberInput {
+  name: string
+  role_en: string
+  role_rw?: string
+  bio_en?: string
+  bio_rw?: string
+  image_url?: string
+  linkedin_url?: string
+  twitter_url?: string
+  github_url?: string
+  sort_order?: number
+  is_active?: boolean
+}
+
+export interface PartnerInput {
+  name: string
+  logo_url?: string
+  website_url?: string
+  description_en?: string
+  description_rw?: string
+  tier?: PartnerTier
+  sort_order?: number
+  is_active?: boolean
+}
+
+export interface MilestoneInput {
+  date: string
+  title_en: string
+  title_rw?: string
+  description_en?: string
+  description_rw?: string
+  icon?: string
+  is_active?: boolean
+}
+
+export interface SiteStatInput {
+  key: string
+  value: number
+  label_en: string
+  label_rw?: string
+  icon?: string
+  sort_order?: number
+  is_active?: boolean
 }
 
 // Database schema type for Supabase client

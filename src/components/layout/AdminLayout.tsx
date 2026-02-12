@@ -1,12 +1,13 @@
 import { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Users, Calendar, FolderKanban, ChevronRight, Home } from 'lucide-react'
+import { LayoutDashboard, Users, Calendar, FolderKanban, ChevronRight, Home, FileText } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 
 interface AdminLayoutProps {
   children: ReactNode
   title: string
+  description?: string
   breadcrumbs?: { label: string; href?: string }[]
 }
 
@@ -15,9 +16,10 @@ const sidebarLinks = [
   { name: 'Members', href: '/admin/members', icon: Users },
   { name: 'Events', href: '/admin/events', icon: Calendar },
   { name: 'Projects', href: '/admin/projects', icon: FolderKanban },
+  { name: 'Content', href: '/admin/content', icon: FileText },
 ]
 
-export function AdminLayout({ children, title, breadcrumbs = [] }: AdminLayoutProps) {
+export function AdminLayout({ children, title, description, breadcrumbs = [] }: AdminLayoutProps) {
   const location = useLocation()
   const { member } = useAuth()
 
@@ -178,7 +180,10 @@ export function AdminLayout({ children, title, breadcrumbs = [] }: AdminLayoutPr
               ))}
             </nav>
             {/* Title */}
-            <h1 className="font-serif font-semibold text-2xl text-ink">{title}</h1>
+            <h1 className="font-serif font-semibold text-2xl text-ink dark:text-dark-text">{title}</h1>
+            {description && (
+              <p className="text-stone dark:text-dark-muted text-sm mt-1">{description}</p>
+            )}
           </div>
 
           {/* Page Content */}
