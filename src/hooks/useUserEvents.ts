@@ -117,8 +117,7 @@ export function useUserEvents(filter: 'upcoming' | 'past'): UseUserEventsResult 
         }
 
         // Fetch from Supabase
-        const now = new Date().toISOString()
-        let query = supabase
+        const query = supabase
           .from('event_rsvps')
           .select(`
             id,

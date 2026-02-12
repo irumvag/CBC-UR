@@ -126,7 +126,6 @@ export function useDashboardData(): UseDashboardDataResult {
         }
 
         // Fetch user's RSVP'd upcoming events
-        const now = new Date().toISOString()
         const { data: rsvpEvents } = await supabase
           .from('event_rsvps')
           .select(`

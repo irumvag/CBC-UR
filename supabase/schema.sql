@@ -96,32 +96,116 @@ ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
 ALTER TABLE project_members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE subscribers ENABLE ROW LEVEL SECURITY;
 
--- Public read access for published events
-CREATE POLICY "Public can view published events" ON events
-  FOR SELECT USING (is_published = true);
-
--- Public read access for projects
-CREATE POLICY "Public can view projects" ON projects
-  FOR SELECT USING (true);
-
--- Public read access for project members
-CREATE POLICY "Public can view project members" ON project_members
-  FOR SELECT USING (true);
+-- MEMBERS POLICIES
 
 -- Public read access for approved members (for team displays)
 CREATE POLICY "Public can view approved members" ON members
   FOR SELECT USING (status = 'approved');
 
--- Allow public to insert new members (applications)
-CREATE POLICY "Anyone can submit membership application" ON members
-  FOR INSERT WITH CHECK (role = 'member' AND status = 'pending');
+-- Users can view their own profile regardless of status
+CREATE POLICY "Users can view own profile" ON members
+  FOR SELECT USING (auth.uid() = id);
+
+-- Allow new user registration (signup creates member with auth.uid as id)
+CREATE POLICY "Users can create own profile" ON members
+  FOR INSERT WITH CHECK (auth.uid() = id);
+
+-- Users can update their own profile
+CREATE POLICY "Users can update own profile" ON members
+  FOR UPDATE USING (auth.uid() = id);
+
+-- Users can delete their own profile
+CREATE POLICY "Users can delete own profile" ON members
+  FOR DELETE USING (auth.uid() = id);
+
+-- EVENTS POLICIES
+
+-- Public read access for published events
+CREATE POLICY "Public can view published events" ON events
+  FOR SELECT USING (is_published = true);
+
+-- Admins can manage all events
+CREATE POLICY "Admins can manage events" ON events
+  FOR ALL USING (
+    EXISTS (
+      SELECT 1 FROM members
+      WHERE members.id = auth.uid()
+      AND members.role = 'admin'
+    )
+  );
+
+-- EVENT RSVPS POLICIES
+
+-- Authenticated users can view their own RSVPs
+CREATE POLICY "Users can view own RSVPs" ON event_rsvps
+  FOR SELECT USING (auth.uid() = member_id);
+
+-- Authenticated users can RSVP to events
+CREATE POLICY "Users can RSVP to events" ON event_rsvps
+  FOR INSERT WITH CHECK (auth.uid() = member_id);
+
+-- Users can update their own RSVPs
+CREATE POLICY "Users can update own RSVPs" ON event_rsvps
+  FOR UPDATE USING (auth.uid() = member_id);
+
+-- Users can cancel their own RSVPs
+CREATE POLICY "Users can delete own RSVPs" ON event_rsvps
+  FOR DELETE USING (auth.uid() = member_id);
+
+-- PROJECTS POLICIES
+
+-- Public read access for projects
+CREATE POLICY "Public can view projects" ON projects
+  FOR SELECT USING (true);
+
+-- Project owners can update their projects
+CREATE POLICY "Project owners can update" ON projects
+  FOR UPDATE USING (
+    EXISTS (
+      SELECT 1 FROM project_members
+      WHERE project_members.project_id = projects.id
+      AND project_members.member_id = auth.uid()
+      AND project_members.role = 'owner'
+    )
+  );
+
+-- Project owners can delete their projects
+CREATE POLICY "Project owners can delete" ON projects
+  FOR DELETE USING (
+    EXISTS (
+      SELECT 1 FROM project_members
+      WHERE project_members.project_id = projects.id
+      AND project_members.member_id = auth.uid()
+      AND project_members.role = 'owner'
+    )
+  );
+
+-- Authenticated users can create projects
+CREATE POLICY "Authenticated users can create projects" ON projects
+  FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
+
+-- PROJECT MEMBERS POLICIES
+
+-- Public read access for project members
+CREATE POLICY "Public can view project members" ON project_members
+  FOR SELECT USING (true);
+
+-- Users can add themselves to projects they own
+CREATE POLICY "Project owners can manage members" ON project_members
+  FOR ALL USING (
+    member_id = auth.uid()
+    OR EXISTS (
+      SELECT 1 FROM project_members pm
+      WHERE pm.project_id = project_members.project_id
+      AND pm.member_id = auth.uid()
+      AND pm.role = 'owner'
+    )
+  );
+
+-- SUBSCRIBERS POLICIES
 
 -- Allow public to subscribe to newsletter
 CREATE POLICY "Anyone can subscribe" ON subscribers
-  FOR INSERT WITH CHECK (true);
-
--- Allow public to RSVP to events (would need auth in production)
-CREATE POLICY "Public can RSVP to events" ON event_rsvps
   FOR INSERT WITH CHECK (true);
 
 -- Sample data for development
