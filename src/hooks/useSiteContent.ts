@@ -256,7 +256,8 @@ export function useFeatures() {
         .order('sort_order')
 
       if (fetchError) throw fetchError
-      setFeatures(data || mockFeatures)
+      // Fallback to mock data if database returns empty
+      setFeatures(data && data.length > 0 ? data : mockFeatures)
     } catch {
       console.warn('Using mock features data')
       setFeatures(mockFeatures)
@@ -382,7 +383,7 @@ export function useTeamMembers() {
         .order('sort_order')
 
       if (error) throw error
-      setTeamMembers(data || mockTeamMembers)
+      setTeamMembers(data && data.length > 0 ? data : mockTeamMembers)
     } catch {
       setTeamMembers(mockTeamMembers)
     } finally {
@@ -505,7 +506,7 @@ export function usePartners() {
         .order('sort_order')
 
       if (error) throw error
-      setPartners(data || mockPartners)
+      setPartners(data && data.length > 0 ? data : mockPartners)
     } catch {
       setPartners(mockPartners)
     } finally {
@@ -627,7 +628,7 @@ export function useMilestones() {
         .order('date', { ascending: true })
 
       if (error) throw error
-      setMilestones(data || mockMilestones)
+      setMilestones(data && data.length > 0 ? data : mockMilestones)
     } catch {
       setMilestones(mockMilestones)
     } finally {
@@ -669,7 +670,7 @@ export function useSiteStats() {
         .order('sort_order')
 
       if (error) throw error
-      setStats(data || mockStats)
+      setStats(data && data.length > 0 ? data : mockStats)
     } catch {
       setStats(mockStats)
     } finally {
