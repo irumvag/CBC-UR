@@ -29,7 +29,7 @@ CREATE POLICY "Admins can manage site content"
   USING (
     EXISTS (
       SELECT 1 FROM members
-      WHERE members.user_id = auth.uid()
+      WHERE members.id = auth.uid()
       AND members.role IN ('admin', 'lead')
     )
   );
@@ -64,7 +64,7 @@ CREATE POLICY "Admins can manage features"
   USING (
     EXISTS (
       SELECT 1 FROM members
-      WHERE members.user_id = auth.uid()
+      WHERE members.id = auth.uid()
       AND members.role IN ('admin', 'lead')
     )
   );
@@ -103,7 +103,7 @@ CREATE POLICY "Admins can manage team members"
   USING (
     EXISTS (
       SELECT 1 FROM members
-      WHERE members.user_id = auth.uid()
+      WHERE members.id = auth.uid()
       AND members.role IN ('admin', 'lead')
     )
   );
@@ -139,7 +139,7 @@ CREATE POLICY "Admins can manage partners"
   USING (
     EXISTS (
       SELECT 1 FROM members
-      WHERE members.user_id = auth.uid()
+      WHERE members.id = auth.uid()
       AND members.role IN ('admin', 'lead')
     )
   );
@@ -174,7 +174,7 @@ CREATE POLICY "Admins can manage milestones"
   USING (
     EXISTS (
       SELECT 1 FROM members
-      WHERE members.user_id = auth.uid()
+      WHERE members.id = auth.uid()
       AND members.role IN ('admin', 'lead')
     )
   );
@@ -208,7 +208,7 @@ CREATE POLICY "Admins can manage site stats"
   USING (
     EXISTS (
       SELECT 1 FROM members
-      WHERE members.user_id = auth.uid()
+      WHERE members.id = auth.uid()
       AND members.role IN ('admin', 'lead')
     )
   );
