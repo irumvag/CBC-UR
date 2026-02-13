@@ -16,6 +16,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   // Sign In form state
   const [signInEmail, setSignInEmail] = useState('')
@@ -32,6 +33,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
   // Reset form when tab changes
   useEffect(() => {
     setError(null)
+    setSuccessMessage(null)
     setShowPassword(false)
     setShowConfirmPassword(false)
   }, [activeTab])
@@ -41,6 +43,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
     if (isOpen) {
       setActiveTab(defaultTab)
       setError(null)
+      setSuccessMessage(null)
     } else {
       // Clear form on close
       setSignInEmail('')
@@ -105,9 +108,16 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
     setIsLoading(true)
 
     try {
-      const { error } = await signUp(signUpEmail, signUpPassword, signUpName)
+      const { error, needsEmailVerification } = await signUp(signUpEmail, signUpPassword, signUpName)
       if (error) {
         setError(error.message)
+      } else if (needsEmailVerification) {
+        setSuccessMessage('Account created! Please check your email to verify your account before signing in.')
+        // Clear the form
+        setSignUpName('')
+        setSignUpEmail('')
+        setSignUpPassword('')
+        setSignUpConfirmPassword('')
       } else {
         onClose()
       }
@@ -120,12 +130,18 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
 
   const handleGoogleSignIn = async () => {
     setError(null)
+    setSuccessMessage(null)
     setIsLoading(true)
 
     try {
       const { error } = await signInWithGoogle()
       if (error) {
-        setError(error.message)
+        // Check for common OAuth configuration errors
+        if (error.message.includes('provider is not enabled') || error.message.includes('Unsupported provider')) {
+          setError('Google sign-in is not configured yet. Please use email/password to sign in, or contact the administrator to enable Google authentication.')
+        } else {
+          setError(error.message)
+        }
         setIsLoading(false)
       }
       // Don't close modal or set loading false - will redirect to Google
@@ -202,6 +218,13 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
 
           {/* Content */}
           <div className="p-6">
+            {/* Success message */}
+            {successMessage && (
+              <div className="mb-4 p-3 rounded-xl bg-green-50 border border-green-200 text-green-700 text-sm">
+                {successMessage}
+              </div>
+            )}
+
             {/* Error message */}
             {error && (
               <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">

@@ -9,7 +9,7 @@ interface AuthContextType {
   member: Member | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: AuthError | null }>
+  signUp: (email: string, password: string, fullName: string) => Promise<{ error: AuthError | null; needsEmailVerification?: boolean }>
   signOut: () => Promise<void>
   signInWithGoogle: () => Promise<{ error: AuthError | null }>
   refreshMember: () => Promise<void>
@@ -133,14 +133,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await new Promise(resolve => setTimeout(resolve, 500))
       setUser({ ...mockUser, email, user_metadata: { full_name: fullName } })
       setMember({ ...mockMember, email, full_name: fullName })
-      return { error: null }
+      return { error: null, needsEmailVerification: false }
     }
+
+    // Get the correct redirect URL (not localhost in production)
+    const siteUrl = import.meta.env.VITE_SITE_URL || window.location.origin
 
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { full_name: fullName },
+        emailRedirectTo: `${siteUrl}/dashboard`,
       },
     })
 
@@ -155,7 +159,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } as any)
     }
 
-    return { error }
+    // Check if email confirmation is required
+    const needsEmailVerification = !error && data.user && !data.session
+
+    return { error, needsEmailVerification }
   }
 
   const signOut = async () => {
