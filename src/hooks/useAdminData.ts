@@ -189,7 +189,7 @@ export function useAdminStats() {
 
       try {
         if (!isSupabaseConfigured) {
-          await new Promise((r) => setTimeout(r, 500))
+          // Use mock data immediately without delay
           const pending = mockMembers.filter((m) => m.status === 'pending')
           const approved = mockMembers.filter((m) => m.status === 'approved')
           const upcoming = mockEvents.filter((e) => new Date(e.date) > new Date())
@@ -203,6 +203,7 @@ export function useAdminStats() {
             totalSubscribers: 42,
           })
           setPendingApplications(pending.slice(0, 5))
+          setIsLoading(false)
           return
         }
 
@@ -264,8 +265,7 @@ export function useAdminMembers(options: UseMembersOptions = {}) {
 
     try {
       if (!isSupabaseConfigured) {
-        await new Promise((r) => setTimeout(r, 300))
-
+        // Use mock data immediately without delay
         let filtered = [...mockMembers]
 
         if (search) {
@@ -416,8 +416,9 @@ export function useAdminEvents() {
 
     try {
       if (!isSupabaseConfigured) {
-        await new Promise((r) => setTimeout(r, 300))
+        // Use mock data immediately without delay
         setEvents(mockEvents)
+        setIsLoading(false)
         return
       }
 
@@ -520,8 +521,9 @@ export function useAdminProjects() {
 
     try {
       if (!isSupabaseConfigured) {
-        await new Promise((r) => setTimeout(r, 300))
+        // Use mock data immediately without delay
         setProjects(mockProjects)
+        setIsLoading(false)
         return
       }
 

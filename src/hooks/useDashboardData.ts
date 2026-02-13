@@ -110,9 +110,7 @@ export function useDashboardData(): UseDashboardDataResult {
 
       try {
         if (!isSupabaseConfigured) {
-          // Use mock data for development
-          await new Promise((resolve) => setTimeout(resolve, 500))
-
+          // Use mock data immediately without delay
           setUpcomingEvents(mockUpcomingEvents)
           setUserProjects(mockUserProjects)
           setStats({
@@ -122,6 +120,7 @@ export function useDashboardData(): UseDashboardDataResult {
               ? new Date(member.joined_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
               : 'Jan 2026',
           })
+          setIsLoading(false)
           return
         }
 
