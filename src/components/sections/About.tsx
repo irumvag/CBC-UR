@@ -39,7 +39,7 @@ export function About() {
   const { ref, isVisible } = useScrollReveal()
 
   return (
-    <section className="py-20 md:py-28 bg-pampas">
+    <section className="py-20 md:py-28 bg-pampas dark:bg-dark-surface transition-colors">
       <div className="container-main">
         <div
           ref={ref}
@@ -55,10 +55,10 @@ export function About() {
             <p className="text-claude-terracotta font-sans font-bold text-xs uppercase tracking-widest mb-4">
               About CBC-UR
             </p>
-            <h2 className="font-serif font-semibold text-ink text-3xl md:text-4xl lg:text-[2.75rem] leading-tight mb-6">
+            <h2 className="font-serif font-semibold text-ink dark:text-dark-text text-3xl md:text-4xl lg:text-[2.75rem] leading-tight mb-6">
               Where Rwandan students meet world-class AI
             </h2>
-            <div className="space-y-4 text-stone text-base md:text-lg leading-relaxed">
+            <div className="space-y-4 text-stone dark:text-dark-muted text-base md:text-lg leading-relaxed">
               <p>
                 The Claude Builder Club at University of Rwanda is a student-led community
                 dedicated to making AI accessible to everyone. We believe the best way to
@@ -101,7 +101,7 @@ export function About() {
                     key={pillar.title}
                     className={cn(
                       'group p-5 md:p-6 rounded-2xl',
-                      'bg-white border border-pampas-warm',
+                      'bg-white dark:bg-dark-card border border-pampas-warm dark:border-dark-border',
                       'transition-all duration-500 ease-out',
                       'hover:shadow-lg hover:-translate-y-1',
                       'opacity-0 translate-y-4',
@@ -120,10 +120,10 @@ export function About() {
                     >
                       <Icon className="w-5 h-5 text-white" />
                     </div>
-                    <h4 className="font-serif font-semibold text-ink text-lg mb-2">
+                    <h4 className="font-serif font-semibold text-ink dark:text-dark-text text-lg mb-2">
                       {pillar.title}
                     </h4>
-                    <p className="text-stone text-sm leading-relaxed">
+                    <p className="text-stone dark:text-dark-muted text-sm leading-relaxed">
                       {pillar.description}
                     </p>
                   </div>
@@ -132,8 +132,8 @@ export function About() {
             </div>
 
             {/* Decorative elements */}
-            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-claude-terracotta/5 rounded-full -z-10" />
-            <div className="absolute -top-6 -left-6 w-20 h-20 bg-sage/5 rounded-full -z-10" />
+            <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-claude-terracotta/5 dark:bg-claude-terracotta/10 rounded-full -z-10" />
+            <div className="absolute -top-6 -left-6 w-20 h-20 bg-sage/5 dark:bg-sage/10 rounded-full -z-10" />
           </div>
         </div>
       </div>
