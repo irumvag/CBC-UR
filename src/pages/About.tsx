@@ -3,6 +3,7 @@ import { Target, Eye, Lightbulb, Shield, Users, Zap } from 'lucide-react'
 import { SectionHeader } from '@/components/ui/SectionHeader'
 import { CTA } from '@/components/sections/CTA'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
+import { AboutSEO } from '@/components/SEO'
 import { cn } from '@/lib/utils'
 
 const values = [
@@ -57,6 +58,7 @@ export default function About() {
 
   return (
     <>
+      <AboutSEO />
       {/* Page Header */}
       <section className="bg-pampas-warm py-16 md:py-20">
         <div className="container-main">

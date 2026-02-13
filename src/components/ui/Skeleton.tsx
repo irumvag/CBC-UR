@@ -8,7 +8,7 @@ export function Skeleton({ className }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'animate-pulse rounded-xl bg-pampas-warm',
+        'animate-pulse rounded-xl bg-pampas-warm dark:bg-dark-card',
         className
       )}
     />
@@ -18,7 +18,7 @@ export function Skeleton({ className }: SkeletonProps) {
 // Event Card Skeleton
 export function EventCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-pampas-warm overflow-hidden">
+    <div className="bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border overflow-hidden">
       <div className="flex items-start p-5 pb-0">
         {/* Date badge */}
         <Skeleton className="w-[60px] h-[68px] rounded-xl" />
@@ -39,7 +39,7 @@ export function EventCardSkeleton() {
           <Skeleton className="w-40 h-4" />
         </div>
         {/* Button */}
-        <div className="pt-4 border-t border-pampas">
+        <div className="pt-4 border-t border-pampas dark:border-dark-border">
           <Skeleton className="w-full h-10 rounded-xl" />
         </div>
       </div>
@@ -50,7 +50,7 @@ export function EventCardSkeleton() {
 // Project Card Skeleton
 export function ProjectCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-pampas-warm overflow-hidden">
+    <div className="bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border overflow-hidden">
       {/* Image placeholder */}
       <Skeleton className="h-40 rounded-none" />
       <div className="p-5">
@@ -69,7 +69,7 @@ export function ProjectCardSkeleton() {
           <Skeleton className="w-14 h-5 rounded-full" />
         </div>
         {/* Team and links */}
-        <div className="flex items-center justify-between pt-4 border-t border-pampas">
+        <div className="flex items-center justify-between pt-4 border-t border-pampas dark:border-dark-border">
           <div className="flex -space-x-2">
             <Skeleton className="w-8 h-8 rounded-full" />
             <Skeleton className="w-8 h-8 rounded-full" />
@@ -91,7 +91,7 @@ export function BenefitsListSkeleton() {
       {[1, 2, 3, 4, 5, 6].map((i) => (
         <div
           key={i}
-          className="flex items-center gap-4 p-4 rounded-xl bg-white border border-pampas-warm"
+          className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-dark-card border border-pampas-warm dark:border-dark-border"
         >
           <Skeleton className="w-10 h-10 rounded-lg" />
           <Skeleton className="flex-1 h-5" />

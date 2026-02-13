@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/Button'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { cn } from '@/lib/utils'
 
 export function CTA() {
   const { ref, isVisible } = useScrollReveal()
+  const { t } = useTranslation()
 
   return (
     <section className="relative overflow-hidden bg-ink">
@@ -29,7 +31,7 @@ export function CTA() {
               isVisible && 'opacity-100 translate-y-0'
             )}
           >
-            Ready to start building?
+            {t('home.cta.title')}
           </h2>
           <p
             className={cn(
@@ -38,8 +40,7 @@ export function CTA() {
               isVisible && 'opacity-100 translate-y-0'
             )}
           >
-            Join a community of curious minds at University of Rwanda. Learn to build
-            with Claude AI, create real-world projects, and shape the future together.
+            {t('home.cta.subtitle')}
           </p>
           <div
             className={cn(
@@ -54,17 +55,17 @@ export function CTA() {
                 size="lg"
                 className="bg-claude-terracotta hover:bg-claude-terracotta-light"
               >
-                Join the Club
+                {t('home.cta.button')}
                 <ArrowRight size={18} />
               </Button>
             </Link>
-            <Link to="/join">
+            <Link to="/events">
               <Button
                 variant="ghost"
                 size="lg"
                 className="text-pampas border border-pampas/30 hover:text-white hover:border-pampas/60 hover:bg-white/5"
               >
-                View Schedule
+                {t('home.events.viewAll')}
               </Button>
             </Link>
           </div>

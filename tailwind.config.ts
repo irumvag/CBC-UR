@@ -5,6 +5,7 @@ const config: Config = {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -22,6 +23,15 @@ const config: Config = {
         sage: '#7C9A82',
         teal: '#4A8B8C',
         surface: '#FAFAF7',
+        // Dark mode specific colors
+        dark: {
+          bg: '#1A1714',
+          surface: '#232220',
+          card: '#2D2926',
+          border: '#3D3935',
+          text: '#F4F3EE',
+          muted: '#B1ADA1',
+        },
       },
       fontFamily: {
         serif: ['Newsreader', 'ui-serif', 'Georgia', 'serif'],

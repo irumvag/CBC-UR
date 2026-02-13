@@ -15,7 +15,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       font-sans font-semibold
       rounded-full
       transition-all duration-200 ease-out
-      focus:outline-none focus:ring-2 focus:ring-claude-terracotta focus:ring-offset-2 focus:ring-offset-surface
+      focus:outline-none focus:ring-2 focus:ring-claude-terracotta focus:ring-offset-2 focus:ring-offset-surface dark:focus:ring-offset-dark-bg
       disabled:opacity-50 disabled:cursor-not-allowed
       hover:-translate-y-0.5
     `
@@ -27,13 +27,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         active:translate-y-0
       `,
       secondary: `
-        bg-transparent text-ink
-        border-2 border-stone
+        bg-transparent text-ink dark:text-dark-text
+        border-2 border-stone dark:border-dark-border
         hover:border-claude-terracotta hover:text-claude-terracotta
       `,
       ghost: `
-        bg-transparent text-stone
-        hover:text-claude-terracotta hover:bg-claude-terracotta/5
+        bg-transparent text-stone dark:text-dark-muted
+        hover:text-claude-terracotta hover:bg-claude-terracotta/5 dark:hover:bg-claude-terracotta/10
       `,
     }
 

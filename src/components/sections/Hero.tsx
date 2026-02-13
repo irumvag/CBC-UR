@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Star, Activity } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 
@@ -50,6 +51,7 @@ function ClaudeStarburst({ className }: { className?: string }) {
 }
 
 export function Hero() {
+  const { t } = useTranslation()
   const { displayText, isComplete } = useTypingAnimation(
     "Let's create something remarkable together",
     3000,
@@ -83,7 +85,7 @@ export function Hero() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
                 </span>
                 <span className="text-claude-terracotta font-medium text-sm">
-                  Now accepting members
+                  {t('home.hero.tagline')}
                 </span>
               </div>
 
@@ -96,8 +98,7 @@ export function Hero() {
                 )}
                 style={{ animationDelay: '200ms', animationFillMode: 'forwards' }}
               >
-                Build the future with{' '}
-                <span className="text-claude-terracotta italic">Claude AI</span>
+                {t('home.hero.title')}
               </h1>
 
               {/* Subtitle */}
@@ -108,8 +109,7 @@ export function Hero() {
                 )}
                 style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
               >
-                The Claude Builder Club at the University of Rwanda empowers students to explore,
-                create, and innovate with Anthropic's AI — from first prompt to production-ready project.
+                {t('home.hero.subtitle')}
               </p>
 
               {/* CTA Buttons */}
@@ -122,13 +122,13 @@ export function Hero() {
               >
                 <Link to="/join">
                   <Button variant="primary" size="lg">
-                    Get Started
+                    {t('home.hero.cta')}
                     <ArrowRight size={18} />
                   </Button>
                 </Link>
                 <Link to="/about">
                   <Button variant="secondary" size="lg">
-                    Learn More
+                    {t('home.hero.secondaryCta')}
                   </Button>
                 </Link>
               </div>
@@ -186,7 +186,7 @@ export function Hero() {
                 style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
               >
                 <Star className="w-4 h-4 text-claude-terracotta fill-claude-terracotta" />
-                <span className="text-sm font-semibold text-ink">100+ Members</span>
+                <span className="text-sm font-semibold text-ink">100+ {t('home.stats.members')}</span>
               </div>
 
               <div
@@ -199,7 +199,7 @@ export function Hero() {
                 style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}
               >
                 <Activity className="w-4 h-4 text-sage" />
-                <span className="text-sm font-semibold text-ink">Active Projects</span>
+                <span className="text-sm font-semibold text-ink">{t('home.stats.projects')}</span>
               </div>
             </div>
           </div>

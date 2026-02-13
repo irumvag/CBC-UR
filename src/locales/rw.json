@@ -1,0 +1,224 @@
+{
+  "common": {
+    "joinTheClub": "Injira mu ishyirahamwe",
+    "learnMore": "Menya Byinshi",
+    "viewAll": "Reba Byose",
+    "getStarted": "Tangira",
+    "signIn": "Injira",
+    "signUp": "Iyandikishe",
+    "signOut": "Sohoka",
+    "loading": "Gutegereza...",
+    "submit": "Ohereza",
+    "cancel": "Hagarika",
+    "save": "Bika",
+    "edit": "Hindura",
+    "delete": "Siba",
+    "close": "Funga",
+    "readMore": "Soma Byinshi",
+    "seeAll": "Reba Byose"
+  },
+  "nav": {
+    "about": "Ibyerekeye",
+    "events": "Ibikorwa",
+    "projects": "Imishinga",
+    "blog": "Inkuru",
+    "community": "Umuryango",
+    "dashboard": "Ikibaho",
+    "myProjects": "Imishinga Yanjye",
+    "settings": "Igenamiterere"
+  },
+  "home": {
+    "hero": {
+      "tagline": "Umuryango w'Abubatsi ba AI",
+      "title": "Kubaka ejo hazaza na Claude AI",
+      "subtitle": "Injira muri Claude Builder Club ya mbere mu Rwanda. Wige iterambere rya AI, ufatanye ku mishinga ifite akamaro, kandi ube igice cy'umuryango w'abahinduye ibintu muri Kaminuza y'u Rwanda.",
+      "cta": "Injira Nonaha",
+      "secondaryCta": "Menya Byinshi"
+    },
+    "stats": {
+      "members": "Abanyamuryango Bakora",
+      "projects": "Imishinga Yakozwe",
+      "workshops": "Amahugurwa Yakorewe",
+      "partners": "Abo Dufatanya"
+    },
+    "features": {
+      "tagline": "Icyo Dukora",
+      "title": "Kubaka Ibisubizo bya AI ku Rwanda",
+      "subtitle": "Duhuza ubwenge bushakashaka kugira ngo twige, tubake, kandi dushyire mu bikorwa ibisubizo bya AI byiganira ibibazo nyabyo mu muryango wacu.",
+      "learn": {
+        "title": "Wige Iterambere rya AI",
+        "description": "Menya ubuhanga bwo gukoresha prompt, gukoresha Claude API, no kubaka porogaramu zifite ubwenge binyuze mu mahugurwa akora ku buryo nyabwo."
+      },
+      "build": {
+        "title": "Kora Imishinga Nyayo",
+        "description": "Kora ku mishinga ifite intego ikemura ibibazo by'aho uri mu buzima busanzwe, uburezi, ubuhinzi, n'ibindi."
+      },
+      "connect": {
+        "title": "Huza & Kura",
+        "description": "Huza n'abandi bubatsi, abakozi b'inganda, n'umuryango mpuzamahanga wa Anthropic w'abahanga mu iterambere."
+      },
+      "showcase": {
+        "title": "Erekana Akazi Kawe",
+        "description": "Tanga imishinga yawe mu minsi yo kwerekana, amarushanwa, kandi uhabwe icyubahiro ku bisubizo byawe bishya."
+      }
+    },
+    "events": {
+      "tagline": "Ibikorwa Bigiye Kubaho",
+      "title": "Injira mu Gice Gikurikira",
+      "subtitle": "Kuva mu mahugurwa kugera ku marushanwa, hari ikintu gihoraho muri CBC-UR.",
+      "viewAll": "Reba Ibikorwa Byose"
+    },
+    "projects": {
+      "tagline": "Imishinga Yatoranyijwe",
+      "title": "Icyo Turimo Kubaka",
+      "subtitle": "Shakisha ibisubizo bishya bya AI byakozwe n'abanyamuryango bacu.",
+      "viewAll": "Reba Imishinga Yose"
+    },
+    "cta": {
+      "title": "Witeguye Gutangira Kubaka?",
+      "subtitle": "Injira muri Claude Builder Club ube igice cy'umuryango w'ibishya bya AI mu Rwanda. Niba uri umutangizi cyangwa umuhanga mu iterambere, hari umwanya wawe.",
+      "button": "Saba Kuba Umunyamuryango"
+    }
+  },
+  "about": {
+    "header": {
+      "tagline": "Ibyerekeye",
+      "title": "Guha Imbaraga Abubatsi ba AI mu Rwanda",
+      "subtitle": "Claude Builder Club muri Kaminuza y'u Rwanda ni umuryango uyobowe n'abanyeshuri wiyemeje kwiga, kubaka, no guhindura ibintu ukoresheje ikoranabuhanga rya AI."
+    },
+    "mission": {
+      "tagline": "Intego Yacu",
+      "title": "Impamvu Turiho",
+      "description": "Twizera ko buri munyeshuri akwiye kubona uburezi bwa AI bugezweho n'amahirwe yo kubaka ibisubizo bifite akamaro. Intego yacu ni ugushiraho ibidukikije bishyigikira aho ubwenge bushakashaka bushobora gushakisha ikoranabuhanga rya AI, gukura ubuhanga nyabwo, no guhanga ingaruka mu miryango yabo.",
+      "vision": {
+        "title": "Icyerekezo Cyacu",
+        "description": "Kuba umuryango w'abanyeshuri ba AI uyobora muri Afurika y'Iburasirazuba, utanga ibisubizo bishya n'abahanga ba AI bakora impinduka nziza."
+      },
+      "values": {
+        "title": "Indangagaciro Zacu",
+        "curiosity": "Kwiga Bishingiye ku Bushakashaka",
+        "collaboration": "Kubaka mu Bufatanye",
+        "impact": "Ingaruka ku Muryango",
+        "inclusivity": "Guhanga Bishyira Hamwe Bose"
+      }
+    },
+    "team": {
+      "tagline": "Ubuyobozi",
+      "title": "Menya Itsinda Ryacu",
+      "subtitle": "Abanyeshuri bishimiye bayobora mu burezi bwa AI no guhindura ibintu."
+    },
+    "timeline": {
+      "tagline": "Urugendo Rwacu",
+      "title": "Uko Twageze Hano",
+      "subtitle": "Kuva ku igitekerezo kugeza ku muryango ukura w'abubatsi ba AI."
+    },
+    "partners": {
+      "tagline": "Abo Dufatanya",
+      "title": "Dushyigikiwe Na",
+      "subtitle": "Twishimiye gufatanya n'imiryango igabana icyerekezo cyacu cyo kwigisha AI."
+    }
+  },
+  "events": {
+    "header": {
+      "tagline": "Ibikorwa n'Imirimo",
+      "title": "Wige, Ubake, Uhuze",
+      "subtitle": "Injira mu mahugurwa yacu, amarushanwa, n'amahuriro kugira ngo uzamure ubuhanga bwawe bwa AI kandi uhuze n'abandi bubatsi."
+    },
+    "filters": {
+      "all": "Ibikorwa Byose",
+      "upcoming": "Bigiye Kubaho",
+      "past": "Byarangiye",
+      "workshop": "Amahugurwa",
+      "hackathon": "Amarushanwa",
+      "meetup": "Amahuriro"
+    },
+    "card": {
+      "register": "Iyandikishe Nonaha",
+      "registered": "Wiyandikishije",
+      "full": "Ibikorwa Byuzuye",
+      "completed": "Byarangiye",
+      "spotsLeft": "{{count}} hasigaye",
+      "attendees": "{{count}} abitabiriye"
+    },
+    "empty": {
+      "title": "Nta bikorwa byabonetse",
+      "description": "Garuka vuba ku bikorwa bigiye kubaho!"
+    }
+  },
+  "join": {
+    "header": {
+      "tagline": "Ba Umunyamuryango",
+      "title": "Injira muri Claude Builder Club",
+      "subtitle": "Tangira urugendo rwawe rwa AI hamwe n'umuryango ugushyigikira. Wige kubaka na Claude, ufatanye ku mishinga nyayo, kandi uhindure ejo hazaza rya AI mu Rwanda."
+    },
+    "benefits": {
+      "tagline": "Inyungu z'Abanyamuryango",
+      "title": "Icyo Uzabona",
+      "description": "Nk'umunyamuryango wa CBC-UR, uzabona ibikoresho, ubuyobozi, n'amahirwe yateguwe kugira ngo ube umubatsi wa AI wizera.",
+      "apiCredits": "Kubona Claude API credits",
+      "workshops": "Amahugurwa buri cyumweru n'amasomo yo kubaka",
+      "mentorship": "Ubuyobozi buturuka ku bubatsi bazi byinshi",
+      "networking": "Guhuza n'umuryango wa Anthropic",
+      "showcase": "Amahirwe yo kwerekana imishinga",
+      "certificate": "Icyemezo cy'ubwitabire"
+    },
+    "form": {
+      "title": "Ifishi yo Gusaba",
+      "fullName": "Amazina Yuzuye",
+      "email": "Imeri",
+      "studentId": "Nomero y'Umunyeshuri",
+      "yearOfStudy": "Umwaka w'Amashuri",
+      "department": "Ishami",
+      "whyJoin": "Kuki ushaka kwinjira?",
+      "whyJoinPlaceholder": "Tubwire icyishimo cyawe ku bijyanye na AI n'icyo wizera kwiga...",
+      "aiExperience": "Ni ubuhe burambe ufite muri AI?",
+      "aiExperiencePlaceholder": "Uburambe ubufite ku bikoresho bya AI, gukora porogaramu, cyangwa ikoranabuhanga rijyanye...",
+      "submit": "Ohereza Icyifuzo",
+      "submitting": "Kohereza...",
+      "disclaimer": "Mu kohereza, wemera kwinjira mu itsinda ryacu rya WhatsApp no kubona amakuru y'ibikorwa.",
+      "success": {
+        "title": "Icyifuzo Cyoherejwe!",
+        "description": "Urakoze gusaba kwinjira muri Claude Builder Club! Tuzasuzuma icyifuzo cyawe kandi tugusubize mu masaha 48 n'intambwe zikurikira.",
+        "another": "Ohereza Icyifuzo Kindi"
+      }
+    },
+    "yearOptions": {
+      "select": "Hitamo umwaka",
+      "year1": "Umwaka wa 1",
+      "year2": "Umwaka wa 2",
+      "year3": "Umwaka wa 3",
+      "year4": "Umwaka wa 4",
+      "year5": "Umwaka wa 5+",
+      "postgrad": "Nyuma ya Kaminuza"
+    },
+    "departmentOptions": {
+      "select": "Hitamo ishami",
+      "cs": "Ikoranabuhanga mu Mubare",
+      "it": "Ikoranabuhanga ry'Amakuru",
+      "se": "Ubwubatsi bwa Porogaramu",
+      "ee": "Ubwubatsi bw'Amashanyarazi",
+      "ce": "Ubwubatsi bw'Mudasobwa",
+      "business": "Ubucuruzi",
+      "economics": "Ubukungu",
+      "medicine": "Ubuvuzi n'Ubuzima",
+      "agriculture": "Ubuhinzi",
+      "arts": "Ubuhanzi n'Imibanire",
+      "education": "Uburezi",
+      "other": "Ibindi"
+    },
+    "validation": {
+      "fullNameRequired": "Amazina yuzuye arakenewe",
+      "fullNameMin": "Izina rigomba kuba nibura inyuguti 2",
+      "emailRequired": "Imeri irakenewe",
+      "emailInvalid": "Shyiramo imeri yemewe",
+      "studentIdRequired": "Nomero y'umunyeshuri irakenewe",
+      "yearRequired": "Hitamo umwaka w'amashuri yawe",
+      "departmentRequired": "Hitamo ishami ryawe"
+    }
+  },
+  "footer": {
+    "universityOf": "Kaminuza y'u Rwanda",
+    "copyright": "© 2026 Claude Builder Club — Kaminuza y'u Rwanda",
+    "builtWith": "Byubatswe n'ubushakashaka na Claude"
+  }
+}

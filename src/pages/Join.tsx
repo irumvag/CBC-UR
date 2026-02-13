@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 import { useMembers } from '@/hooks/useMembers'
 import { useToast } from '@/components/ui/Toast'
+import { JoinSEO } from '@/components/SEO'
 import { cn } from '@/lib/utils'
 
 const benefits = [
@@ -165,6 +166,7 @@ export default function Join() {
 
   return (
     <>
+      <JoinSEO />
       {/* Page Header */}
       <section className="bg-pampas-warm py-16 md:py-20">
         <div className="container-main">
