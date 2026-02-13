@@ -70,9 +70,9 @@ export function useUserProjects(): UseUserProjectsResult {
 
     try {
       if (!isSupabaseConfigured) {
-        // Use mock data for development
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        // Use mock data immediately
         setProjects(mockProjects)
+        setIsLoading(false)
         return
       }
 
@@ -115,8 +115,7 @@ export function useUserProjects(): UseUserProjectsResult {
 
     try {
       if (!isSupabaseConfigured) {
-        // Mock project creation
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        // Mock project creation immediately
         const newProject: Project = {
           id: `mock-${Date.now()}`,
           title: input.title,
@@ -185,8 +184,7 @@ export function useUserProjects(): UseUserProjectsResult {
 
     try {
       if (!isSupabaseConfigured) {
-        // Mock delete
-        await new Promise((resolve) => setTimeout(resolve, 300))
+        // Mock delete immediately
         setProjects((prev) => prev.filter((p) => p.id !== projectId))
         return { error: null }
       }

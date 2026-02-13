@@ -91,9 +91,7 @@ export function useUserEvents(filter: 'upcoming' | 'past'): UseUserEventsResult 
 
       try {
         if (!isSupabaseConfigured) {
-          // Use mock data for development
-          await new Promise((resolve) => setTimeout(resolve, 500))
-
+          // Use mock data immediately
           const now = new Date()
           const filteredEvents = mockEvents
             .filter((event) => {
@@ -113,6 +111,7 @@ export function useUserEvents(filter: 'upcoming' | 'past'): UseUserEventsResult 
             }))
 
           setEvents(filteredEvents)
+          setIsLoading(false)
           return
         }
 

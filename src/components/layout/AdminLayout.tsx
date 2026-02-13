@@ -160,21 +160,21 @@ export function AdminLayout({ children, title, description, breadcrumbs = [] }: 
         {/* Main Content */}
         <main className="flex-1 min-h-[calc(100vh-5rem)]">
           {/* Breadcrumb & Title */}
-          <div className="bg-white border-b border-pampas-warm px-4 md:px-6 lg:px-8 py-4">
+          <div className="bg-white dark:bg-dark-surface border-b border-pampas-warm dark:border-dark-border px-4 md:px-6 lg:px-8 py-4">
             {/* Breadcrumb */}
             <nav className="flex items-center gap-2 text-sm mb-2">
-              <Link to="/admin" className="text-stone hover:text-ink transition-colors">
+              <Link to="/admin" className="text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text transition-colors">
                 Admin
               </Link>
               {breadcrumbs.map((crumb, index) => (
                 <span key={index} className="flex items-center gap-2">
-                  <ChevronRight size={14} className="text-stone/50" />
+                  <ChevronRight size={14} className="text-stone/50 dark:text-dark-muted/50" />
                   {crumb.href ? (
-                    <Link to={crumb.href} className="text-stone hover:text-ink transition-colors">
+                    <Link to={crumb.href} className="text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text transition-colors">
                       {crumb.label}
                     </Link>
                   ) : (
-                    <span className="text-ink font-medium">{crumb.label}</span>
+                    <span className="text-ink dark:text-dark-text font-medium">{crumb.label}</span>
                   )}
                 </span>
               ))}

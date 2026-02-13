@@ -213,8 +213,7 @@ export function useRSVP(): UseRSVPResult {
 
     try {
       if (!isSupabaseConfigured) {
-        // Simulate success for mock
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        // Return success immediately for mock
         return { success: true }
       }
 

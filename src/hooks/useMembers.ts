@@ -26,8 +26,7 @@ export function useMembers(): UseMembersResult {
       }
 
       if (!isSupabaseConfigured) {
-        // Simulate success for mock
-        await new Promise((resolve) => setTimeout(resolve, 800))
+        // Return success immediately for mock
         return {
           success: true,
           member: {
