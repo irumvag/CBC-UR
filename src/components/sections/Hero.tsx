@@ -59,11 +59,11 @@ export function Hero() {
   )
 
   return (
-    <section className="relative overflow-hidden bg-pampas min-h-[calc(100vh-5rem)]">
+    <section className="relative overflow-hidden bg-pampas dark:bg-dark-bg min-h-[calc(100vh-5rem)] transition-colors">
       {/* Background decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-claude-terracotta/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-sage/5 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-claude-terracotta/5 dark:bg-claude-terracotta/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-sage/5 dark:bg-sage/10 rounded-full blur-3xl" />
       </div>
 
       <div className="container-main relative">
@@ -92,7 +92,7 @@ export function Hero() {
               {/* Title */}
               <h1
                 className={cn(
-                  'font-serif font-semibold text-ink mb-6',
+                  'font-serif font-semibold text-ink dark:text-dark-text mb-6',
                   'text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.1]',
                   'opacity-0 animate-fade-in'
                 )}
@@ -104,7 +104,7 @@ export function Hero() {
               {/* Subtitle */}
               <p
                 className={cn(
-                  'text-stone text-lg md:text-xl leading-relaxed mb-8 max-w-xl',
+                  'text-stone dark:text-dark-muted text-lg md:text-xl leading-relaxed mb-8 max-w-xl',
                   'opacity-0 animate-fade-in'
                 )}
                 style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
@@ -139,7 +139,7 @@ export function Hero() {
               {/* Main card */}
               <div
                 className={cn(
-                  'relative bg-white rounded-3xl shadow-lg shadow-ink/5 overflow-hidden',
+                  'relative bg-white dark:bg-dark-card rounded-3xl shadow-lg shadow-ink/5 dark:shadow-black/20 overflow-hidden',
                   'opacity-0 animate-fade-in'
                 )}
                 style={{ animationDelay: '300ms', animationFillMode: 'forwards' }}
@@ -154,20 +154,20 @@ export function Hero() {
                       <ClaudeStarburst className="w-7 h-7 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-serif font-semibold text-ink text-lg">Claude</h3>
-                      <p className="text-stone text-sm">AI Assistant by Anthropic</p>
+                      <h3 className="font-serif font-semibold text-ink dark:text-dark-text text-lg">Claude</h3>
+                      <p className="text-stone dark:text-dark-muted text-sm">AI Assistant by Anthropic</p>
                     </div>
                   </div>
 
                   {/* Message body */}
                   <div className="space-y-4">
-                    <p className="text-charcoal leading-relaxed">
+                    <p className="text-charcoal dark:text-dark-text leading-relaxed">
                       Welcome to CBC-UR! I'm here to help you learn AI development,
                       build meaningful projects, and prepare for the future of technology.
                     </p>
 
                     {/* Typing animation line */}
-                    <p className="text-claude-terracotta-deep font-medium">
+                    <p className="text-claude-terracotta-deep dark:text-claude-terracotta font-medium">
                       {displayText}
                       {!isComplete && <span className="typing-cursor" />}
                     </p>
@@ -180,26 +180,26 @@ export function Hero() {
                 className={cn(
                   'absolute -top-4 -left-4 md:-left-8',
                   'hidden md:flex items-center gap-2 px-4 py-2.5',
-                  'bg-white rounded-full shadow-lg shadow-ink/10',
+                  'bg-white dark:bg-dark-card rounded-full shadow-lg shadow-ink/10 dark:shadow-black/20',
                   'float opacity-0 animate-fade-in'
                 )}
                 style={{ animationDelay: '600ms', animationFillMode: 'forwards' }}
               >
                 <Star className="w-4 h-4 text-claude-terracotta fill-claude-terracotta" />
-                <span className="text-sm font-semibold text-ink">100+ {t('home.stats.members')}</span>
+                <span className="text-sm font-semibold text-ink dark:text-dark-text">100+ {t('home.stats.members')}</span>
               </div>
 
               <div
                 className={cn(
                   'absolute -bottom-4 -right-4 md:-right-8',
                   'hidden md:flex items-center gap-2 px-4 py-2.5',
-                  'bg-white rounded-full shadow-lg shadow-ink/10',
+                  'bg-white dark:bg-dark-card rounded-full shadow-lg shadow-ink/10 dark:shadow-black/20',
                   'float-delayed opacity-0 animate-fade-in'
                 )}
                 style={{ animationDelay: '700ms', animationFillMode: 'forwards' }}
               >
                 <Activity className="w-4 h-4 text-sage" />
-                <span className="text-sm font-semibold text-ink">{t('home.stats.projects')}</span>
+                <span className="text-sm font-semibold text-ink dark:text-dark-text">{t('home.stats.projects')}</span>
               </div>
             </div>
           </div>

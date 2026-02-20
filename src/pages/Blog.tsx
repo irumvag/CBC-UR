@@ -37,7 +37,7 @@ function ArticleCard({ article }: { article: ArticleWithAuthor }) {
   return (
     <Link
       to={`/blog/${article.slug}`}
-      className="group bg-white rounded-2xl border border-pampas-warm overflow-hidden card-lift"
+      className="group bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border overflow-hidden card-lift"
     >
       {/* Cover Image */}
       {article.cover_image_url && (
@@ -57,19 +57,19 @@ function ArticleCard({ article }: { article: ArticleWithAuthor }) {
         </Badge>
 
         {/* Title */}
-        <h3 className="font-serif font-semibold text-ink text-xl mb-2 group-hover:text-claude-terracotta transition-colors line-clamp-2">
+        <h3 className="font-serif font-semibold text-ink dark:text-dark-text text-xl mb-2 group-hover:text-claude-terracotta transition-colors line-clamp-2">
           {article.title}
         </h3>
 
         {/* Excerpt */}
         {article.excerpt && (
-          <p className="text-stone text-sm leading-relaxed mb-4 line-clamp-2">
+          <p className="text-stone dark:text-dark-muted text-sm leading-relaxed mb-4 line-clamp-2">
             {article.excerpt}
           </p>
         )}
 
         {/* Meta */}
-        <div className="flex items-center justify-between pt-4 border-t border-pampas">
+        <div className="flex items-center justify-between pt-4 border-t border-pampas dark:border-dark-border">
           <div className="flex items-center gap-3">
             {/* Author Avatar */}
             <div className="w-8 h-8 rounded-full bg-claude-terracotta/10 flex items-center justify-center">
@@ -84,8 +84,8 @@ function ArticleCard({ article }: { article: ArticleWithAuthor }) {
               )}
             </div>
             <div className="text-sm">
-              <p className="text-ink font-medium">{article.author?.full_name}</p>
-              <div className="flex items-center gap-1 text-stone text-xs">
+              <p className="text-ink dark:text-dark-text font-medium">{article.author?.full_name}</p>
+              <div className="flex items-center gap-1 text-stone dark:text-dark-muted text-xs">
                 <Calendar size={12} />
                 {formattedDate}
               </div>
@@ -94,7 +94,7 @@ function ArticleCard({ article }: { article: ArticleWithAuthor }) {
 
           <ArrowRight
             size={18}
-            className="text-stone group-hover:text-claude-terracotta group-hover:translate-x-1 transition-all"
+            className="text-stone dark:text-dark-muted group-hover:text-claude-terracotta group-hover:translate-x-1 transition-all"
           />
         </div>
       </div>
@@ -104,13 +104,13 @@ function ArticleCard({ article }: { article: ArticleWithAuthor }) {
 
 function ArticleCardSkeleton() {
   return (
-    <div className="bg-white rounded-2xl border border-pampas-warm overflow-hidden">
+    <div className="bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border overflow-hidden">
       <Skeleton className="aspect-video" />
       <div className="p-6">
         <Skeleton className="h-5 w-20 mb-3 rounded-full" />
         <Skeleton className="h-6 w-full mb-2" />
         <Skeleton className="h-4 w-3/4 mb-4" />
-        <div className="flex items-center gap-3 pt-4 border-t border-pampas">
+        <div className="flex items-center gap-3 pt-4 border-t border-pampas dark:border-dark-border">
           <Skeleton className="w-8 h-8 rounded-full" />
           <div>
             <Skeleton className="h-4 w-24 mb-1" />
@@ -138,14 +138,14 @@ export default function Blog() {
       />
 
       {/* Page Header */}
-      <section className="bg-pampas-warm py-16 md:py-20">
+      <section className="bg-pampas-warm dark:bg-dark-surface py-16 md:py-20">
         <div className="container-main">
-          <nav className="flex items-center gap-2 text-sm text-stone mb-6">
+          <nav className="flex items-center gap-2 text-sm text-stone dark:text-dark-muted mb-6">
             <Link to="/" className="hover:text-claude-terracotta transition-colors">
               Home
             </Link>
             <span>/</span>
-            <span className="text-ink">Blog</span>
+            <span className="text-ink dark:text-dark-text">Blog</span>
           </nav>
 
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -153,10 +153,10 @@ export default function Blog() {
               <p className="text-claude-terracotta font-sans font-bold text-xs uppercase tracking-widest mb-3">
                 Community Blog
               </p>
-              <h1 className="font-serif font-semibold text-ink text-3xl md:text-4xl lg:text-5xl leading-tight mb-4">
+              <h1 className="font-serif font-semibold text-ink dark:text-dark-text text-3xl md:text-4xl lg:text-5xl leading-tight mb-4">
                 Articles & Tutorials
               </h1>
-              <p className="text-stone text-lg leading-relaxed">
+              <p className="text-stone dark:text-dark-muted text-lg leading-relaxed">
                 Learn from our community. Tutorials, project showcases, and the latest news from
                 Claude Builder Club.
               </p>
@@ -175,10 +175,10 @@ export default function Blog() {
       </section>
 
       {/* Category Filter */}
-      <section className="bg-surface border-b border-pampas-warm sticky top-16 z-30">
+      <section className="bg-surface dark:bg-dark-bg border-b border-pampas-warm dark:border-dark-border sticky top-16 z-30">
         <div className="container-main py-4">
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-            <Filter size={16} className="text-stone flex-shrink-0" />
+            <Filter size={16} className="text-stone dark:text-dark-muted flex-shrink-0" />
             {categories.map((cat) => (
               <button
                 key={cat.value}
@@ -187,7 +187,7 @@ export default function Blog() {
                   'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all',
                   selectedCategory === cat.value
                     ? 'bg-claude-terracotta text-white'
-                    : 'bg-white text-stone hover:text-ink hover:bg-pampas-warm border border-pampas-warm'
+                    : 'bg-white dark:bg-dark-card text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text hover:bg-pampas-warm dark:hover:bg-dark-surface border border-pampas-warm dark:border-dark-border'
                 )}
               >
                 {cat.label}
@@ -198,7 +198,7 @@ export default function Blog() {
       </section>
 
       {/* Articles Grid */}
-      <section className="py-12 md:py-16 bg-surface">
+      <section className="py-12 md:py-16 bg-surface dark:bg-dark-bg">
         <div className="container-main">
           {isLoading ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -208,11 +208,11 @@ export default function Blog() {
             </div>
           ) : articles.length === 0 ? (
             <div className="text-center py-16">
-              <div className="w-16 h-16 rounded-full bg-pampas-warm flex items-center justify-center mx-auto mb-4">
-                <PenSquare size={24} className="text-stone" />
+              <div className="w-16 h-16 rounded-full bg-pampas-warm dark:bg-dark-surface flex items-center justify-center mx-auto mb-4">
+                <PenSquare size={24} className="text-stone dark:text-dark-muted" />
               </div>
-              <h3 className="font-serif text-xl font-semibold text-ink mb-2">No articles yet</h3>
-              <p className="text-stone mb-6">
+              <h3 className="font-serif text-xl font-semibold text-ink dark:text-dark-text mb-2">No articles yet</h3>
+              <p className="text-stone dark:text-dark-muted mb-6">
                 {selectedCategory !== 'all'
                   ? `No ${selectedCategory} articles have been published yet.`
                   : 'Be the first to share your knowledge with the community!'}

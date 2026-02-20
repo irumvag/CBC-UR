@@ -123,8 +123,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: null }
     }
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    return { error }
+    try {
+      // Add a timeout to prevent infinite loading if Supabase hangs
+      const signInPromise = supabase.auth.signInWithPassword({ email, password })
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Sign in request timed out. Please check your connection and try again.')), 10000)
+      )
+
+      const { error } = await Promise.race([signInPromise, timeoutPromise]) as any
+      return { error }
+    } catch (err: any) {
+      return { error: { message: err.message || 'Sign in failed' } as AuthError }
+    }
   }
 
   const signUp = async (email: string, password: string, fullName: string) => {
@@ -136,33 +146,49 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: null, needsEmailVerification: false }
     }
 
-    // Get the correct redirect URL (not localhost in production)
-    const siteUrl = import.meta.env.VITE_SITE_URL || window.location.origin
+    try {
+      // Get the correct redirect URL (not localhost in production)
+      const siteUrl = import.meta.env.VITE_SITE_URL || window.location.origin
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName },
-        emailRedirectTo: `${siteUrl}/dashboard`,
-      },
-    })
-
-    // Create member profile after signup
-    if (!error && data.user) {
-      await supabase.from('members').insert({
-        id: data.user.id,
+      const signUpPromise = supabase.auth.signUp({
         email,
-        full_name: fullName,
-        role: 'member',
-        status: 'pending',
-      } as any)
+        password,
+        options: {
+          data: { full_name: fullName },
+          emailRedirectTo: `${siteUrl}/dashboard`,
+        },
+      })
+
+      // Add a timeout to prevent infinite loading if Supabase hangs
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Sign up request timed out. Please check your connection and try again.')), 10000)
+      )
+
+      const { data, error } = await Promise.race([signUpPromise, timeoutPromise]) as any
+
+      // Create member profile after signup
+      if (!error && data?.user) {
+        try {
+          await supabase.from('members').insert({
+            id: data.user.id,
+            email,
+            full_name: fullName,
+            role: 'member',
+            status: 'pending',
+          } as any)
+        } catch (memberErr: any) {
+          console.error('Error creating member profile:', memberErr)
+          // Don't fail sign-up if member profile creation fails
+        }
+      }
+
+      // Check if email confirmation is required
+      const needsEmailVerification = !error && !!data?.user && !data?.session
+
+      return { error, needsEmailVerification }
+    } catch (err: any) {
+      return { error: { message: err.message || 'Sign up failed' } as AuthError, needsEmailVerification: false }
     }
-
-    // Check if email confirmation is required
-    const needsEmailVerification = !error && !!data.user && !data.session
-
-    return { error, needsEmailVerification }
   }
 
   const signOut = async () => {
@@ -186,13 +212,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: null }
     }
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/dashboard`,
-      },
-    })
-    return { error }
+    try {
+      const googleSignInPromise = supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      })
+
+      // Add a timeout to prevent infinite loading if Supabase hangs
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Google sign in request timed out. Please check your connection and try again.')), 10000)
+      )
+
+      const { error } = await Promise.race([googleSignInPromise, timeoutPromise]) as any
+      return { error }
+    } catch (err: any) {
+      return { error: { message: err.message || 'Google sign in failed' } as AuthError }
+    }
   }
 
   return (

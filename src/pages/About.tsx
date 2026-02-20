@@ -60,21 +60,21 @@ export default function About() {
     <>
       <AboutSEO />
       {/* Page Header */}
-      <section className="bg-pampas-warm py-16 md:py-20">
+      <section className="bg-pampas-warm dark:bg-dark-surface py-16 md:py-20 transition-colors">
         <div className="container-main">
-          <nav className="flex items-center gap-2 text-sm text-stone mb-6">
+          <nav className="flex items-center gap-2 text-sm text-stone dark:text-dark-muted mb-6">
             <Link to="/" className="hover:text-claude-terracotta transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-ink">About</span>
+            <span className="text-ink dark:text-dark-text">About</span>
           </nav>
           <div className="max-w-3xl">
             <p className="text-claude-terracotta font-sans font-bold text-xs uppercase tracking-widest mb-3">
               Our Story
             </p>
-            <h1 className="font-serif font-semibold text-ink text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
+            <h1 className="font-serif font-semibold text-ink dark:text-dark-text text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
               Empowering the next generation of AI builders in Rwanda
             </h1>
-            <p className="text-stone text-lg md:text-xl leading-relaxed">
+            <p className="text-stone dark:text-dark-muted text-lg md:text-xl leading-relaxed">
               Claude Builder Club was founded with a simple belief: the best way to learn AI is to build with it.
               We're creating a community where curiosity meets creation, and where every student can become an AI builder.
             </p>
@@ -83,20 +83,20 @@ export default function About() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-16 md:py-20 bg-surface">
+      <section className="py-16 md:py-20 bg-surface dark:bg-dark-bg transition-colors">
         <div className="container-main">
           <div className="grid md:grid-cols-2 gap-6 md:gap-8">
             {/* Mission Card */}
-            <div className="bg-white rounded-2xl border border-pampas-warm p-6 md:p-8 flex gap-4 md:gap-6">
+            <div className="bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border p-6 md:p-8 flex gap-4 md:gap-6">
               <div className="w-1 bg-claude-terracotta rounded-full flex-shrink-0" />
               <div>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-xl bg-claude-terracotta/10 flex items-center justify-center">
                     <Target className="w-6 h-6 text-claude-terracotta" />
                   </div>
-                  <h3 className="font-serif font-semibold text-ink text-xl md:text-2xl">Our Mission</h3>
+                  <h3 className="font-serif font-semibold text-ink dark:text-dark-text text-xl md:text-2xl">Our Mission</h3>
                 </div>
-                <p className="text-stone leading-relaxed">
+                <p className="text-stone dark:text-dark-muted leading-relaxed">
                   To democratize AI literacy at University of Rwanda by providing hands-on learning experiences
                   that empower students from all disciplines to build practical solutions using Claude AI.
                 </p>
@@ -104,16 +104,16 @@ export default function About() {
             </div>
 
             {/* Vision Card */}
-            <div className="bg-white rounded-2xl border border-pampas-warm p-6 md:p-8 flex gap-4 md:gap-6">
+            <div className="bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border p-6 md:p-8 flex gap-4 md:gap-6">
               <div className="w-1 bg-sage rounded-full flex-shrink-0" />
               <div>
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-xl bg-sage/10 flex items-center justify-center">
                     <Eye className="w-6 h-6 text-sage" />
                   </div>
-                  <h3 className="font-serif font-semibold text-ink text-xl md:text-2xl">Our Vision</h3>
+                  <h3 className="font-serif font-semibold text-ink dark:text-dark-text text-xl md:text-2xl">Our Vision</h3>
                 </div>
-                <p className="text-stone leading-relaxed">
+                <p className="text-stone dark:text-dark-muted leading-relaxed">
                   A future where every Rwandan student has the skills and confidence to leverage AI as a tool
                   for innovation, problem-solving, and positive impact in their communities.
                 </p>
@@ -124,7 +124,7 @@ export default function About() {
       </section>
 
       {/* Values */}
-      <section className="py-16 md:py-20 bg-pampas">
+      <section className="py-16 md:py-20 bg-pampas dark:bg-dark-surface transition-colors">
         <div className="container-main">
           <SectionHeader
             eyebrow="Our Values"
@@ -138,7 +138,7 @@ export default function About() {
                 <div
                   key={value.title}
                   className={cn(
-                    'bg-white rounded-2xl border border-pampas-warm p-6',
+                    'bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border p-6',
                     'transition-all duration-500 ease-out',
                     'hover:shadow-lg hover:-translate-y-1',
                     'opacity-0 translate-y-4',
@@ -152,8 +152,8 @@ export default function About() {
                   )}>
                     <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <h4 className="font-serif font-semibold text-ink text-lg mb-2">{value.title}</h4>
-                  <p className="text-stone text-sm leading-relaxed">{value.desc}</p>
+                  <h4 className="font-serif font-semibold text-ink dark:text-dark-text text-lg mb-2">{value.title}</h4>
+                  <p className="text-stone dark:text-dark-muted text-sm leading-relaxed">{value.desc}</p>
                 </div>
               )
             })}
@@ -162,7 +162,7 @@ export default function About() {
       </section>
 
       {/* Team */}
-      <section className="py-16 md:py-20 bg-surface">
+      <section className="py-16 md:py-20 bg-surface dark:bg-dark-bg transition-colors">
         <div className="container-main">
           <SectionHeader
             eyebrow="Leadership"
@@ -174,7 +174,7 @@ export default function About() {
               <div
                 key={member.name}
                 className={cn(
-                  'bg-white rounded-2xl border border-pampas-warm p-6 text-center',
+                  'bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border p-6 text-center',
                   'transition-all duration-500 ease-out',
                   'hover:shadow-lg hover:-translate-y-1',
                   'opacity-0 translate-y-4',
@@ -187,9 +187,9 @@ export default function About() {
                     {member.initials}
                   </span>
                 </div>
-                <h4 className="font-serif font-semibold text-ink text-lg">{member.name}</h4>
+                <h4 className="font-serif font-semibold text-ink dark:text-dark-text text-lg">{member.name}</h4>
                 <p className="text-claude-terracotta font-medium text-sm mb-2">{member.role}</p>
-                <p className="text-stone text-sm leading-relaxed">{member.bio}</p>
+                <p className="text-stone dark:text-dark-muted text-sm leading-relaxed">{member.bio}</p>
               </div>
             ))}
           </div>
@@ -197,7 +197,7 @@ export default function About() {
       </section>
 
       {/* Timeline */}
-      <section className="py-16 md:py-20 bg-pampas">
+      <section className="py-16 md:py-20 bg-pampas dark:bg-dark-surface transition-colors">
         <div className="container-main">
           <SectionHeader
             eyebrow="Our Journey"
@@ -206,7 +206,7 @@ export default function About() {
           />
           <div ref={timelineRef} className="max-w-4xl mx-auto relative">
             {/* Center line */}
-            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-pampas-warm md:-translate-x-0.5" />
+            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-pampas-warm dark:bg-dark-border md:-translate-x-0.5" />
 
             {timeline.map((item, index) => (
               <div
@@ -222,7 +222,7 @@ export default function About() {
                 <div className={cn(
                   'absolute w-4 h-4 bg-claude-terracotta rounded-full',
                   'left-2 md:left-1/2 top-6 md:-translate-x-1/2',
-                  'ring-4 ring-pampas'
+                  'ring-4 ring-pampas dark:ring-dark-surface'
                 )} />
 
                 {/* Content */}
@@ -231,12 +231,12 @@ export default function About() {
                   'md:w-[calc(50%-2rem)]',
                   item.side === 'left' ? 'md:mr-auto md:pr-8 md:text-right' : 'md:ml-auto md:pl-8'
                 )}>
-                  <div className="bg-white rounded-2xl border border-pampas-warm p-5">
+                  <div className="bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border p-5">
                     <span className="text-claude-terracotta font-sans font-semibold text-sm">
                       {item.date}
                     </span>
-                    <h4 className="font-serif font-semibold text-ink text-lg mt-1 mb-2">{item.title}</h4>
-                    <p className="text-stone text-sm leading-relaxed">{item.desc}</p>
+                    <h4 className="font-serif font-semibold text-ink dark:text-dark-text text-lg mt-1 mb-2">{item.title}</h4>
+                    <p className="text-stone dark:text-dark-muted text-sm leading-relaxed">{item.desc}</p>
                   </div>
                 </div>
               </div>

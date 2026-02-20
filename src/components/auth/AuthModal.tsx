@@ -165,34 +165,34 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
         <div
           className={cn(
-            'bg-pampas rounded-2xl shadow-2xl w-full max-w-md pointer-events-auto',
+            'bg-pampas dark:bg-dark-card rounded-2xl shadow-2xl w-full max-w-md pointer-events-auto',
             'transform transition-all duration-300',
             'animate-modal-in'
           )}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-pampas-warm">
-            <h2 className="font-serif font-semibold text-xl text-ink">
+          <div className="flex items-center justify-between p-6 border-b border-pampas-warm dark:border-dark-border">
+            <h2 className="font-serif font-semibold text-xl text-ink dark:text-dark-text">
               {activeTab === 'signin' ? 'Welcome Back' : 'Join CBC-UR'}
             </h2>
             <button
               onClick={onClose}
-              className="p-2 text-stone hover:text-ink hover:bg-pampas-warm rounded-lg transition-colors"
+              className="p-2 text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text hover:bg-pampas-warm dark:hover:bg-dark-surface rounded-lg transition-colors"
             >
               <X size={20} />
             </button>
           </div>
 
           {/* Tabs */}
-          <div className="flex border-b border-pampas-warm">
+          <div className="flex border-b border-pampas-warm dark:border-dark-border">
             <button
               onClick={() => setActiveTab('signin')}
               className={cn(
                 'flex-1 py-3 font-sans font-medium text-sm transition-colors relative',
                 activeTab === 'signin'
                   ? 'text-claude-terracotta'
-                  : 'text-stone hover:text-ink'
+                  : 'text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text'
               )}
             >
               Sign In
@@ -206,7 +206,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                 'flex-1 py-3 font-sans font-medium text-sm transition-colors relative',
                 activeTab === 'signup'
                   ? 'text-claude-terracotta'
-                  : 'text-stone hover:text-ink'
+                  : 'text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text'
               )}
             >
               Sign Up
@@ -220,14 +220,14 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
           <div className="p-6">
             {/* Success message */}
             {successMessage && (
-              <div className="mb-4 p-3 rounded-xl bg-green-50 border border-green-200 text-green-700 text-sm">
+              <div className="mb-4 p-3 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 text-sm">
                 {successMessage}
               </div>
             )}
 
             {/* Error message */}
             {error && (
-              <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
+              <div className="mb-4 p-3 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm">
                 {error}
               </div>
             )}
@@ -236,11 +236,11 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
               <form onSubmit={handleSignIn} className="space-y-4">
                 {/* Email */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Email
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                     <input
                       type="email"
                       value={signInEmail}
@@ -249,7 +249,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                       required
                       disabled={isLoading}
                       className={cn(
-                        'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
+                        'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-surface text-ink dark:text-dark-text placeholder:text-stone dark:placeholder:text-dark-muted',
                         'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
                         'transition-all disabled:opacity-50'
                       )}
@@ -259,11 +259,11 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
 
                 {/* Password */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       value={signInPassword}
@@ -272,7 +272,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                       required
                       disabled={isLoading}
                       className={cn(
-                        'w-full pl-12 pr-12 py-3 rounded-xl border-2 border-pampas-warm bg-white',
+                        'w-full pl-12 pr-12 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-surface text-ink dark:text-dark-text placeholder:text-stone dark:placeholder:text-dark-muted',
                         'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
                         'transition-all disabled:opacity-50'
                       )}
@@ -280,7 +280,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-stone hover:text-ink"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text"
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
@@ -301,10 +301,10 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                 {/* Divider */}
                 <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-pampas-warm" />
+                    <div className="w-full border-t border-pampas-warm dark:border-dark-border" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-pampas text-stone">or continue with</span>
+                    <span className="px-4 bg-pampas dark:bg-dark-card text-stone dark:text-dark-muted">or continue with</span>
                   </div>
                 </div>
 
@@ -315,9 +315,9 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                   disabled={isLoading}
                   className={cn(
                     'w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl',
-                    'border-2 border-pampas-warm bg-white',
-                    'font-sans font-medium text-ink',
-                    'hover:bg-pampas-warm transition-colors',
+                    'border-2 border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-surface',
+                    'font-sans font-medium text-ink dark:text-dark-text',
+                    'hover:bg-pampas-warm dark:hover:bg-dark-border transition-colors',
                     'disabled:opacity-50 disabled:cursor-not-allowed'
                   )}
                 >
@@ -346,11 +346,11 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
               <form onSubmit={handleSignUp} className="space-y-4">
                 {/* Full Name */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Full Name
                   </label>
                   <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                     <input
                       type="text"
                       value={signUpName}
@@ -359,7 +359,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                       required
                       disabled={isLoading}
                       className={cn(
-                        'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
+                        'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-surface text-ink dark:text-dark-text placeholder:text-stone dark:placeholder:text-dark-muted',
                         'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
                         'transition-all disabled:opacity-50'
                       )}
@@ -369,11 +369,11 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
 
                 {/* Email */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Email
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                     <input
                       type="email"
                       value={signUpEmail}
@@ -382,7 +382,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                       required
                       disabled={isLoading}
                       className={cn(
-                        'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
+                        'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-surface text-ink dark:text-dark-text placeholder:text-stone dark:placeholder:text-dark-muted',
                         'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
                         'transition-all disabled:opacity-50'
                       )}
@@ -392,11 +392,11 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
 
                 {/* Password */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       value={signUpPassword}
@@ -405,7 +405,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                       required
                       disabled={isLoading}
                       className={cn(
-                        'w-full pl-12 pr-12 py-3 rounded-xl border-2 border-pampas-warm bg-white',
+                        'w-full pl-12 pr-12 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-surface text-ink dark:text-dark-text placeholder:text-stone dark:placeholder:text-dark-muted',
                         'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
                         'transition-all disabled:opacity-50'
                       )}
@@ -413,7 +413,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-stone hover:text-ink"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text"
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
@@ -422,11 +422,11 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
 
                 {/* Confirm Password */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Confirm Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                     <input
                       type={showConfirmPassword ? 'text' : 'password'}
                       value={signUpConfirmPassword}
@@ -435,7 +435,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                       required
                       disabled={isLoading}
                       className={cn(
-                        'w-full pl-12 pr-12 py-3 rounded-xl border-2 border-pampas-warm bg-white',
+                        'w-full pl-12 pr-12 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-surface text-ink dark:text-dark-text placeholder:text-stone dark:placeholder:text-dark-muted',
                         'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
                         'transition-all disabled:opacity-50'
                       )}
@@ -443,7 +443,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-stone hover:text-ink"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text"
                     >
                       {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
@@ -461,7 +461,7 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'signin' }: AuthModalP
                   )}
                 </Button>
 
-                <p className="text-xs text-stone text-center">
+                <p className="text-xs text-stone dark:text-dark-muted text-center">
                   By signing up, you agree to our Terms of Service and Privacy Policy.
                 </p>
               </form>

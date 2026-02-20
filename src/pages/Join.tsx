@@ -155,34 +155,34 @@ export default function Join() {
   }
 
   const getInputClassName = (fieldName: keyof FormErrors) => cn(
-    'w-full px-4 py-3 rounded-xl border-2 bg-white transition-all',
+    'w-full px-4 py-3 rounded-xl border-2 bg-white dark:bg-dark-card text-ink dark:text-dark-text placeholder:text-stone dark:placeholder:text-dark-muted transition-all',
     'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20',
     touched[fieldName] && errors[fieldName]
       ? 'border-red-400 focus:border-red-400'
       : touched[fieldName] && !errors[fieldName] && formData[fieldName]
       ? 'border-sage focus:border-sage'
-      : 'border-pampas-warm focus:border-claude-terracotta'
+      : 'border-pampas-warm dark:border-dark-border focus:border-claude-terracotta'
   )
 
   return (
     <>
       <JoinSEO />
       {/* Page Header */}
-      <section className="bg-pampas-warm py-16 md:py-20">
+      <section className="bg-pampas-warm dark:bg-dark-surface py-16 md:py-20">
         <div className="container-main">
-          <nav className="flex items-center gap-2 text-sm text-stone mb-6">
+          <nav className="flex items-center gap-2 text-sm text-stone dark:text-dark-muted mb-6">
             <Link to="/" className="hover:text-claude-terracotta transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-ink">Join</span>
+            <span className="text-ink dark:text-dark-text">Join</span>
           </nav>
           <div className="max-w-3xl">
             <p className="text-claude-terracotta font-sans font-bold text-xs uppercase tracking-widest mb-3">
               Become a Member
             </p>
-            <h1 className="font-serif font-semibold text-ink text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
+            <h1 className="font-serif font-semibold text-ink dark:text-dark-text text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
               Join Claude Builder Club
             </h1>
-            <p className="text-stone text-lg md:text-xl leading-relaxed">
+            <p className="text-stone dark:text-dark-muted text-lg md:text-xl leading-relaxed">
               Start your AI journey with a community that supports you. Learn to build with Claude,
               collaborate on real projects, and shape the future of AI in Rwanda.
             </p>
@@ -191,7 +191,7 @@ export default function Join() {
       </section>
 
       {/* Two Column: Benefits + Form */}
-      <section className="py-16 md:py-20 bg-surface">
+      <section className="py-16 md:py-20 bg-surface dark:bg-dark-bg">
         <div className="container-main">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
             {/* Left: Benefits */}
@@ -199,10 +199,10 @@ export default function Join() {
               <p className="text-claude-terracotta font-sans font-bold text-xs uppercase tracking-widest mb-3">
                 Member Benefits
               </p>
-              <h2 className="font-serif font-semibold text-ink text-2xl md:text-3xl mb-6">
+              <h2 className="font-serif font-semibold text-ink dark:text-dark-text text-2xl md:text-3xl mb-6">
                 What You'll Get
               </h2>
-              <p className="text-stone leading-relaxed mb-8">
+              <p className="text-stone dark:text-dark-muted leading-relaxed mb-8">
                 As a CBC-UR member, you'll have access to resources, mentorship, and opportunities
                 designed to help you become a confident AI builder.
               </p>
@@ -214,7 +214,7 @@ export default function Join() {
                     <li
                       key={benefit.text}
                       className={cn(
-                        'flex items-center gap-4 p-4 rounded-xl bg-white border border-pampas-warm',
+                        'flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-dark-card border border-pampas-warm dark:border-dark-border',
                         'transition-all duration-500 ease-out',
                         'opacity-0 translate-x-4',
                         benefitsVisible && 'opacity-100 translate-x-0'
@@ -224,7 +224,7 @@ export default function Join() {
                       <div className="w-10 h-10 rounded-lg bg-claude-terracotta flex items-center justify-center flex-shrink-0">
                         <Icon className="w-5 h-5 text-white" />
                       </div>
-                      <span className="text-ink font-medium">{benefit.text}</span>
+                      <span className="text-ink dark:text-dark-text font-medium">{benefit.text}</span>
                     </li>
                   )
                 })}
@@ -233,16 +233,16 @@ export default function Join() {
 
             {/* Right: Application Form */}
             <div>
-              <div className="bg-white rounded-2xl border border-pampas-warm p-6 md:p-8">
+              <div className="bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border p-6 md:p-8">
                 {submitted ? (
                   <div className="text-center py-8">
                     <div className="w-16 h-16 rounded-full bg-sage/10 flex items-center justify-center mx-auto mb-4">
                       <CheckCircle className="w-8 h-8 text-sage" />
                     </div>
-                    <h3 className="font-serif text-2xl font-semibold text-ink mb-2">
+                    <h3 className="font-serif text-2xl font-semibold text-ink dark:text-dark-text mb-2">
                       Application Submitted!
                     </h3>
-                    <p className="text-stone mb-6">
+                    <p className="text-stone dark:text-dark-muted mb-6">
                       Thank you for applying to Claude Builder Club! We'll review your application
                       and get back to you within 48 hours with next steps.
                     </p>
@@ -268,13 +268,13 @@ export default function Join() {
                   </div>
                 ) : (
                   <>
-                    <h3 className="font-serif font-semibold text-ink text-xl mb-6">
+                    <h3 className="font-serif font-semibold text-ink dark:text-dark-text text-xl mb-6">
                       Application Form
                     </h3>
                     <form onSubmit={handleSubmit} className="space-y-5">
                       {/* Full Name */}
                       <div>
-                        <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                        <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                           Full Name <span className="text-claude-terracotta">*</span>
                         </label>
                         <input
@@ -294,7 +294,7 @@ export default function Join() {
 
                       {/* Email */}
                       <div>
-                        <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                        <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                           Email <span className="text-claude-terracotta">*</span>
                         </label>
                         <input
@@ -314,7 +314,7 @@ export default function Join() {
 
                       {/* Student ID */}
                       <div>
-                        <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                        <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                           Student ID <span className="text-claude-terracotta">*</span>
                         </label>
                         <input
@@ -335,7 +335,7 @@ export default function Join() {
                       {/* Year of Study & Department */}
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                          <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                             Year of Study <span className="text-claude-terracotta">*</span>
                           </label>
                           <select
@@ -355,7 +355,7 @@ export default function Join() {
                           )}
                         </div>
                         <div>
-                          <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                          <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                             Department <span className="text-claude-terracotta">*</span>
                           </label>
                           <select
@@ -378,7 +378,7 @@ export default function Join() {
 
                       {/* Why do you want to join? */}
                       <div>
-                        <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                        <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                           Why do you want to join?
                         </label>
                         <textarea
@@ -388,7 +388,7 @@ export default function Join() {
                           rows={3}
                           placeholder="Tell us what excites you about AI and what you hope to learn..."
                           className={cn(
-                            'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white resize-none',
+                            'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-card text-ink dark:text-dark-text placeholder:text-stone dark:placeholder:text-dark-muted resize-none',
                             'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta transition-all'
                           )}
                           disabled={isLoading}
@@ -397,7 +397,7 @@ export default function Join() {
 
                       {/* AI Experience */}
                       <div>
-                        <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                        <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                           What's your experience with AI?
                         </label>
                         <textarea
@@ -407,7 +407,7 @@ export default function Join() {
                           rows={3}
                           placeholder="Any experience with AI tools, programming, or related technologies..."
                           className={cn(
-                            'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white resize-none',
+                            'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-card text-ink dark:text-dark-text placeholder:text-stone dark:placeholder:text-dark-muted resize-none',
                             'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta transition-all'
                           )}
                           disabled={isLoading}
@@ -418,7 +418,7 @@ export default function Join() {
                         {isLoading ? 'Submitting...' : 'Submit Application'}
                       </Button>
 
-                      <p className="text-stone text-xs text-center">
+                      <p className="text-stone dark:text-dark-muted text-xs text-center">
                         By submitting, you agree to join our WhatsApp group and receive event updates.
                       </p>
                     </form>

@@ -23,21 +23,21 @@ export default function Projects() {
     <>
       <ProjectsSEO />
       {/* Page Header */}
-      <section className="bg-pampas-warm py-16 md:py-20">
+      <section className="bg-pampas-warm dark:bg-dark-surface py-16 md:py-20">
         <div className="container-main">
-          <nav className="flex items-center gap-2 text-sm text-stone mb-6">
+          <nav className="flex items-center gap-2 text-sm text-stone dark:text-dark-muted mb-6">
             <Link to="/" className="hover:text-claude-terracotta transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-ink">Projects</span>
+            <span className="text-ink dark:text-dark-text">Projects</span>
           </nav>
           <div className="max-w-3xl">
             <p className="text-claude-terracotta font-sans font-bold text-xs uppercase tracking-widest mb-3">
               Project Showcase
             </p>
-            <h1 className="font-serif font-semibold text-ink text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
+            <h1 className="font-serif font-semibold text-ink dark:text-dark-text text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
               See What We're Building
             </h1>
-            <p className="text-stone text-lg md:text-xl leading-relaxed">
+            <p className="text-stone dark:text-dark-muted text-lg md:text-xl leading-relaxed">
               Explore projects created by CBC-UR members using Claude AI. From healthcare solutions to
               educational tools — our community is building for Rwanda.
             </p>
@@ -46,7 +46,7 @@ export default function Projects() {
       </section>
 
       {/* Filter Bar & Projects Grid */}
-      <section className="py-16 md:py-20 bg-surface">
+      <section className="py-16 md:py-20 bg-surface dark:bg-dark-bg">
         <div className="container-main">
           {/* Category Filter */}
           <div className="flex flex-wrap justify-center gap-2 mb-10">
@@ -58,7 +58,7 @@ export default function Projects() {
                   'px-4 py-2 rounded-full text-sm font-medium transition-all',
                   selectedCategory === category
                     ? 'bg-claude-terracotta text-white shadow-sm'
-                    : 'bg-pampas text-stone hover:text-ink hover:bg-pampas-warm'
+                    : 'bg-pampas dark:bg-dark-surface text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text hover:bg-pampas-warm dark:hover:bg-dark-card'
                 )}
               >
                 {category}
@@ -66,9 +66,9 @@ export default function Projects() {
             ))}
           </div>
 
-          {/* Error State */}
-          {error && (
-            <div className="text-center py-8 text-stone">
+          {/* Error State (only if no projects loaded) */}
+          {error && !isLoading && projects.length === 0 && (
+            <div className="text-center py-8 text-stone dark:text-dark-muted">
               <p>{error}</p>
             </div>
           )}
@@ -83,13 +83,13 @@ export default function Projects() {
           )}
 
           {/* Projects Grid */}
-          {!isLoading && !error && (
+          {!isLoading && projects.length > 0 && (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {projects.map((project) => (
                 <div
                   key={project.id}
                   className={cn(
-                    'group bg-white rounded-2xl border border-pampas-warm overflow-hidden',
+                    'group bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border overflow-hidden',
                     'transition-all duration-300 ease-out',
                     'hover:shadow-xl hover:-translate-y-2'
                   )}
@@ -111,13 +111,13 @@ export default function Projects() {
 
                   {/* Content */}
                   <div className="p-5">
-                    <Badge className="bg-pampas text-stone mb-3">
+                    <Badge className="bg-pampas dark:bg-dark-surface text-stone dark:text-dark-muted mb-3">
                       {project.category || 'Project'}
                     </Badge>
-                    <h3 className="font-serif font-semibold text-ink text-lg mb-2">
+                    <h3 className="font-serif font-semibold text-ink dark:text-dark-text text-lg mb-2">
                       {project.title}
                     </h3>
-                    <p className="text-stone text-sm leading-relaxed mb-4">
+                    <p className="text-stone dark:text-dark-muted text-sm leading-relaxed mb-4">
                       {project.description}
                     </p>
 
@@ -136,13 +136,13 @@ export default function Projects() {
                     )}
 
                     {/* Team & Links */}
-                    <div className="flex items-center justify-between pt-4 border-t border-pampas">
+                    <div className="flex items-center justify-between pt-4 border-t border-pampas dark:border-dark-border">
                       {/* Team Avatars */}
                       <div className="flex -space-x-2">
                         {project.team.slice(0, 3).map((member) => (
                           <div
                             key={member.initials}
-                            className="w-8 h-8 rounded-full bg-gradient-to-br from-claude-terracotta to-claude-terracotta-light flex items-center justify-center ring-2 ring-white"
+                            className="w-8 h-8 rounded-full bg-gradient-to-br from-claude-terracotta to-claude-terracotta-light flex items-center justify-center ring-2 ring-white dark:ring-dark-card"
                             title={member.name}
                           >
                             <span className="text-xs font-semibold text-white">
@@ -151,8 +151,8 @@ export default function Projects() {
                           </div>
                         ))}
                         {project.team.length > 3 && (
-                          <div className="w-8 h-8 rounded-full bg-pampas flex items-center justify-center ring-2 ring-white">
-                            <span className="text-xs font-semibold text-stone">
+                          <div className="w-8 h-8 rounded-full bg-pampas dark:bg-dark-surface flex items-center justify-center ring-2 ring-white dark:ring-dark-card">
+                            <span className="text-xs font-semibold text-stone dark:text-dark-muted">
                               +{project.team.length - 3}
                             </span>
                           </div>
@@ -201,14 +201,14 @@ export default function Projects() {
 
           {!isLoading && !error && projects.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-stone text-lg">No projects found in this category.</p>
+              <p className="text-stone dark:text-dark-muted text-lg">No projects found in this category.</p>
             </div>
           )}
         </div>
       </section>
 
       {/* Submit Project CTA */}
-      <section className="py-16 md:py-20 bg-pampas">
+      <section className="py-16 md:py-20 bg-pampas dark:bg-dark-surface">
         <div className="container-main">
           <div className="max-w-2xl mx-auto text-center">
             <SectionHeader
