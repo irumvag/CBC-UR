@@ -66,8 +66,8 @@ export default function Projects() {
             ))}
           </div>
 
-          {/* Error State */}
-          {error && (
+          {/* Error State (only if no projects loaded) */}
+          {error && !isLoading && projects.length === 0 && (
             <div className="text-center py-8 text-stone dark:text-dark-muted">
               <p>{error}</p>
             </div>
@@ -83,7 +83,7 @@ export default function Projects() {
           )}
 
           {/* Projects Grid */}
-          {!isLoading && !error && (
+          {!isLoading && projects.length > 0 && (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {projects.map((project) => (
                 <div

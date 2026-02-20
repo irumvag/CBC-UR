@@ -126,8 +126,8 @@ export default function Events() {
             </div>
           </div>
 
-          {/* Error State */}
-          {error && (
+          {/* Error State (only if no events loaded) */}
+          {error && !isLoading && events.length === 0 && (
             <div className="text-center py-8 text-stone dark:text-dark-muted">
               <p>{error}</p>
             </div>
@@ -143,7 +143,7 @@ export default function Events() {
           )}
 
           {/* Events Grid */}
-          {!isLoading && !error && (
+          {!isLoading && events.length > 0 && (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {events.map((event) => {
                 const { day, month } = formatDate(event.date)
