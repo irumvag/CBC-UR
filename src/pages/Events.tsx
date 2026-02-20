@@ -81,21 +81,21 @@ export default function Events() {
     <>
       <EventsSEO />
       {/* Page Header */}
-      <section className="bg-pampas-warm py-16 md:py-20">
+      <section className="bg-pampas-warm dark:bg-dark-surface py-16 md:py-20">
         <div className="container-main">
-          <nav className="flex items-center gap-2 text-sm text-stone mb-6">
+          <nav className="flex items-center gap-2 text-sm text-stone dark:text-dark-muted mb-6">
             <Link to="/" className="hover:text-claude-terracotta transition-colors">Home</Link>
             <span>/</span>
-            <span className="text-ink">Events</span>
+            <span className="text-ink dark:text-dark-text">Events</span>
           </nav>
           <div className="max-w-3xl">
             <p className="text-claude-terracotta font-sans font-bold text-xs uppercase tracking-widest mb-3">
               Events & Workshops
             </p>
-            <h1 className="font-serif font-semibold text-ink text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
+            <h1 className="font-serif font-semibold text-ink dark:text-dark-text text-3xl md:text-4xl lg:text-5xl leading-tight mb-6">
               Learn, Build, and Connect
             </h1>
-            <p className="text-stone text-lg md:text-xl leading-relaxed">
+            <p className="text-stone dark:text-dark-muted text-lg md:text-xl leading-relaxed">
               Join our workshops, meetups, and hackathons. From beginner-friendly introductions to advanced
               build sessions — there's something for everyone.
             </p>
@@ -104,11 +104,11 @@ export default function Events() {
       </section>
 
       {/* Filter Tabs & Events Grid */}
-      <section className="py-16 md:py-20 bg-surface">
+      <section className="py-16 md:py-20 bg-surface dark:bg-dark-bg">
         <div className="container-main">
           {/* Filter Tabs */}
           <div className="flex justify-center mb-10">
-            <div className="inline-flex bg-pampas rounded-full p-1">
+            <div className="inline-flex bg-pampas dark:bg-dark-surface rounded-full p-1">
               {(['upcoming', 'past', 'all'] as FilterType[]).map((tab) => (
                 <button
                   key={tab}
@@ -117,7 +117,7 @@ export default function Events() {
                     'px-6 py-2 rounded-full text-sm font-medium transition-all',
                     filter === tab
                       ? 'bg-claude-terracotta text-white shadow-sm'
-                      : 'text-stone hover:text-ink'
+                      : 'text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text'
                   )}
                 >
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -128,7 +128,7 @@ export default function Events() {
 
           {/* Error State */}
           {error && (
-            <div className="text-center py-8 text-stone">
+            <div className="text-center py-8 text-stone dark:text-dark-muted">
               <p>{error}</p>
             </div>
           )}
@@ -155,7 +155,7 @@ export default function Events() {
                   <div
                     key={event.id}
                     className={cn(
-                      'bg-white rounded-2xl border border-pampas-warm overflow-hidden',
+                      'bg-white dark:bg-dark-card rounded-2xl border border-pampas-warm dark:border-dark-border overflow-hidden',
                       'transition-all duration-300 ease-out',
                       'hover:shadow-lg hover:-translate-y-1',
                       isPast && 'opacity-75'
@@ -172,7 +172,7 @@ export default function Events() {
                           <TypeIcon size={12} className="mr-1" />
                           {typeLabels[eventType]}
                         </Badge>
-                        <h3 className="font-serif font-semibold text-ink text-lg mt-2 leading-tight">
+                        <h3 className="font-serif font-semibold text-ink dark:text-dark-text text-lg mt-2 leading-tight">
                           {event.title}
                         </h3>
                       </div>
@@ -180,10 +180,10 @@ export default function Events() {
 
                     {/* Content */}
                     <div className="p-5">
-                      <p className="text-stone text-sm leading-relaxed mb-4">
+                      <p className="text-stone dark:text-dark-muted text-sm leading-relaxed mb-4">
                         {event.description}
                       </p>
-                      <div className="space-y-2 text-sm text-stone">
+                      <div className="space-y-2 text-sm text-stone dark:text-dark-muted">
                         <div className="flex items-center gap-2">
                           <Clock size={14} className="text-claude-terracotta" />
                           <span>{formatTime(event.date, event.end_date)}</span>
@@ -195,7 +195,7 @@ export default function Events() {
                           </div>
                         )}
                       </div>
-                      <div className="mt-4 pt-4 border-t border-pampas">
+                      <div className="mt-4 pt-4 border-t border-pampas dark:border-dark-border">
                         <Button
                           variant={isPast ? 'secondary' : 'primary'}
                           size="sm"
@@ -214,23 +214,23 @@ export default function Events() {
 
           {!isLoading && !error && events.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-stone text-lg">No events found for this filter.</p>
+              <p className="text-stone dark:text-dark-muted text-lg">No events found for this filter.</p>
             </div>
           )}
         </div>
       </section>
 
       {/* Subscribe CTA */}
-      <section className="py-16 md:py-20 bg-pampas">
+      <section className="py-16 md:py-20 bg-pampas dark:bg-dark-surface">
         <div className="container-main">
           <div className="max-w-2xl mx-auto text-center">
             <div className="w-16 h-16 rounded-2xl bg-claude-terracotta/10 flex items-center justify-center mx-auto mb-6">
               <Mail className="w-8 h-8 text-claude-terracotta" />
             </div>
-            <h2 className="font-serif font-semibold text-ink text-2xl md:text-3xl mb-4">
+            <h2 className="font-serif font-semibold text-ink dark:text-dark-text text-2xl md:text-3xl mb-4">
               Never Miss an Event
             </h2>
-            <p className="text-stone mb-8">
+            <p className="text-stone dark:text-dark-muted mb-8">
               Subscribe to get notified about upcoming workshops, hackathons, and meetups.
             </p>
 
@@ -242,8 +242,8 @@ export default function Events() {
                 placeholder="Enter your email"
                 required
                 className={cn(
-                  'flex-1 px-4 py-3 rounded-xl border border-pampas-warm',
-                  'bg-white text-ink placeholder:text-stone',
+                  'flex-1 px-4 py-3 rounded-xl border border-pampas-warm dark:border-dark-border',
+                  'bg-white dark:bg-dark-card text-ink dark:text-dark-text placeholder:text-stone dark:placeholder:text-dark-muted',
                   'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
                   'transition-all'
                 )}

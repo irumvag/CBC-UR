@@ -160,16 +160,7 @@ export function useProjects(category?: Category): UseProjectsResult {
 
       let query = supabase
         .from('projects')
-        .select(`
-          *,
-          project_members (
-            role,
-            member:members (
-              id,
-              full_name
-            )
-          )
-        `)
+        .select('*')
         .order('is_featured', { ascending: false })
         .order('created_at', { ascending: false })
 
@@ -181,17 +172,9 @@ export function useProjects(category?: Category): UseProjectsResult {
 
       if (fetchError) throw fetchError
 
-      // Transform data to include team info
       const transformedProjects: ProjectWithTeam[] = (data || []).map((project: any) => ({
         ...project,
-        team: project.project_members?.map((pm: any) => ({
-          initials: pm.member?.full_name
-            ?.split(' ')
-            .map((n: string) => n[0])
-            .join('')
-            .toUpperCase() || '??',
-          name: pm.member?.full_name || 'Unknown',
-        })) || [],
+        team: [],
       }))
 
       setProjects(transformedProjects)
@@ -231,16 +214,7 @@ export function useProject(projectId: string): UseProjectResult {
 
         const { data, error: fetchError } = await supabase
           .from('projects')
-          .select(`
-            *,
-            project_members (
-              role,
-              member:members (
-                id,
-                full_name
-              )
-            )
-          `)
+          .select('*')
           .eq('id', projectId)
           .single()
 
@@ -248,14 +222,7 @@ export function useProject(projectId: string): UseProjectResult {
 
         const transformedProject: ProjectWithTeam = {
           ...(data as any),
-          team: (data as any).project_members?.map((pm: any) => ({
-            initials: pm.member?.full_name
-              ?.split(' ')
-              .map((n: string) => n[0])
-              .join('')
-              .toUpperCase() || '??',
-            name: pm.member?.full_name || 'Unknown',
-          })) || [],
+          team: [],
         }
 
         setProject(transformedProject)
