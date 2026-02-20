@@ -15,7 +15,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS features (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   icon TEXT NOT NULL,
-  title_en TEXT NOT NULL,
+  title_en TEXT NOT NULL UNIQUE,
   title_rw TEXT,
   description_en TEXT NOT NULL,
   description_rw TEXT,
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS features (
 -- Team members table
 CREATE TABLE IF NOT EXISTS team_members (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name TEXT NOT NULL,
+  name TEXT NOT NULL UNIQUE,
   role_en TEXT NOT NULL,
   role_rw TEXT,
   bio_en TEXT,
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS team_members (
 -- Partners table
 CREATE TABLE IF NOT EXISTS partners (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name TEXT NOT NULL,
+  name TEXT NOT NULL UNIQUE,
   logo_url TEXT,
   website_url TEXT,
   description_en TEXT,
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS partners (
 -- Milestones table
 CREATE TABLE IF NOT EXISTS milestones (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  date DATE NOT NULL,
+  date DATE NOT NULL UNIQUE,
   title_en TEXT NOT NULL,
   title_rw TEXT,
   description_en TEXT,
@@ -71,6 +71,12 @@ CREATE TABLE IF NOT EXISTS milestones (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Add unique constraints to existing tables that may lack them (safe to run if already exists)
+CREATE UNIQUE INDEX IF NOT EXISTS features_title_en_key    ON features(title_en);
+CREATE UNIQUE INDEX IF NOT EXISTS team_members_name_key    ON team_members(name);
+CREATE UNIQUE INDEX IF NOT EXISTS partners_name_key        ON partners(name);
+CREATE UNIQUE INDEX IF NOT EXISTS milestones_date_key      ON milestones(date);
 
 -- Site stats table
 CREATE TABLE IF NOT EXISTS site_stats (
@@ -407,7 +413,13 @@ INSERT INTO features (icon, title_en, title_rw, description_en, description_rw, 
 ('code', 'Build Real Projects', 'Kora Imishinga Nyayo', 'Work on meaningful projects that solve local challenges in healthcare, education, agriculture, and more.', 'Kora ku mishinga ifite intego ikemura ibibazo by''aho uri mu buzima busanzwe, uburezi, ubuhinzi, n''ibindi.', 2, true),
 ('users', 'Connect & Grow', 'Huza & Kura', 'Network with fellow builders, industry professionals, and Anthropic''s global community of developers.', 'Huza n''abandi bubatsi, abakozi b''inganda, n''umuryango mpuzamahanga wa Anthropic w''abahanga mu iterambere.', 3, true),
 ('presentation', 'Showcase Your Work', 'Erekana Akazi Kawe', 'Present your projects at demo days, hackathons, and gain recognition for your innovative solutions.', 'Tanga imishinga yawe mu minsi yo kwerekana, amarushanwa, kandi uhabwe icyubahiro ku bisubizo byawe bishya.', 4, true)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (title_en) DO UPDATE SET
+  icon           = EXCLUDED.icon,
+  title_rw       = EXCLUDED.title_rw,
+  description_en = EXCLUDED.description_en,
+  description_rw = EXCLUDED.description_rw,
+  sort_order     = EXCLUDED.sort_order,
+  is_active      = EXCLUDED.is_active;
 
 -- ============================================
 -- PART 4: SEED DATA - Team Members
@@ -418,7 +430,13 @@ INSERT INTO team_members (name, role_en, role_rw, bio_en, bio_rw, image_url, lin
 ('Marie Claire Uwimana', 'Vice President', 'Visi Perezida', 'Software Engineering student focused on building AI solutions for healthcare.', 'Umunyeshuri wa Software Engineering yibanda ku kubaka ibisubizo bya AI mu buzima.', NULL, NULL, NULL, 2, true),
 ('Eric Habimana', 'Technical Lead', 'Umuyobozi w''Ikoranabuhanga', 'Full-stack developer with experience in machine learning and Claude API integration.', 'Umunyamwuga wa full-stack ufite uburambe mu kwiga imashini no guhuza Claude API.', NULL, NULL, NULL, 3, true),
 ('Alice Mukamana', 'Events Coordinator', 'Uhuzabikorwa', 'Business Administration student managing club activities and community engagement.', 'Umunyeshuri wa Business Administration uyobora ibikorwa by''ishyirahamwe n''ubufatanye n''abaturage.', NULL, NULL, NULL, 4, true)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (name) DO UPDATE SET
+  role_en    = EXCLUDED.role_en,
+  role_rw    = EXCLUDED.role_rw,
+  bio_en     = EXCLUDED.bio_en,
+  bio_rw     = EXCLUDED.bio_rw,
+  sort_order = EXCLUDED.sort_order,
+  is_active  = EXCLUDED.is_active;
 
 -- ============================================
 -- PART 5: SEED DATA - Partners
@@ -428,7 +446,14 @@ INSERT INTO partners (name, logo_url, website_url, description_en, description_r
 ('Anthropic', 'https://upload.wikimedia.org/wikipedia/commons/7/78/Anthropic_logo.svg', 'https://www.anthropic.com', 'AI safety company and creator of Claude, our primary technology partner.', 'Sosiyete y''umutekano wa AI n''uwahanze Claude, umufatanyabikorwa wacu w''ibanze mu ikoranabuhanga.', 'platinum', 1, true),
 ('University of Rwanda', 'https://ur.ac.rw/spip/sites/default/files/ur_logo_0.png', 'https://ur.ac.rw', 'Our home institution providing space, support, and academic guidance.', 'Kaminuza yacu itanga umwanya, ubufasha, n''ubuyobozi bw''amasomo.', 'platinum', 2, true),
 ('Rwanda ICT Chamber', NULL, 'https://ictchamber.rw', 'Supporting tech ecosystem development and connecting us with industry.', 'Gushyigikira iterambere ry''ikoranabuhanga no kuduhuza n''inganda.', 'gold', 3, true)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (name) DO UPDATE SET
+  logo_url       = EXCLUDED.logo_url,
+  website_url    = EXCLUDED.website_url,
+  description_en = EXCLUDED.description_en,
+  description_rw = EXCLUDED.description_rw,
+  tier           = EXCLUDED.tier,
+  sort_order     = EXCLUDED.sort_order,
+  is_active      = EXCLUDED.is_active;
 
 -- ============================================
 -- PART 6: SEED DATA - Milestones
@@ -439,7 +464,13 @@ INSERT INTO milestones (date, title_en, title_rw, description_en, description_rw
 ('2024-10-15', 'First Workshop', 'Ihugurwa rya Mbere', 'Hosted our first Claude API workshop with 50+ attendees.', 'Twakoreye ihugurwa ryacu rya mbere rya Claude API ririmo abantu 50+.', 'users', true),
 ('2024-11-20', 'Hackathon Launch', 'Gutangiza Amarushanwa', 'Organized our first AI hackathon focused on local challenges.', 'Twateguye amarushanwa yacu ya mbere ya AI yibanda ku bibazo by''aho.', 'trophy', true),
 ('2025-01-10', '100 Members', 'Abanyamuryango 100', 'Reached 100 active members milestone.', 'Twageze ku ntego y''abanyamuryango 100 bakora.', 'star', true)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (date) DO UPDATE SET
+  title_en       = EXCLUDED.title_en,
+  title_rw       = EXCLUDED.title_rw,
+  description_en = EXCLUDED.description_en,
+  description_rw = EXCLUDED.description_rw,
+  icon           = EXCLUDED.icon,
+  is_active      = EXCLUDED.is_active;
 
 -- ============================================
 -- PART 7: SEED DATA - Site Stats
