@@ -38,7 +38,7 @@ export function Features() {
   const { localizedFeatures, loading } = useFeatures()
 
   return (
-    <section className="py-20 md:py-28 bg-surface dark:bg-dark-surface transition-colors">
+    <section className="py-20 md:py-28 bg-surface dark:bg-dark-bg transition-colors">
       <div className="container-main">
         <SectionHeader
           eyebrow={t('home.features.tagline')}
@@ -63,7 +63,7 @@ export function Features() {
                     'group p-6 md:p-8 rounded-2xl',
                     'bg-white dark:bg-dark-card border border-pampas-warm dark:border-dark-border',
                     'transition-all duration-500 ease-out',
-                    'hover:shadow-lg hover:-translate-y-1 hover:border-claude-terracotta-light',
+                    'hover:shadow-lg hover:-translate-y-1 hover:border-claude-terracotta-light dark:hover:border-claude-terracotta',
                     'opacity-0 translate-y-4',
                     isVisible && 'opacity-100 translate-y-0'
                   )}
@@ -71,7 +71,7 @@ export function Features() {
                     transitionDelay: isVisible ? `${index * 100}ms` : '0ms',
                   }}
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-claude-terracotta/10 flex items-center justify-center mb-5 group-hover:bg-claude-terracotta/20 transition-colors">
+                  <div className="w-14 h-14 rounded-2xl bg-claude-terracotta/10 dark:bg-claude-terracotta/20 flex items-center justify-center mb-5 group-hover:bg-claude-terracotta/20 dark:group-hover:bg-claude-terracotta/30 transition-colors">
                     <Icon className="w-7 h-7 text-claude-terracotta" />
                   </div>
                   <h3 className="font-serif font-semibold text-ink dark:text-dark-text text-lg mb-2">
