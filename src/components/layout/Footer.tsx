@@ -61,10 +61,10 @@ export function Footer() {
               Try Claude
             </a>
             <Link
-              to="/join"
+              to="/about"
               className="text-stone dark:text-dark-muted hover:text-claude-terracotta transition-colors text-sm font-medium"
             >
-              {t('nav.community')}
+              {t('nav.about')}
             </Link>
           </div>
         </div>

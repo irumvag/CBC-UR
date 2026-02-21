@@ -34,24 +34,24 @@ export function AdminRoute({ children }: AdminRouteProps) {
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-surface px-4">
+      <div className="min-h-screen flex items-center justify-center bg-surface dark:bg-dark-bg px-4">
         <div className="text-center max-w-md">
-          <div className="w-20 h-20 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-6">
+          <div className="w-20 h-20 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-6">
             <ShieldX className="w-10 h-10 text-red-500" />
           </div>
-          <h1 className="font-serif font-semibold text-3xl text-ink mb-3">
+          <h1 className="font-serif font-semibold text-3xl text-ink dark:text-dark-text mb-3">
             Access Denied
           </h1>
-          <p className="text-stone mb-8">
+          <p className="text-stone dark:text-dark-muted mb-8">
             You don't have permission to access the admin panel. This area is restricted to club administrators and leads.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button variant="secondary" onClick={() => window.history.back()}>
               Go Back
             </Button>
-            <a href="/dashboard">
+            <a href="/">
               <Button variant="primary">
-                Go to Dashboard
+                Go to Home
               </Button>
             </a>
           </div>

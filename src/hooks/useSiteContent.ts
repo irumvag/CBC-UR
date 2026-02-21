@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import type {
@@ -245,6 +245,7 @@ export function useFeatures() {
   const [loading, setLoading] = useState(isSupabaseConfigured)
   const [error] = useState<string | null>(null)
   const { i18n } = useTranslation()
+  const abortRef = useRef<AbortController | null>(null)
 
   const fetchFeatures = useCallback(async () => {
     if (!isSupabaseConfigured) {
@@ -252,6 +253,8 @@ export function useFeatures() {
       setLoading(false)
       return
     }
+    abortRef.current?.abort()
+    abortRef.current = new AbortController()
     setLoading(true)
     try {
       const { data, error: fetchError } = await supabase
@@ -259,10 +262,12 @@ export function useFeatures() {
         .select('*')
         .eq('is_active', true)
         .order('sort_order')
+        .abortSignal(abortRef.current.signal)
 
       if (fetchError) throw fetchError
       setFeatures(data && data.length > 0 ? data : mockFeatures)
-    } catch {
+    } catch (err) {
+      if ((err as Error)?.name === 'AbortError') return
       console.warn('Using mock features data')
       setFeatures(mockFeatures)
     } finally {
@@ -272,6 +277,7 @@ export function useFeatures() {
 
   useEffect(() => {
     if (isSupabaseConfigured) fetchFeatures()
+    return () => { abortRef.current?.abort() }
   }, [fetchFeatures])
 
   // Get localized feature data
@@ -376,6 +382,7 @@ export function useTeamMembers() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>(isSupabaseConfigured ? [] : mockTeamMembers)
   const [loading, setLoading] = useState(isSupabaseConfigured)
   const { i18n } = useTranslation()
+  const abortRef = useRef<AbortController | null>(null)
 
   const fetchTeamMembers = useCallback(async () => {
     if (!isSupabaseConfigured) {
@@ -383,6 +390,8 @@ export function useTeamMembers() {
       setLoading(false)
       return
     }
+    abortRef.current?.abort()
+    abortRef.current = new AbortController()
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -390,10 +399,12 @@ export function useTeamMembers() {
         .select('*')
         .eq('is_active', true)
         .order('sort_order')
+        .abortSignal(abortRef.current.signal)
 
       if (error) throw error
       setTeamMembers(data && data.length > 0 ? data : mockTeamMembers)
-    } catch {
+    } catch (err) {
+      if ((err as Error)?.name === 'AbortError') return
       setTeamMembers(mockTeamMembers)
     } finally {
       setLoading(false)
@@ -402,6 +413,7 @@ export function useTeamMembers() {
 
   useEffect(() => {
     if (isSupabaseConfigured) fetchTeamMembers()
+    return () => { abortRef.current?.abort() }
   }, [fetchTeamMembers])
 
   const getLocalizedTeamMembers = useCallback(() => {
@@ -503,6 +515,7 @@ export function usePartners() {
   const [partners, setPartners] = useState<Partner[]>(isSupabaseConfigured ? [] : mockPartners)
   const [loading, setLoading] = useState(isSupabaseConfigured)
   const { i18n } = useTranslation()
+  const abortRef = useRef<AbortController | null>(null)
 
   const fetchPartners = useCallback(async () => {
     if (!isSupabaseConfigured) {
@@ -510,6 +523,8 @@ export function usePartners() {
       setLoading(false)
       return
     }
+    abortRef.current?.abort()
+    abortRef.current = new AbortController()
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -518,10 +533,12 @@ export function usePartners() {
         .eq('is_active', true)
         .order('tier')
         .order('sort_order')
+        .abortSignal(abortRef.current.signal)
 
       if (error) throw error
       setPartners(data && data.length > 0 ? data : mockPartners)
-    } catch {
+    } catch (err) {
+      if ((err as Error)?.name === 'AbortError') return
       setPartners(mockPartners)
     } finally {
       setLoading(false)
@@ -530,6 +547,7 @@ export function usePartners() {
 
   useEffect(() => {
     if (isSupabaseConfigured) fetchPartners()
+    return () => { abortRef.current?.abort() }
   }, [fetchPartners])
 
   const getLocalizedPartners = useCallback(() => {
@@ -631,6 +649,7 @@ export function useMilestones() {
   const [milestones, setMilestones] = useState<Milestone[]>(isSupabaseConfigured ? [] : mockMilestones)
   const [loading, setLoading] = useState(isSupabaseConfigured)
   const { i18n } = useTranslation()
+  const abortRef = useRef<AbortController | null>(null)
 
   const fetchMilestones = useCallback(async () => {
     if (!isSupabaseConfigured) {
@@ -638,6 +657,8 @@ export function useMilestones() {
       setLoading(false)
       return
     }
+    abortRef.current?.abort()
+    abortRef.current = new AbortController()
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -645,10 +666,12 @@ export function useMilestones() {
         .select('*')
         .eq('is_active', true)
         .order('date', { ascending: true })
+        .abortSignal(abortRef.current.signal)
 
       if (error) throw error
       setMilestones(data && data.length > 0 ? data : mockMilestones)
-    } catch {
+    } catch (err) {
+      if ((err as Error)?.name === 'AbortError') return
       setMilestones(mockMilestones)
     } finally {
       setLoading(false)
@@ -657,6 +680,7 @@ export function useMilestones() {
 
   useEffect(() => {
     if (isSupabaseConfigured) fetchMilestones()
+    return () => { abortRef.current?.abort() }
   }, [fetchMilestones])
 
   const getLocalizedMilestones = useCallback(() => {
@@ -678,6 +702,7 @@ export function useSiteStats() {
   const [stats, setStats] = useState<SiteStat[]>(isSupabaseConfigured ? [] : mockStats)
   const [loading, setLoading] = useState(isSupabaseConfigured)
   const { i18n } = useTranslation()
+  const abortRef = useRef<AbortController | null>(null)
 
   const fetchStats = useCallback(async () => {
     if (!isSupabaseConfigured) {
@@ -685,6 +710,8 @@ export function useSiteStats() {
       setLoading(false)
       return
     }
+    abortRef.current?.abort()
+    abortRef.current = new AbortController()
     setLoading(true)
     try {
       const { data, error } = await supabase
@@ -692,10 +719,12 @@ export function useSiteStats() {
         .select('*')
         .eq('is_active', true)
         .order('sort_order')
+        .abortSignal(abortRef.current.signal)
 
       if (error) throw error
       setStats(data && data.length > 0 ? data : mockStats)
-    } catch {
+    } catch (err) {
+      if ((err as Error)?.name === 'AbortError') return
       setStats(mockStats)
     } finally {
       setLoading(false)
@@ -704,6 +733,7 @@ export function useSiteStats() {
 
   useEffect(() => {
     if (isSupabaseConfigured) fetchStats()
+    return () => { abortRef.current?.abort() }
   }, [fetchStats])
 
   const getLocalizedStats = useCallback(() => {

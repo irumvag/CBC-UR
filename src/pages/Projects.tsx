@@ -216,7 +216,7 @@ export default function Projects() {
               title="Submit Your Project"
               subtitle="Built something with Claude? We'd love to showcase it. Share your work with the community and inspire other builders."
             />
-            <Link to="/join">
+            <Link to="/about">
               <Button variant="primary" size="lg">
                 Submit Your Project
                 <ArrowRight size={18} />

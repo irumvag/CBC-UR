@@ -13,7 +13,7 @@ interface SEOProps {
 const defaultMeta = {
   siteName: 'Claude Builder Club - University of Rwanda',
   title: 'Claude Builder Club UR',
-  description: 'Join the Claude Builder Club at University of Rwanda. Build innovative AI solutions, learn from workshops, and connect with fellow developers passionate about AI technology.',
+  description: 'Claude Builder Club at University of Rwanda. Building innovative AI solutions through workshops, projects, and community events.',
   image: '/og-image.png',
   url: 'https://cbc-ur.vercel.app',
   twitterHandle: '@ClaudeBuilderUR',
@@ -129,27 +129,6 @@ export function ProjectsSEO() {
       title="Projects"
       description="Explore innovative AI projects built by Claude Builder Club UR members. From healthcare to education, see how we're solving real problems with Claude."
       url="/projects"
-    />
-  )
-}
-
-export function JoinSEO() {
-  return (
-    <SEO
-      title="Join the Club"
-      description="Apply to become a member of Claude Builder Club at University of Rwanda. Get access to resources, mentorship, and a community of AI enthusiasts."
-      url="/join"
-    />
-  )
-}
-
-export function DashboardSEO() {
-  return (
-    <SEO
-      title="Dashboard"
-      description="Your member dashboard at Claude Builder Club UR."
-      url="/dashboard"
-      noIndex
     />
   )
 }
