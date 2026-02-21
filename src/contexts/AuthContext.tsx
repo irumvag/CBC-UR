@@ -83,18 +83,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!isSupabaseConfigured) {
-      // For development, start logged out
+      // For development without Supabase, auto-login as mock admin
+      setUser(mockUser)
+      setMember(mockMember)
       setLoading(false)
       return
     }
 
-    // Get initial session
+    // Get initial session with a timeout to prevent infinite loading
+    const sessionTimeout = setTimeout(() => {
+      setLoading(false)
+    }, 5000)
+
     supabase.auth.getSession().then(({ data: { session } }) => {
+      clearTimeout(sessionTimeout)
       setSession(session)
       setUser(session?.user ?? null)
       if (session?.user) {
         fetchMember(session.user.id)
       }
+      setLoading(false)
+    }).catch(() => {
+      clearTimeout(sessionTimeout)
       setLoading(false)
     })
 
@@ -111,7 +121,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     )
 
-    return () => subscription.unsubscribe()
+    return () => {
+      clearTimeout(sessionTimeout)
+      subscription.unsubscribe()
+    }
   }, [fetchMember])
 
   const signIn = async (email: string, password: string) => {
