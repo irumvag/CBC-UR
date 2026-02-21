@@ -142,16 +142,30 @@ export default function DashboardProjects() {
     setErrors({})
   }
 
+  const inputClass = cn(
+    'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border',
+    'bg-white dark:bg-dark-surface text-ink dark:text-dark-text',
+    'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
+    'transition-all disabled:opacity-50'
+  )
+
+  const inputWithIconClass = cn(
+    'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border',
+    'bg-white dark:bg-dark-surface text-ink dark:text-dark-text',
+    'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
+    'transition-all disabled:opacity-50'
+  )
+
   return (
     <DashboardLayout>
       <div className="p-4 md:p-6 lg:p-8 pb-24 md:pb-8">
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
-            <h1 className="font-serif font-semibold text-2xl md:text-3xl text-ink mb-1">
+            <h1 className="font-serif font-semibold text-2xl md:text-3xl text-ink dark:text-dark-text mb-1">
               My Projects
             </h1>
-            <p className="text-stone">
+            <p className="text-stone dark:text-dark-muted">
               Manage your Claude-powered projects
             </p>
           </div>
@@ -174,7 +188,7 @@ export default function DashboardProjects() {
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="bg-white rounded-xl border border-pampas-warm p-5 hover:border-claude-terracotta/30 transition-colors group"
+                className="bg-white dark:bg-dark-card rounded-xl border border-pampas-warm dark:border-dark-border p-5 hover:border-claude-terracotta/30 transition-colors group"
               >
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <div className="flex items-center gap-3">
@@ -182,22 +196,22 @@ export default function DashboardProjects() {
                       <FolderKanban className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-ink">{project.title}</h3>
+                      <h3 className="font-semibold text-ink dark:text-dark-text">{project.title}</h3>
                       {project.category && (
-                        <span className="text-xs text-stone">{project.category}</span>
+                        <span className="text-xs text-stone dark:text-dark-muted">{project.category}</span>
                       )}
                     </div>
                   </div>
                   <button
                     onClick={() => handleDelete(project.id)}
-                    className="opacity-0 group-hover:opacity-100 p-1.5 text-stone hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                    className="opacity-0 group-hover:opacity-100 p-1.5 text-stone dark:text-dark-muted hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
                     title="Delete project"
                   >
                     <Trash2 size={16} />
                   </button>
                 </div>
 
-                <p className="text-stone text-sm line-clamp-2 mb-4">
+                <p className="text-stone dark:text-dark-muted text-sm line-clamp-2 mb-4">
                   {project.description || 'No description'}
                 </p>
 
@@ -206,7 +220,7 @@ export default function DashboardProjects() {
                     {project.tech_stack.map((tech) => (
                       <span
                         key={tech}
-                        className="text-xs px-2 py-1 rounded-full bg-pampas-warm text-stone"
+                        className="text-xs px-2 py-1 rounded-full bg-pampas-warm dark:bg-dark-surface text-stone dark:text-dark-muted"
                       >
                         {tech}
                       </span>
@@ -220,7 +234,7 @@ export default function DashboardProjects() {
                       href={project.github_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-sm text-stone hover:text-ink transition-colors"
+                      className="flex items-center gap-1.5 text-sm text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text transition-colors"
                     >
                       <Github size={16} />
                       GitHub
@@ -242,14 +256,14 @@ export default function DashboardProjects() {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-pampas-warm p-8 text-center">
-            <div className="w-20 h-20 rounded-full bg-pampas-warm flex items-center justify-center mx-auto mb-4">
-              <FolderKanban className="w-10 h-10 text-stone" />
+          <div className="bg-white dark:bg-dark-card rounded-xl border border-pampas-warm dark:border-dark-border p-8 text-center">
+            <div className="w-20 h-20 rounded-full bg-pampas-warm dark:bg-dark-surface flex items-center justify-center mx-auto mb-4">
+              <FolderKanban className="w-10 h-10 text-stone dark:text-dark-muted" />
             </div>
-            <h3 className="font-serif font-semibold text-xl text-ink mb-2">
+            <h3 className="font-serif font-semibold text-xl text-ink dark:text-dark-text mb-2">
               No projects yet
             </h3>
-            <p className="text-stone mb-6 max-w-sm mx-auto">
+            <p className="text-stone dark:text-dark-muted mb-6 max-w-sm mx-auto">
               Start building with Claude! Add your first project to showcase your work and track your progress.
             </p>
             <Button variant="primary" onClick={() => setIsModalOpen(true)}>
@@ -273,19 +287,19 @@ export default function DashboardProjects() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">
             <div
               className={cn(
-                'bg-pampas rounded-2xl shadow-2xl w-full max-w-lg pointer-events-auto my-8',
+                'bg-pampas dark:bg-dark-card rounded-2xl shadow-2xl w-full max-w-lg pointer-events-auto my-8',
                 'transform transition-all duration-300 animate-modal-in'
               )}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b border-pampas-warm">
-                <h2 className="font-serif font-semibold text-xl text-ink">
+              <div className="flex items-center justify-between p-6 border-b border-pampas-warm dark:border-dark-border">
+                <h2 className="font-serif font-semibold text-xl text-ink dark:text-dark-text">
                   Add New Project
                 </h2>
                 <button
                   onClick={closeModal}
-                  className="p-2 text-stone hover:text-ink hover:bg-pampas-warm rounded-lg transition-colors"
+                  className="p-2 text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text hover:bg-pampas-warm dark:hover:bg-dark-surface rounded-lg transition-colors"
                 >
                   <X size={20} />
                 </button>
@@ -295,7 +309,7 @@ export default function DashboardProjects() {
               <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
                 {/* Title */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Project Title *
                   </label>
                   <input
@@ -305,10 +319,8 @@ export default function DashboardProjects() {
                     placeholder="My Awesome AI Project"
                     disabled={isSubmitting}
                     className={cn(
-                      'w-full px-4 py-3 rounded-xl border-2 bg-white',
-                      errors.title ? 'border-red-300' : 'border-pampas-warm',
-                      'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                      'transition-all disabled:opacity-50'
+                      inputClass,
+                      errors.title ? 'border-red-300 dark:border-red-700' : ''
                     )}
                   />
                   {errors.title && <p className="mt-1 text-red-600 text-sm">{errors.title}</p>}
@@ -316,7 +328,7 @@ export default function DashboardProjects() {
 
                 {/* Description */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Description *
                   </label>
                   <textarea
@@ -326,10 +338,9 @@ export default function DashboardProjects() {
                     rows={3}
                     disabled={isSubmitting}
                     className={cn(
-                      'w-full px-4 py-3 rounded-xl border-2 bg-white resize-none',
-                      errors.description ? 'border-red-300' : 'border-pampas-warm',
-                      'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                      'transition-all disabled:opacity-50'
+                      inputClass,
+                      'resize-none',
+                      errors.description ? 'border-red-300 dark:border-red-700' : ''
                     )}
                   />
                   {errors.description && <p className="mt-1 text-red-600 text-sm">{errors.description}</p>}
@@ -337,7 +348,7 @@ export default function DashboardProjects() {
 
                 {/* Category */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Category *
                   </label>
                   <select
@@ -345,10 +356,8 @@ export default function DashboardProjects() {
                     onChange={(e) => setFormData((prev) => ({ ...prev, category: e.target.value }))}
                     disabled={isSubmitting}
                     className={cn(
-                      'w-full px-4 py-3 rounded-xl border-2 bg-white',
-                      errors.category ? 'border-red-300' : 'border-pampas-warm',
-                      'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                      'transition-all disabled:opacity-50'
+                      inputClass,
+                      errors.category ? 'border-red-300 dark:border-red-700' : ''
                     )}
                   >
                     <option value="">Select a category</option>
@@ -361,56 +370,48 @@ export default function DashboardProjects() {
 
                 {/* GitHub URL */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     GitHub URL
                   </label>
                   <div className="relative">
-                    <Github className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                    <Github className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                     <input
                       type="url"
                       value={formData.github_url}
                       onChange={(e) => setFormData((prev) => ({ ...prev, github_url: e.target.value }))}
                       placeholder="https://github.com/username/repo"
                       disabled={isSubmitting}
-                      className={cn(
-                        'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                        'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                        'transition-all disabled:opacity-50'
-                      )}
+                      className={inputWithIconClass}
                     />
                   </div>
                 </div>
 
                 {/* Demo URL */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Live Demo URL
                   </label>
                   <div className="relative">
-                    <ExternalLink className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                    <ExternalLink className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                     <input
                       type="url"
                       value={formData.demo_url}
                       onChange={(e) => setFormData((prev) => ({ ...prev, demo_url: e.target.value }))}
                       placeholder="https://myproject.demo.com"
                       disabled={isSubmitting}
-                      className={cn(
-                        'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                        'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                        'transition-all disabled:opacity-50'
-                      )}
+                      className={inputWithIconClass}
                     />
                   </div>
                 </div>
 
                 {/* Tech Stack */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Tech Stack
                   </label>
                   <div className="flex gap-2">
                     <div className="relative flex-1">
-                      <Tag className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                      <Tag className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                       <input
                         type="text"
                         value={techInput}
@@ -418,11 +419,7 @@ export default function DashboardProjects() {
                         onKeyDown={handleKeyDown}
                         placeholder="React, Claude API, etc."
                         disabled={isSubmitting}
-                        className={cn(
-                          'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                          'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                          'transition-all disabled:opacity-50'
-                        )}
+                        className={inputWithIconClass}
                       />
                     </div>
                     <Button
@@ -457,25 +454,21 @@ export default function DashboardProjects() {
 
                 {/* Image URL */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Project Image URL
                   </label>
                   <div className="relative">
-                    <Upload className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                    <Upload className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                     <input
                       type="url"
                       value={formData.image_url}
                       onChange={(e) => setFormData((prev) => ({ ...prev, image_url: e.target.value }))}
                       placeholder="https://example.com/image.png"
                       disabled={isSubmitting}
-                      className={cn(
-                        'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                        'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                        'transition-all disabled:opacity-50'
-                      )}
+                      className={inputWithIconClass}
                     />
                   </div>
-                  <p className="mt-1 text-stone text-xs">
+                  <p className="mt-1 text-stone dark:text-dark-muted text-xs">
                     Paste a URL to an image for your project thumbnail
                   </p>
                 </div>

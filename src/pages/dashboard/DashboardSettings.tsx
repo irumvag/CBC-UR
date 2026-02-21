@@ -166,28 +166,42 @@ export default function DashboardSettings() {
     return '?'
   }
 
+  const inputClass = cn(
+    'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border',
+    'bg-white dark:bg-dark-surface text-ink dark:text-dark-text',
+    'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
+    'transition-all disabled:opacity-50'
+  )
+
+  const selectClass = cn(
+    'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border',
+    'bg-white dark:bg-dark-surface text-ink dark:text-dark-text',
+    'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
+    'transition-all disabled:opacity-50'
+  )
+
   return (
     <DashboardLayout>
       <div className="p-4 md:p-6 lg:p-8 pb-24 md:pb-8 max-w-2xl">
         {/* Page Header */}
         <div className="mb-6">
-          <h1 className="font-serif font-semibold text-2xl md:text-3xl text-ink mb-1">
+          <h1 className="font-serif font-semibold text-2xl md:text-3xl text-ink dark:text-dark-text mb-1">
             Settings
           </h1>
-          <p className="text-stone">
+          <p className="text-stone dark:text-dark-muted">
             Manage your profile and account settings
           </p>
         </div>
 
         {/* Profile Form */}
         <form onSubmit={handleSubmit}>
-          <div className="bg-white rounded-xl border border-pampas-warm p-6 mb-6">
-            <h2 className="font-serif font-semibold text-lg text-ink mb-6">
+          <div className="bg-white dark:bg-dark-card rounded-xl border border-pampas-warm dark:border-dark-border p-6 mb-6">
+            <h2 className="font-serif font-semibold text-lg text-ink dark:text-dark-text mb-6">
               Profile Information
             </h2>
 
             {/* Avatar Section */}
-            <div className="flex items-center gap-4 mb-6 pb-6 border-b border-pampas-warm">
+            <div className="flex items-center gap-4 mb-6 pb-6 border-b border-pampas-warm dark:border-dark-border">
               <div className="w-20 h-20 rounded-full bg-gradient-to-br from-claude-terracotta to-claude-terracotta-light flex items-center justify-center flex-shrink-0 overflow-hidden">
                 {formData.avatar_url ? (
                   <img
@@ -205,11 +219,11 @@ export default function DashboardSettings() {
                 )}
               </div>
               <div className="flex-1">
-                <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                   Avatar URL
                 </label>
                 <div className="relative">
-                  <Camera className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                  <Camera className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                   <input
                     type="url"
                     name="avatar_url"
@@ -217,11 +231,7 @@ export default function DashboardSettings() {
                     onChange={handleChange}
                     placeholder="https://example.com/avatar.jpg"
                     disabled={isSaving}
-                    className={cn(
-                      'w-full pl-12 pr-4 py-2.5 rounded-xl border-2 border-pampas-warm bg-white text-sm',
-                      'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                      'transition-all disabled:opacity-50'
-                    )}
+                    className={cn(inputClass, 'text-sm')}
                   />
                 </div>
               </div>
@@ -230,11 +240,11 @@ export default function DashboardSettings() {
             <div className="space-y-4">
               {/* Full Name */}
               <div>
-                <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                   Full Name
                 </label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                   <input
                     type="text"
                     name="full_name"
@@ -242,43 +252,40 @@ export default function DashboardSettings() {
                     onChange={handleChange}
                     placeholder="Enter your full name"
                     disabled={isSaving}
-                    className={cn(
-                      'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                      'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                      'transition-all disabled:opacity-50'
-                    )}
+                    className={inputClass}
                   />
                 </div>
               </div>
 
               {/* Email (read-only) */}
               <div>
-                <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                   Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                   <input
                     type="email"
                     value={user?.email || ''}
                     readOnly
                     disabled
                     className={cn(
-                      'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-pampas-warm/50',
-                      'text-stone cursor-not-allowed'
+                      'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border',
+                      'bg-pampas-warm/50 dark:bg-dark-surface/50',
+                      'text-stone dark:text-dark-muted cursor-not-allowed'
                     )}
                   />
                 </div>
-                <p className="mt-1 text-stone text-xs">Email cannot be changed</p>
+                <p className="mt-1 text-stone dark:text-dark-muted text-xs">Email cannot be changed</p>
               </div>
 
               {/* Student ID */}
               <div>
-                <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                   Student ID
                 </label>
                 <div className="relative">
-                  <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone" />
+                  <BookOpen className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted" />
                   <input
                     type="text"
                     name="student_id"
@@ -286,11 +293,7 @@ export default function DashboardSettings() {
                     onChange={handleChange}
                     placeholder="e.g., 220012345"
                     disabled={isSaving}
-                    className={cn(
-                      'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                      'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                      'transition-all disabled:opacity-50'
-                    )}
+                    className={inputClass}
                   />
                 </div>
               </div>
@@ -299,7 +302,7 @@ export default function DashboardSettings() {
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Year of Study */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Year of Study
                   </label>
                   <select
@@ -307,11 +310,7 @@ export default function DashboardSettings() {
                     value={formData.year_of_study}
                     onChange={handleChange}
                     disabled={isSaving}
-                    className={cn(
-                      'w-full px-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                      'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                      'transition-all disabled:opacity-50'
-                    )}
+                    className={selectClass}
                   >
                     <option value="">Select year</option>
                     {yearOptions.map((option) => (
@@ -324,21 +323,17 @@ export default function DashboardSettings() {
 
                 {/* Department */}
                 <div>
-                  <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                  <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                     Department
                   </label>
                   <div className="relative">
-                    <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone pointer-events-none" />
+                    <Building className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone dark:text-dark-muted pointer-events-none" />
                     <select
                       name="department"
                       value={formData.department}
                       onChange={handleChange}
                       disabled={isSaving}
-                      className={cn(
-                        'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-white',
-                        'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
-                        'transition-all disabled:opacity-50 appearance-none'
-                      )}
+                      className={cn(selectClass, 'pl-12 appearance-none')}
                     >
                       <option value="">Select department</option>
                       {departmentOptions.map((option) => (
@@ -353,11 +348,11 @@ export default function DashboardSettings() {
 
               {/* Bio */}
               <div>
-                <label className="block font-sans font-semibold text-ink text-sm mb-2">
+                <label className="block font-sans font-semibold text-ink dark:text-dark-text text-sm mb-2">
                   Bio
                 </label>
                 <div className="relative">
-                  <FileText className="absolute left-4 top-3.5 w-5 h-5 text-stone" />
+                  <FileText className="absolute left-4 top-3.5 w-5 h-5 text-stone dark:text-dark-muted" />
                   <textarea
                     name="bio"
                     value={formData.bio}
@@ -366,20 +361,21 @@ export default function DashboardSettings() {
                     rows={4}
                     disabled={isSaving}
                     className={cn(
-                      'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm bg-white resize-none',
+                      'w-full pl-12 pr-4 py-3 rounded-xl border-2 border-pampas-warm dark:border-dark-border',
+                      'bg-white dark:bg-dark-surface text-ink dark:text-dark-text resize-none',
                       'focus:outline-none focus:ring-2 focus:ring-claude-terracotta/20 focus:border-claude-terracotta',
                       'transition-all disabled:opacity-50'
                     )}
                   />
                 </div>
-                <p className="mt-1 text-stone text-xs">
+                <p className="mt-1 text-stone dark:text-dark-muted text-xs">
                   {formData.bio.length}/500 characters
                 </p>
               </div>
             </div>
 
             {/* Save Button */}
-            <div className="mt-6 pt-6 border-t border-pampas-warm">
+            <div className="mt-6 pt-6 border-t border-pampas-warm dark:border-dark-border">
               <Button type="submit" variant="primary" disabled={isSaving}>
                 {isSaving ? (
                   <>
@@ -395,24 +391,24 @@ export default function DashboardSettings() {
         </form>
 
         {/* Danger Zone */}
-        <div className="bg-white rounded-xl border border-red-200 p-6">
+        <div className="bg-white dark:bg-dark-card rounded-xl border border-red-200 dark:border-red-900/30 p-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-red-600" />
             </div>
             <div>
-              <h2 className="font-serif font-semibold text-lg text-ink">
+              <h2 className="font-serif font-semibold text-lg text-ink dark:text-dark-text">
                 Danger Zone
               </h2>
-              <p className="text-stone text-sm">
+              <p className="text-stone dark:text-dark-muted text-sm">
                 Irreversible and destructive actions
               </p>
             </div>
           </div>
 
-          <div className="p-4 bg-red-50/50 rounded-xl border border-red-100">
-            <h3 className="font-semibold text-ink mb-1">Delete Account</h3>
-            <p className="text-stone text-sm mb-4">
+          <div className="p-4 bg-red-50/50 dark:bg-red-900/10 rounded-xl border border-red-100 dark:border-red-900/20">
+            <h3 className="font-semibold text-ink dark:text-dark-text mb-1">Delete Account</h3>
+            <p className="text-stone dark:text-dark-muted text-sm mb-4">
               Permanently delete your account and all associated data. This action cannot be undone.
             </p>
 
@@ -452,7 +448,7 @@ export default function DashboardSettings() {
                 onClick={handleDeleteAccount}
                 className={cn(
                   'px-5 py-2.5 rounded-full font-sans font-medium text-sm',
-                  'border-2 border-red-200 text-red-600 hover:bg-red-50',
+                  'border-2 border-red-200 dark:border-red-900/50 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20',
                   'transition-colors'
                 )}
               >

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { LayoutDashboard, Calendar, FolderKanban, Settings, Award } from 'lucide-react'
+import { LayoutDashboard, Calendar, FolderKanban, Settings, Award, LogOut } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 
@@ -17,7 +17,7 @@ const sidebarLinks = [
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const location = useLocation()
-  const { member, user } = useAuth()
+  const { member, user, signOut } = useAuth()
 
   // Get user initials for avatar
   const getInitials = () => {
@@ -66,12 +66,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-pampas pt-16 md:pt-20">
+    <div className="min-h-screen bg-pampas dark:bg-dark-bg pt-16 md:pt-20 transition-colors">
       <div className="flex">
         {/* Sidebar - Desktop */}
-        <aside className="hidden lg:flex flex-col w-64 border-r border-pampas-warm bg-surface min-h-[calc(100vh-5rem)] sticky top-20">
+        <aside className="hidden lg:flex flex-col w-64 border-r border-pampas-warm dark:border-dark-border bg-surface dark:bg-dark-card min-h-[calc(100vh-5rem)] sticky top-20 transition-colors">
           {/* User Info Card */}
-          <div className="p-4 border-b border-pampas-warm">
+          <div className="p-4 border-b border-pampas-warm dark:border-dark-border">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-claude-terracotta to-claude-terracotta-light flex items-center justify-center flex-shrink-0">
                 {member?.avatar_url ? (
@@ -87,7 +87,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-ink truncate">
+                <p className="font-semibold text-ink dark:text-dark-text truncate">
                   {member?.full_name || user?.email}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
@@ -97,7 +97,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 </div>
               </div>
             </div>
-            <div className="mt-3 flex items-center gap-2 text-stone text-xs">
+            <div className="mt-3 flex items-center gap-2 text-stone dark:text-dark-muted text-xs">
               <Award size={14} />
               <span>Member since {formatJoinDate()}</span>
             </div>
@@ -117,7 +117,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
                         isActive
                           ? 'bg-claude-terracotta/10 text-claude-terracotta'
-                          : 'text-stone hover:bg-pampas-warm hover:text-ink'
+                          : 'text-stone dark:text-dark-muted hover:bg-pampas-warm dark:hover:bg-dark-surface hover:text-ink dark:hover:text-dark-text'
                       )}
                     >
                       <Icon size={20} />
@@ -128,12 +128,23 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               })}
             </ul>
           </nav>
+
+          {/* Sign Out Button */}
+          <div className="p-4 border-t border-pampas-warm dark:border-dark-border">
+            <button
+              onClick={() => signOut()}
+              className="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-medium text-stone dark:text-dark-muted hover:bg-pampas-warm dark:hover:bg-dark-surface hover:text-ink dark:hover:text-dark-text transition-colors"
+            >
+              <LogOut size={20} />
+              Sign Out
+            </button>
+          </div>
         </aside>
 
         {/* Sidebar - Tablet (icons only) */}
-        <aside className="hidden md:flex lg:hidden flex-col w-16 border-r border-pampas-warm bg-surface min-h-[calc(100vh-5rem)] sticky top-20">
+        <aside className="hidden md:flex lg:hidden flex-col w-16 border-r border-pampas-warm dark:border-dark-border bg-surface dark:bg-dark-card min-h-[calc(100vh-5rem)] sticky top-20 transition-colors">
           {/* User Avatar */}
-          <div className="p-3 border-b border-pampas-warm flex justify-center">
+          <div className="p-3 border-b border-pampas-warm dark:border-dark-border flex justify-center">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-claude-terracotta to-claude-terracotta-light flex items-center justify-center">
               {member?.avatar_url ? (
                 <img
@@ -164,7 +175,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         'flex items-center justify-center p-3 rounded-xl transition-colors',
                         isActive
                           ? 'bg-claude-terracotta/10 text-claude-terracotta'
-                          : 'text-stone hover:bg-pampas-warm hover:text-ink'
+                          : 'text-stone dark:text-dark-muted hover:bg-pampas-warm dark:hover:bg-dark-surface hover:text-ink dark:hover:text-dark-text'
                       )}
                     >
                       <Icon size={20} />
@@ -174,6 +185,17 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               })}
             </ul>
           </nav>
+
+          {/* Sign Out Icon */}
+          <div className="p-2 border-t border-pampas-warm dark:border-dark-border">
+            <button
+              onClick={() => signOut()}
+              title="Sign Out"
+              className="flex items-center justify-center w-full p-3 rounded-xl text-stone dark:text-dark-muted hover:bg-pampas-warm dark:hover:bg-dark-surface hover:text-ink dark:hover:text-dark-text transition-colors"
+            >
+              <LogOut size={20} />
+            </button>
+          </div>
         </aside>
 
         {/* Main Content */}
@@ -183,7 +205,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
 
       {/* Bottom Navigation - Mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-pampas-warm z-40">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface dark:bg-dark-card border-t border-pampas-warm dark:border-dark-border z-40 transition-colors">
         <ul className="flex justify-around">
           {sidebarLinks.map((link) => {
             const Icon = link.icon
@@ -196,7 +218,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     'flex flex-col items-center gap-1 py-3 px-2 transition-colors',
                     isActive
                       ? 'text-claude-terracotta'
-                      : 'text-stone'
+                      : 'text-stone dark:text-dark-muted'
                   )}
                 >
                   <Icon size={20} />
@@ -205,6 +227,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               </li>
             )
           })}
+          {/* Sign Out in mobile nav */}
+          <li className="flex-1">
+            <button
+              onClick={() => signOut()}
+              className="flex flex-col items-center gap-1 py-3 px-2 w-full text-stone dark:text-dark-muted transition-colors"
+            >
+              <LogOut size={20} />
+              <span className="text-xs font-medium">Sign Out</span>
+            </button>
+          </li>
         </ul>
       </nav>
     </div>

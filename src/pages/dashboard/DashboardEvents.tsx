@@ -33,10 +33,10 @@ export default function DashboardEvents() {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div>
-            <h1 className="font-serif font-semibold text-2xl md:text-3xl text-ink mb-1">
+            <h1 className="font-serif font-semibold text-2xl md:text-3xl text-ink dark:text-dark-text mb-1">
               My Events
             </h1>
-            <p className="text-stone">
+            <p className="text-stone dark:text-dark-muted">
               Events you've registered for
             </p>
           </div>
@@ -57,7 +57,7 @@ export default function DashboardEvents() {
               'px-4 py-2 rounded-full font-medium text-sm transition-colors',
               filter === 'upcoming'
                 ? 'bg-claude-terracotta text-white'
-                : 'bg-white border border-pampas-warm text-stone hover:text-ink'
+                : 'bg-white dark:bg-dark-surface border border-pampas-warm dark:border-dark-border text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text'
             )}
           >
             Upcoming
@@ -68,7 +68,7 @@ export default function DashboardEvents() {
               'px-4 py-2 rounded-full font-medium text-sm transition-colors',
               filter === 'past'
                 ? 'bg-claude-terracotta text-white'
-                : 'bg-white border border-pampas-warm text-stone hover:text-ink'
+                : 'bg-white dark:bg-dark-surface border border-pampas-warm dark:border-dark-border text-stone dark:text-dark-muted hover:text-ink dark:hover:text-dark-text'
             )}
           >
             Past
@@ -92,7 +92,7 @@ export default function DashboardEvents() {
                 <div
                   key={item.id}
                   className={cn(
-                    'bg-white rounded-xl border border-pampas-warm p-4 md:p-5',
+                    'bg-white dark:bg-dark-card rounded-xl border border-pampas-warm dark:border-dark-border p-4 md:p-5',
                     isPast && 'opacity-75'
                   )}
                 >
@@ -110,7 +110,7 @@ export default function DashboardEvents() {
                     {/* Event Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-3">
-                        <h3 className="font-semibold text-ink text-lg">{item.event.title}</h3>
+                        <h3 className="font-semibold text-ink dark:text-dark-text text-lg">{item.event.title}</h3>
                         <span
                           className={cn(
                             'flex-shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium',
@@ -141,12 +141,12 @@ export default function DashboardEvents() {
                       </div>
 
                       {item.event.description && (
-                        <p className="text-stone text-sm mt-1 line-clamp-2">
+                        <p className="text-stone dark:text-dark-muted text-sm mt-1 line-clamp-2">
                           {item.event.description}
                         </p>
                       )}
 
-                      <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-stone">
+                      <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-stone dark:text-dark-muted">
                         <span className="flex items-center gap-1.5">
                           <Clock size={14} />
                           {full} at {time}
@@ -165,14 +165,14 @@ export default function DashboardEvents() {
             })}
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-pampas-warm p-8 text-center">
-            <div className="w-16 h-16 rounded-full bg-pampas-warm flex items-center justify-center mx-auto mb-4">
-              <Calendar className="w-8 h-8 text-stone" />
+          <div className="bg-white dark:bg-dark-card rounded-xl border border-pampas-warm dark:border-dark-border p-8 text-center">
+            <div className="w-16 h-16 rounded-full bg-pampas-warm dark:bg-dark-surface flex items-center justify-center mx-auto mb-4">
+              <Calendar className="w-8 h-8 text-stone dark:text-dark-muted" />
             </div>
-            <h3 className="font-serif font-semibold text-xl text-ink mb-2">
+            <h3 className="font-serif font-semibold text-xl text-ink dark:text-dark-text mb-2">
               {filter === 'upcoming' ? 'No upcoming events' : 'No past events'}
             </h3>
-            <p className="text-stone mb-6">
+            <p className="text-stone dark:text-dark-muted mb-6">
               {filter === 'upcoming'
                 ? "You haven't registered for any upcoming events yet."
                 : "You don't have any past events in your history."}

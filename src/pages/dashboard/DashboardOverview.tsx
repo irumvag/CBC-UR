@@ -28,10 +28,10 @@ export default function DashboardOverview() {
       <div className="p-4 md:p-6 lg:p-8 pb-24 md:pb-8">
         {/* Welcome Header */}
         <div className="mb-8">
-          <h1 className="font-serif font-semibold text-2xl md:text-3xl text-ink mb-2">
+          <h1 className="font-serif font-semibold text-2xl md:text-3xl text-ink dark:text-dark-text mb-2">
             Welcome back, {firstName}
           </h1>
-          <p className="text-stone">
+          <p className="text-stone dark:text-dark-muted">
             Here's what's happening with your Claude Builder Club membership.
           </p>
         </div>
@@ -46,38 +46,38 @@ export default function DashboardOverview() {
             </>
           ) : (
             <>
-              <div className="bg-white rounded-xl border border-pampas-warm p-4">
+              <div className="bg-white dark:bg-dark-card rounded-xl border border-pampas-warm dark:border-dark-border p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-claude-terracotta/10 flex items-center justify-center">
                     <Calendar className="w-5 h-5 text-claude-terracotta" />
                   </div>
                   <div>
-                    <p className="text-2xl font-semibold text-ink">{stats.eventsAttended}</p>
-                    <p className="text-stone text-sm">Events Attended</p>
+                    <p className="text-2xl font-semibold text-ink dark:text-dark-text">{stats.eventsAttended}</p>
+                    <p className="text-stone dark:text-dark-muted text-sm">Events Attended</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl border border-pampas-warm p-4">
+              <div className="bg-white dark:bg-dark-card rounded-xl border border-pampas-warm dark:border-dark-border p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-sage/10 flex items-center justify-center">
                     <FolderKanban className="w-5 h-5 text-sage" />
                   </div>
                   <div>
-                    <p className="text-2xl font-semibold text-ink">{stats.projectsCount}</p>
-                    <p className="text-stone text-sm">Projects</p>
+                    <p className="text-2xl font-semibold text-ink dark:text-dark-text">{stats.projectsCount}</p>
+                    <p className="text-stone dark:text-dark-muted text-sm">Projects</p>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl border border-pampas-warm p-4 col-span-2 lg:col-span-1">
+              <div className="bg-white dark:bg-dark-card rounded-xl border border-pampas-warm dark:border-dark-border p-4 col-span-2 lg:col-span-1">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-teal/10 flex items-center justify-center">
                     <Clock className="w-5 h-5 text-teal" />
                   </div>
                   <div>
-                    <p className="text-2xl font-semibold text-ink">{stats.memberSince}</p>
-                    <p className="text-stone text-sm">Member Since</p>
+                    <p className="text-2xl font-semibold text-ink dark:text-dark-text">{stats.memberSince}</p>
+                    <p className="text-stone dark:text-dark-muted text-sm">Member Since</p>
                   </div>
                 </div>
               </div>
@@ -88,9 +88,9 @@ export default function DashboardOverview() {
         {/* Two Column Grid */}
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Upcoming Events */}
-          <div className="bg-white rounded-xl border border-pampas-warm">
-            <div className="flex items-center justify-between p-4 border-b border-pampas-warm">
-              <h2 className="font-serif font-semibold text-lg text-ink">Upcoming Events</h2>
+          <div className="bg-white dark:bg-dark-card rounded-xl border border-pampas-warm dark:border-dark-border">
+            <div className="flex items-center justify-between p-4 border-b border-pampas-warm dark:border-dark-border">
+              <h2 className="font-serif font-semibold text-lg text-ink dark:text-dark-text">Upcoming Events</h2>
               <Link
                 to="/dashboard/events"
                 className="text-claude-terracotta text-sm font-medium flex items-center gap-1 hover:underline"
@@ -114,15 +114,15 @@ export default function DashboardOverview() {
                     return (
                       <li
                         key={event.id}
-                        className="flex gap-4 p-3 rounded-lg hover:bg-pampas-warm/50 transition-colors"
+                        className="flex gap-4 p-3 rounded-lg hover:bg-pampas-warm/50 dark:hover:bg-dark-surface/50 transition-colors"
                       >
                         <div className="flex-shrink-0 w-14 h-14 rounded-lg bg-claude-terracotta/10 flex flex-col items-center justify-center">
                           <span className="text-lg font-semibold text-claude-terracotta">{day}</span>
                           <span className="text-xs text-claude-terracotta uppercase">{month}</span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-ink truncate">{event.title}</h3>
-                          <p className="text-stone text-sm flex items-center gap-1 mt-1">
+                          <h3 className="font-medium text-ink dark:text-dark-text truncate">{event.title}</h3>
+                          <p className="text-stone dark:text-dark-muted text-sm flex items-center gap-1 mt-1">
                             <CalendarDays size={14} />
                             {time} {event.location && `• ${event.location}`}
                           </p>
@@ -133,10 +133,10 @@ export default function DashboardOverview() {
                 </ul>
               ) : (
                 <div className="text-center py-8">
-                  <div className="w-12 h-12 rounded-full bg-pampas-warm flex items-center justify-center mx-auto mb-3">
-                    <Calendar className="w-6 h-6 text-stone" />
+                  <div className="w-12 h-12 rounded-full bg-pampas-warm dark:bg-dark-surface flex items-center justify-center mx-auto mb-3">
+                    <Calendar className="w-6 h-6 text-stone dark:text-dark-muted" />
                   </div>
-                  <p className="text-stone mb-3">No upcoming events</p>
+                  <p className="text-stone dark:text-dark-muted mb-3">No upcoming events</p>
                   <Link to="/events">
                     <Button variant="secondary" size="sm">
                       Browse Events
@@ -148,9 +148,9 @@ export default function DashboardOverview() {
           </div>
 
           {/* Recent Projects */}
-          <div className="bg-white rounded-xl border border-pampas-warm">
-            <div className="flex items-center justify-between p-4 border-b border-pampas-warm">
-              <h2 className="font-serif font-semibold text-lg text-ink">My Projects</h2>
+          <div className="bg-white dark:bg-dark-card rounded-xl border border-pampas-warm dark:border-dark-border">
+            <div className="flex items-center justify-between p-4 border-b border-pampas-warm dark:border-dark-border">
+              <h2 className="font-serif font-semibold text-lg text-ink dark:text-dark-text">My Projects</h2>
               <Link
                 to="/dashboard/projects"
                 className="text-claude-terracotta text-sm font-medium flex items-center gap-1 hover:underline"
@@ -171,7 +171,7 @@ export default function DashboardOverview() {
                   {userProjects.slice(0, 3).map((project) => (
                     <li
                       key={project.id}
-                      className="p-3 rounded-lg hover:bg-pampas-warm/50 transition-colors"
+                      className="p-3 rounded-lg hover:bg-pampas-warm/50 dark:hover:bg-dark-surface/50 transition-colors"
                     >
                       <div className="flex items-start gap-3">
                         <div className={cn(
@@ -181,8 +181,8 @@ export default function DashboardOverview() {
                           <FolderKanban className="w-5 h-5 text-white" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-ink truncate">{project.title}</h3>
-                          <p className="text-stone text-sm line-clamp-1 mt-0.5">
+                          <h3 className="font-medium text-ink dark:text-dark-text truncate">{project.title}</h3>
+                          <p className="text-stone dark:text-dark-muted text-sm line-clamp-1 mt-0.5">
                             {project.description || 'No description'}
                           </p>
                           {project.tech_stack && project.tech_stack.length > 0 && (
@@ -190,7 +190,7 @@ export default function DashboardOverview() {
                               {project.tech_stack.slice(0, 3).map((tech) => (
                                 <span
                                   key={tech}
-                                  className="text-xs px-2 py-0.5 rounded-full bg-pampas-warm text-stone"
+                                  className="text-xs px-2 py-0.5 rounded-full bg-pampas-warm dark:bg-dark-surface text-stone dark:text-dark-muted"
                                 >
                                   {tech}
                                 </span>
@@ -204,10 +204,10 @@ export default function DashboardOverview() {
                 </ul>
               ) : (
                 <div className="text-center py-8">
-                  <div className="w-12 h-12 rounded-full bg-pampas-warm flex items-center justify-center mx-auto mb-3">
-                    <FolderKanban className="w-6 h-6 text-stone" />
+                  <div className="w-12 h-12 rounded-full bg-pampas-warm dark:bg-dark-surface flex items-center justify-center mx-auto mb-3">
+                    <FolderKanban className="w-6 h-6 text-stone dark:text-dark-muted" />
                   </div>
-                  <p className="text-stone mb-3">No projects yet</p>
+                  <p className="text-stone dark:text-dark-muted mb-3">No projects yet</p>
                   <Link to="/dashboard/projects">
                     <Button variant="primary" size="sm">
                       <Plus size={16} className="mr-1" />
