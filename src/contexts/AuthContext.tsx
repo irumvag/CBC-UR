@@ -205,15 +205,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signOut = async () => {
-    if (!isSupabaseConfigured) {
-      setUser(null)
-      setMember(null)
-      return
-    }
-
-    await supabase.auth.signOut()
+    // Clear state immediately so UI reflects sign-out right away
     setUser(null)
+    setSession(null)
     setMember(null)
+
+    if (!isSupabaseConfigured) return
+
+    // Fire-and-forget Supabase sign out with timeout so it never hangs
+    try {
+      const signOutPromise = supabase.auth.signOut()
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Sign out timed out')), 5000)
+      )
+      await Promise.race([signOutPromise, timeoutPromise])
+    } catch (err) {
+      console.error('Sign out error (state already cleared):', err)
+    }
   }
 
   const signInWithGoogle = async () => {

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { LayoutDashboard, Calendar, FolderKanban, Settings, Award, LogOut } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
@@ -17,7 +17,13 @@ const sidebarLinks = [
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const location = useLocation()
+  const navigate = useNavigate()
   const { member, user, signOut } = useAuth()
+
+  const handleSignOut = async () => {
+    await signOut()
+    navigate('/')
+  }
 
   // Get user initials for avatar
   const getInitials = () => {
@@ -132,7 +138,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Sign Out Button */}
           <div className="p-4 border-t border-pampas-warm dark:border-dark-border">
             <button
-              onClick={() => signOut()}
+              onClick={handleSignOut}
               className="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-medium text-stone dark:text-dark-muted hover:bg-pampas-warm dark:hover:bg-dark-surface hover:text-ink dark:hover:text-dark-text transition-colors"
             >
               <LogOut size={20} />
@@ -189,7 +195,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Sign Out Icon */}
           <div className="p-2 border-t border-pampas-warm dark:border-dark-border">
             <button
-              onClick={() => signOut()}
+              onClick={handleSignOut}
               title="Sign Out"
               className="flex items-center justify-center w-full p-3 rounded-xl text-stone dark:text-dark-muted hover:bg-pampas-warm dark:hover:bg-dark-surface hover:text-ink dark:hover:text-dark-text transition-colors"
             >
@@ -230,7 +236,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Sign Out in mobile nav */}
           <li className="flex-1">
             <button
-              onClick={() => signOut()}
+              onClick={handleSignOut}
               className="flex flex-col items-center gap-1 py-3 px-2 w-full text-stone dark:text-dark-muted transition-colors"
             >
               <LogOut size={20} />
