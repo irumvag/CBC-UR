@@ -18,7 +18,7 @@ const tabs = [
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<AdminTab>('overview')
-  const { user, member, signOut } = useAuth()
+  const { member, signOut } = useAuth()
   const navigate = useNavigate()
 
   // Check if user is admin
