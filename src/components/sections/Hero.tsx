@@ -120,7 +120,7 @@ export function Hero() {
                 )}
                 style={{ animationDelay: '400ms', animationFillMode: 'forwards' }}
               >
-                <Link to="/join">
+                <Link to="/about">
                   <Button variant="primary" size="lg">
                     {t('home.hero.cta')}
                     <ArrowRight size={18} />

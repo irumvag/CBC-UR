@@ -49,7 +49,7 @@ export function CTA() {
               isVisible && 'opacity-100 translate-y-0'
             )}
           >
-            <Link to="/join">
+            <Link to="/about">
               <Button
                 variant="primary"
                 size="lg"

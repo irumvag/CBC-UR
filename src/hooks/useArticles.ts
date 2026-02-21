@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import type { Article, ArticleWithAuthor, ArticleInput, ArticleCategory } from '@/types/database'
 
@@ -303,13 +303,13 @@ export function useArticles(category?: ArticleCategory) {
   const [articles, setArticles] = useState<ArticleWithAuthor[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
 
   const fetchArticles = useCallback(async () => {
     setIsLoading(true)
     setError(null)
 
     if (!isSupabaseConfigured) {
-      // Use mock data
       let filtered = mockArticles.filter(a => a.published)
       if (category) {
         filtered = filtered.filter(a => a.category === category)
@@ -320,6 +320,9 @@ export function useArticles(category?: ArticleCategory) {
       setIsLoading(false)
       return
     }
+
+    abortRef.current?.abort()
+    abortRef.current = new AbortController()
 
     try {
       let query = supabase
@@ -335,14 +338,14 @@ export function useArticles(category?: ArticleCategory) {
         query = query.eq('category', category)
       }
 
-      const { data, error: fetchError } = await query
+      const { data, error: fetchError } = await query.abortSignal(abortRef.current.signal)
 
       if (fetchError) throw fetchError
       setArticles((data as unknown as ArticleWithAuthor[]) || [])
     } catch (err) {
+      if ((err as Error)?.name === 'AbortError') return
       console.error('Error fetching articles:', err)
       setError('Failed to load articles')
-      // Fall back to mock data on error
       setArticles(mockArticles.filter(a => a.published))
     } finally {
       setIsLoading(false)
@@ -351,6 +354,7 @@ export function useArticles(category?: ArticleCategory) {
 
   useEffect(() => {
     fetchArticles()
+    return () => { abortRef.current?.abort() }
   }, [fetchArticles])
 
   return { articles, isLoading, error, refetch: fetchArticles }

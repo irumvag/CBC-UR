@@ -20,11 +20,11 @@ const categories: { value: ArticleCategory | 'all'; label: string }[] = [
 ]
 
 const categoryColors: Record<ArticleCategory, string> = {
-  tutorial: 'bg-teal/10 text-teal',
-  project: 'bg-claude-terracotta/10 text-claude-terracotta',
-  news: 'bg-sage/10 text-sage',
-  event: 'bg-purple-100 text-purple-700',
-  general: 'bg-stone/10 text-stone',
+  tutorial: 'bg-teal/10 dark:bg-teal/20 text-teal dark:text-teal-300',
+  project: 'bg-claude-terracotta/10 dark:bg-claude-terracotta/20 text-claude-terracotta',
+  news: 'bg-sage/10 dark:bg-sage/20 text-sage dark:text-sage-300',
+  event: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
+  general: 'bg-stone/10 dark:bg-stone/20 text-stone dark:text-stone-300',
 }
 
 function ArticleCard({ article }: { article: ArticleWithAuthor }) {

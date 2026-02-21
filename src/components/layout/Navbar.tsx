@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { Menu, X, ChevronDown, LayoutDashboard, FolderKanban, Settings, LogOut, Sun, Moon } from 'lucide-react'
+import { Menu, X, ChevronDown, LayoutDashboard, LogOut, Sun, Moon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { useTheme } from '@/contexts/ThemeContext'
@@ -13,7 +13,6 @@ const navLinks = [
   { key: 'events', href: '/events' },
   { key: 'projects', href: '/projects' },
   { key: 'blog', href: '/blog' },
-  { key: 'community', href: '/join' },
 ]
 
 export function Navbar() {
@@ -22,7 +21,6 @@ export function Navbar() {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [langMenuOpen, setLangMenuOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
-  const [authModalTab, setAuthModalTab] = useState<'signin' | 'signup'>('signin')
   const userMenuRef = useRef<HTMLDivElement>(null)
   const langMenuRef = useRef<HTMLDivElement>(null)
   const location = useLocation()
@@ -49,7 +47,6 @@ export function Navbar() {
   useEffect(() => {
     if (location.state?.openAuth) {
       setAuthModalOpen(true)
-      setAuthModalTab('signin')
       // Clear the state
       window.history.replaceState({}, document.title)
     }
@@ -76,13 +73,6 @@ export function Navbar() {
   }
 
   const openSignIn = () => {
-    setAuthModalTab('signin')
-    setAuthModalOpen(true)
-    setMobileMenuOpen(false)
-  }
-
-  const openSignUp = () => {
-    setAuthModalTab('signup')
     setAuthModalOpen(true)
     setMobileMenuOpen(false)
   }
@@ -102,6 +92,8 @@ export function Navbar() {
     }
     return '?'
   }
+
+  const isAdmin = member?.role === 'admin' || member?.role === 'lead'
 
   return (
     <>
@@ -215,8 +207,8 @@ export function Navbar() {
               {/* Auth Section */}
               {!loading && (
                 <>
-                  {user ? (
-                    // User is logged in - show avatar with dropdown
+                  {user && isAdmin ? (
+                    // Admin is logged in - show avatar with dropdown
                     <div className="relative" ref={userMenuRef}>
                       <button
                         onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -263,25 +255,11 @@ export function Navbar() {
                           {/* Menu Items */}
                           <div className="py-1">
                             <Link
-                              to="/dashboard"
+                              to="/admin"
                               className="flex items-center gap-3 px-4 py-2.5 text-sm text-ink dark:text-dark-text hover:bg-pampas-warm dark:hover:bg-dark-surface transition-colors"
                             >
                               <LayoutDashboard size={18} className="text-stone dark:text-dark-muted" />
-                              {t('nav.dashboard')}
-                            </Link>
-                            <Link
-                              to="/dashboard/projects"
-                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-ink dark:text-dark-text hover:bg-pampas-warm dark:hover:bg-dark-surface transition-colors"
-                            >
-                              <FolderKanban size={18} className="text-stone dark:text-dark-muted" />
-                              {t('nav.myProjects')}
-                            </Link>
-                            <Link
-                              to="/dashboard/settings"
-                              className="flex items-center gap-3 px-4 py-2.5 text-sm text-ink dark:text-dark-text hover:bg-pampas-warm dark:hover:bg-dark-surface transition-colors"
-                            >
-                              <Settings size={18} className="text-stone dark:text-dark-muted" />
-                              {t('nav.settings')}
+                              Admin Panel
                             </Link>
                           </div>
 
@@ -298,20 +276,20 @@ export function Navbar() {
                         </div>
                       )}
                     </div>
-                  ) : (
-                    // User is not logged in - show Join button
+                  ) : !user ? (
+                    // No user logged in - show Admin Sign In button
                     <button
-                      onClick={openSignUp}
+                      onClick={openSignIn}
                       className={cn(
-                        'font-sans font-semibold text-sm px-5 py-2.5 rounded-full',
-                        'bg-ink dark:bg-dark-text text-pampas dark:text-dark-bg',
+                        'font-sans font-medium text-sm px-4 py-2 rounded-full',
+                        'border-2 border-pampas-warm dark:border-dark-border text-stone dark:text-dark-muted',
                         'transition-all duration-200',
-                        'hover:bg-claude-terracotta hover:text-white hover:-translate-y-0.5 hover:shadow-lg'
+                        'hover:border-claude-terracotta/30 hover:text-ink dark:hover:text-dark-text'
                       )}
                     >
-                      {t('common.joinTheClub')}
+                      {t('common.signIn')}
                     </button>
-                  )}
+                  ) : null}
                 </>
               )}
             </div>
@@ -378,7 +356,7 @@ export function Navbar() {
                 {/* Mobile Auth Section */}
                 {!loading && (
                   <>
-                    {user ? (
+                    {user && isAdmin ? (
                       <>
                         {/* User Info */}
                         <div className="flex items-center gap-3 px-4 py-3 mt-2 border-t border-pampas-warm dark:border-dark-border">
@@ -403,27 +381,13 @@ export function Navbar() {
                           </div>
                         </div>
 
-                        {/* Mobile Dashboard Links */}
+                        {/* Mobile Admin Link */}
                         <Link
-                          to="/dashboard"
+                          to="/admin"
                           className="flex items-center gap-3 px-4 py-3 text-stone dark:text-dark-muted hover:bg-pampas dark:hover:bg-dark-card hover:text-ink dark:hover:text-dark-text rounded-xl transition-colors"
                         >
                           <LayoutDashboard size={18} />
-                          {t('nav.dashboard')}
-                        </Link>
-                        <Link
-                          to="/dashboard/projects"
-                          className="flex items-center gap-3 px-4 py-3 text-stone dark:text-dark-muted hover:bg-pampas dark:hover:bg-dark-card hover:text-ink dark:hover:text-dark-text rounded-xl transition-colors"
-                        >
-                          <FolderKanban size={18} />
-                          {t('nav.myProjects')}
-                        </Link>
-                        <Link
-                          to="/dashboard/settings"
-                          className="flex items-center gap-3 px-4 py-3 text-stone dark:text-dark-muted hover:bg-pampas dark:hover:bg-dark-card hover:text-ink dark:hover:text-dark-text rounded-xl transition-colors"
-                        >
-                          <Settings size={18} />
-                          {t('nav.settings')}
+                          Admin Panel
                         </Link>
                         <button
                           onClick={handleSignOut}
@@ -433,30 +397,18 @@ export function Navbar() {
                           {t('common.signOut')}
                         </button>
                       </>
-                    ) : (
-                      <>
-                        <button
-                          onClick={openSignIn}
-                          className={cn(
-                            'font-sans font-medium text-center px-5 py-3 mt-2 rounded-full',
-                            'border-2 border-pampas-warm dark:border-dark-border text-ink dark:text-dark-text',
-                            'hover:bg-pampas dark:hover:bg-dark-card transition-colors'
-                          )}
-                        >
-                          {t('common.signIn')}
-                        </button>
-                        <button
-                          onClick={openSignUp}
-                          className={cn(
-                            'font-sans font-semibold text-center px-5 py-3 mt-2 rounded-full',
-                            'bg-ink dark:bg-dark-text text-pampas dark:text-dark-bg',
-                            'hover:bg-claude-terracotta hover:text-white transition-colors'
-                          )}
-                        >
-                          {t('common.joinTheClub')}
-                        </button>
-                      </>
-                    )}
+                    ) : !user ? (
+                      <button
+                        onClick={openSignIn}
+                        className={cn(
+                          'font-sans font-medium text-center px-5 py-3 mt-2 rounded-full',
+                          'border-2 border-pampas-warm dark:border-dark-border text-ink dark:text-dark-text',
+                          'hover:bg-pampas dark:hover:bg-dark-card transition-colors'
+                        )}
+                      >
+                        {t('common.signIn')}
+                      </button>
+                    ) : null}
                   </>
                 )}
               </div>
@@ -469,7 +421,6 @@ export function Navbar() {
       <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
-        defaultTab={authModalTab}
       />
     </>
   )

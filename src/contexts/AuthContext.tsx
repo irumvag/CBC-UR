@@ -9,9 +9,7 @@ interface AuthContextType {
   member: Member | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: AuthError | null; needsEmailVerification?: boolean }>
   signOut: () => Promise<void>
-  signInWithGoogle: () => Promise<{ error: AuthError | null }>
   refreshMember: () => Promise<void>
 }
 
@@ -49,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   // Fetch member profile from database
-  const fetchMember = useCallback(async (userId: string) => {
+  const fetchMember = useCallback(async (userId: string, signal?: AbortSignal) => {
     if (!isSupabaseConfigured) {
       setMember(mockMember)
       return
@@ -62,14 +60,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .eq('id', userId)
         .single()
 
+      if (signal?.aborted) return
+
       if (error) {
-        // Member might not exist yet (new user)
-        console.log('Member not found, may need to create profile')
+        console.log('Member not found or not an admin')
         setMember(null)
       } else {
         setMember(data as Member)
       }
     } catch (err) {
+      if (signal?.aborted) return
       console.error('Error fetching member:', err)
       setMember(null)
     }
@@ -82,36 +82,55 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user?.id, fetchMember])
 
   useEffect(() => {
+    const abortController = new AbortController()
+
     if (!isSupabaseConfigured) {
-      // For development, start logged out
+      // For development without Supabase, auto-login as mock admin
+      setUser(mockUser)
+      setMember(mockMember)
       setLoading(false)
       return
     }
 
-    // Get initial session
+    // Get initial session with a timeout to prevent infinite loading
+    const sessionTimeout = setTimeout(() => {
+      setLoading(false)
+    }, 5000)
+
     supabase.auth.getSession().then(({ data: { session } }) => {
+      if (abortController.signal.aborted) return
+      clearTimeout(sessionTimeout)
       setSession(session)
       setUser(session?.user ?? null)
       if (session?.user) {
-        fetchMember(session.user.id)
+        fetchMember(session.user.id, abortController.signal)
       }
+      setLoading(false)
+    }).catch(() => {
+      if (abortController.signal.aborted) return
+      clearTimeout(sessionTimeout)
       setLoading(false)
     })
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
+        if (abortController.signal.aborted) return
         setSession(session)
         setUser(session?.user ?? null)
         if (session?.user) {
-          await fetchMember(session.user.id)
+          await fetchMember(session.user.id, abortController.signal)
         } else {
           setMember(null)
         }
       }
     )
 
-    return () => subscription.unsubscribe()
+    return () => {
+      abortController.abort()
+      clearTimeout(sessionTimeout)
+      subscription.unsubscribe()
+    }
   }, [fetchMember])
 
   const signIn = async (email: string, password: string) => {
@@ -124,111 +143,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      // Add a timeout to prevent infinite loading if Supabase hangs
       const signInPromise = supabase.auth.signInWithPassword({ email, password })
-      const timeoutPromise = new Promise((_, reject) =>
+      const timeoutPromise = new Promise<never>((_, reject) =>
         setTimeout(() => reject(new Error('Sign in request timed out. Please check your connection and try again.')), 10000)
       )
 
-      const { error } = await Promise.race([signInPromise, timeoutPromise]) as any
+      const { error } = await Promise.race([signInPromise, timeoutPromise])
       return { error }
-    } catch (err: any) {
-      return { error: { message: err.message || 'Sign in failed' } as AuthError }
-    }
-  }
-
-  const signUp = async (email: string, password: string, fullName: string) => {
-    if (!isSupabaseConfigured) {
-      // Mock sign up for development
-      await new Promise(resolve => setTimeout(resolve, 500))
-      setUser({ ...mockUser, email, user_metadata: { full_name: fullName } })
-      setMember({ ...mockMember, email, full_name: fullName })
-      return { error: null, needsEmailVerification: false }
-    }
-
-    try {
-      // Get the correct redirect URL (not localhost in production)
-      const siteUrl = import.meta.env.VITE_SITE_URL || window.location.origin
-
-      const signUpPromise = supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: { full_name: fullName },
-          emailRedirectTo: `${siteUrl}/dashboard`,
-        },
-      })
-
-      // Add a timeout to prevent infinite loading if Supabase hangs
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Sign up request timed out. Please check your connection and try again.')), 10000)
-      )
-
-      const { data, error } = await Promise.race([signUpPromise, timeoutPromise]) as any
-
-      // Create member profile after signup
-      if (!error && data?.user) {
-        try {
-          await supabase.from('members').insert({
-            id: data.user.id,
-            email,
-            full_name: fullName,
-            role: 'member',
-            status: 'pending',
-          } as any)
-        } catch (memberErr: any) {
-          console.error('Error creating member profile:', memberErr)
-          // Don't fail sign-up if member profile creation fails
-        }
-      }
-
-      // Check if email confirmation is required
-      const needsEmailVerification = !error && !!data?.user && !data?.session
-
-      return { error, needsEmailVerification }
-    } catch (err: any) {
-      return { error: { message: err.message || 'Sign up failed' } as AuthError, needsEmailVerification: false }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Sign in failed'
+      return { error: { message } as AuthError }
     }
   }
 
   const signOut = async () => {
-    if (!isSupabaseConfigured) {
-      setUser(null)
-      setMember(null)
-      return
-    }
-
-    await supabase.auth.signOut()
+    // Clear state immediately so UI reflects sign-out right away
     setUser(null)
+    setSession(null)
     setMember(null)
-  }
 
-  const signInWithGoogle = async () => {
-    if (!isSupabaseConfigured) {
-      // Mock Google sign in for development
-      await new Promise(resolve => setTimeout(resolve, 500))
-      setUser(mockUser)
-      setMember(mockMember)
-      return { error: null }
-    }
+    if (!isSupabaseConfigured) return
 
+    // Fire-and-forget Supabase sign out with timeout so it never hangs
     try {
-      const googleSignInPromise = supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`,
-        },
-      })
-
-      // Add a timeout to prevent infinite loading if Supabase hangs
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Google sign in request timed out. Please check your connection and try again.')), 10000)
+      const signOutPromise = supabase.auth.signOut()
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Sign out timed out')), 5000)
       )
-
-      const { error } = await Promise.race([googleSignInPromise, timeoutPromise]) as any
-      return { error }
-    } catch (err: any) {
-      return { error: { message: err.message || 'Google sign in failed' } as AuthError }
+      await Promise.race([signOutPromise, timeoutPromise])
+    } catch (err) {
+      console.error('Sign out error (state already cleared):', err)
     }
   }
 
@@ -240,9 +184,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         member,
         loading,
         signIn,
-        signUp,
         signOut,
-        signInWithGoogle,
         refreshMember,
       }}
     >
