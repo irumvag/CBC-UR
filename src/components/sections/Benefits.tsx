@@ -1,61 +1,50 @@
-import { Cpu, Trophy, Users, BookOpen } from 'lucide-react'
-
-const benefits = [
-  {
-    icon: Cpu,
-    title: 'Claude Access',
-    description: 'Get hands-on experience with Claude AI through exclusive workshops and dedicated API access for club projects.',
-  },
-  {
-    icon: Trophy,
-    title: 'Hackathons',
-    description: 'Compete in AI hackathons, build innovative solutions, and showcase your skills to the community.',
-  },
-  {
-    icon: Users,
-    title: 'Community',
-    description: 'Connect with fellow builders, share ideas, and collaborate on projects that make a real impact in Rwanda.',
-  },
-  {
-    icon: BookOpen,
-    title: 'Learn & Grow',
-    description: 'From beginner-friendly intros to advanced prompt engineering — level up your AI skills every week.',
-  },
+const cards = [
+  { icon: "/images/claude-icons/grid.png", title: "FREE Claude", desc: "Access to Claude Pro, API Credits, and merch" },
+  { icon: "/images/claude-icons/lightning.png", title: "Hackathons", desc: "Compete & win tons of amazing prizes" },
+  { icon: "/images/claude-icons/flowers.png", title: "Community", desc: "Connect with students passionate about AI" },
+  { icon: "/images/claude-icons/lightbulb.png", title: "Learn", desc: "Hands-on tutorials for all skill-levels" },
 ]
 
 export function Benefits() {
   return (
-    <section className="bg-pampas dark:bg-dark-surface py-16 sm:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-12">
-        <div className="mb-10 text-center sm:mb-14">
-          <h2 className="font-serif text-2xl font-bold tracking-tight text-ink dark:text-dark-text sm:text-3xl md:text-4xl">
-            Why Join the Club?
+    <section className="mx-auto max-w-6xl px-4 py-10 sm:px-8 sm:py-12 md:py-16">
+      <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-16">
+        <div className="flex-1">
+          <h2 className="mb-3 text-lg font-bold text-ink sm:mb-4 sm:text-xl md:text-3xl">
+            Fill out this form to join!
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-stone dark:text-dark-muted sm:text-lg">
-            Whether you&apos;re a beginner or experienced developer, there&apos;s something for everyone.
-          </p>
+          <div className="overflow-hidden rounded-lg border border-cloudy/20">
+            <iframe
+              id="JotFormIFrame-CBC-UR"
+              title="Registration Form"
+              src="https://www.jotform.com/253555944387168"
+              style={{
+                minWidth: "100%",
+                maxWidth: "100%",
+                height: 450,
+                border: "none",
+              }}
+              scrolling="yes"
+              allowFullScreen
+            />
+          </div>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {benefits.map((benefit) => {
-            const Icon = benefit.icon
-            return (
-              <div
-                key={benefit.title}
-                className="rounded-2xl border border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-claude-terracotta/10">
-                  <Icon className="h-6 w-6 text-claude-terracotta" />
+        <div className="flex-1">
+          <h2 className="text-xl font-semibold text-ink sm:text-2xl md:text-2xl">
+            What&apos;s in it for you?
+          </h2>
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:mt-6 sm:gap-4 md:flex md:flex-col md:items-start">
+            {cards.map((item, i) => (
+              <div key={item.title} className={`flex items-start gap-2.5 rounded-lg border border-cloudy/20 bg-pampas/30 p-3 sm:gap-3 sm:p-4 md:w-[80%] ${i % 2 === 1 ? "md:self-end" : ""}`}>
+                <img src={item.icon} alt="" className="h-12 w-12 flex-shrink-0 sm:h-12 sm:w-12" />
+                <div>
+                  <p className="text-sm font-semibold text-ink sm:text-base">{item.title}</p>
+                  <p className="text-xs text-stone sm:text-sm">{item.desc}</p>
                 </div>
-                <h3 className="mb-2 font-serif text-lg font-semibold text-ink dark:text-dark-text">
-                  {benefit.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-stone dark:text-dark-muted">
-                  {benefit.description}
-                </p>
               </div>
-            )
-          })}
+            ))}
+          </div>
         </div>
       </div>
     </section>

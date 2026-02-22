@@ -36,22 +36,16 @@ export function Header() {
       <header className="sticky top-0 z-50 bg-surface dark:bg-dark-bg">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-8 sm:py-2.5 md:px-12">
           <Link to="/" className="group flex items-center gap-1.5 sm:gap-2">
-            <svg viewBox="0 0 36 36" className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 transition-transform duration-300 ease-out group-hover:rotate-12" fill="none">
-              <circle cx="18" cy="6" r="2.5" className="fill-claude-terracotta" />
-              <circle cx="26.5" cy="9.5" r="2.5" className="fill-claude-terracotta" />
-              <circle cx="30" cy="18" r="2.5" className="fill-claude-terracotta" />
-              <circle cx="26.5" cy="26.5" r="2.5" className="fill-claude-terracotta" />
-              <circle cx="18" cy="30" r="2.5" className="fill-claude-terracotta" />
-              <circle cx="9.5" cy="26.5" r="2.5" className="fill-claude-terracotta" />
-              <circle cx="6" cy="18" r="2.5" className="fill-claude-terracotta" />
-              <circle cx="9.5" cy="9.5" r="2.5" className="fill-claude-terracotta" />
-              <circle cx="18" cy="18" r="3.5" className="fill-claude-terracotta" />
-            </svg>
+            <img
+              src="/images/claude_logo.svg"
+              alt="Claude logo"
+              className="h-5 w-5 transition-transform duration-300 ease-out group-hover:rotate-12 sm:h-6 sm:w-6 md:h-7 md:w-7"
+            />
             <div className="flex flex-col leading-tight">
               <span className="font-sans text-xs font-bold tracking-tight text-ink dark:text-dark-text sm:text-sm md:text-base">
                 University of Rwanda
               </span>
-              <span className="text-[10px] font-semibold tracking-wide text-claude-terracotta sm:text-xs md:text-sm">
+              <span className="text-[10px] font-semibold tracking-wide text-claude-terracotta-deep sm:text-xs md:text-sm">
                 Claude Builder Club
               </span>
             </div>
@@ -63,19 +57,19 @@ export function Header() {
               <Link
                 key={link.href}
                 to={link.href}
-                className="group relative transition-colors hover:text-claude-terracotta"
+                className="group relative transition-colors hover:text-claude-terracotta-deep"
               >
                 {link.label}
-                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-claude-terracotta transition-all duration-300 ease-out group-hover:w-full" />
+                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-claude-terracotta-deep transition-all duration-300 ease-out group-hover:w-full" />
               </Link>
             ))}
             {user && isAdmin && (
               <Link
                 to="/admin"
-                className="group relative transition-colors hover:text-claude-terracotta"
+                className="group relative transition-colors hover:text-claude-terracotta-deep"
               >
                 Admin
-                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-claude-terracotta transition-all duration-300 ease-out group-hover:w-full" />
+                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-claude-terracotta-deep transition-all duration-300 ease-out group-hover:w-full" />
               </Link>
             )}
           </nav>
@@ -104,7 +98,7 @@ export function Header() {
                     key={link.href}
                     to={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-md px-4 py-3 text-base font-medium text-stone dark:text-dark-muted transition-colors hover:bg-pampas dark:hover:bg-dark-card hover:text-claude-terracotta"
+                    className="rounded-md px-4 py-3 text-base font-medium text-stone dark:text-dark-muted transition-colors hover:bg-pampas dark:hover:bg-dark-card hover:text-claude-terracotta-deep"
                   >
                     {link.label}
                   </Link>
@@ -113,7 +107,7 @@ export function Header() {
                   <Link
                     to="/admin"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-md px-4 py-3 text-base font-medium text-stone dark:text-dark-muted transition-colors hover:bg-pampas dark:hover:bg-dark-card hover:text-claude-terracotta"
+                    className="rounded-md px-4 py-3 text-base font-medium text-stone dark:text-dark-muted transition-colors hover:bg-pampas dark:hover:bg-dark-card hover:text-claude-terracotta-deep"
                   >
                     Admin Panel
                   </Link>
@@ -128,7 +122,7 @@ export function Header() {
                 ) : !user ? (
                   <button
                     onClick={() => { setAuthModalOpen(true); setMobileMenuOpen(false) }}
-                    className="rounded-md px-4 py-3 text-left text-base font-medium text-stone dark:text-dark-muted transition-colors hover:bg-pampas dark:hover:bg-dark-card hover:text-claude-terracotta"
+                    className="rounded-md px-4 py-3 text-left text-base font-medium text-stone dark:text-dark-muted transition-colors hover:bg-pampas dark:hover:bg-dark-card hover:text-claude-terracotta-deep"
                   >
                     Admin Sign In
                   </button>
@@ -138,7 +132,7 @@ export function Header() {
           </div>
         </div>
 
-        <div className="h-[1.5px] w-full bg-claude-terracotta" />
+        <div className="h-[1.5px] w-full bg-claude-terracotta-deep" />
       </header>
 
       <AuthModal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)} />

@@ -1,38 +1,36 @@
-const galleryImages = [
-  { alt: 'Workshop session', gradient: 'from-claude-terracotta/30 to-claude-terracotta-light/20' },
-  { alt: 'Team collaboration', gradient: 'from-sage/30 to-teal/20' },
-  { alt: 'Hackathon event', gradient: 'from-teal/30 to-claude-terracotta/20' },
-  { alt: 'Presentation day', gradient: 'from-stone/20 to-pampas-warm' },
-  { alt: 'Coding session', gradient: 'from-claude-terracotta-light/30 to-sage/20' },
-  { alt: 'Community meetup', gradient: 'from-claude-terracotta/20 to-teal/30' },
+const images = [
+  { src: "/images/GM1.jpg", alt: "General meeting" },
+  { src: "/images/hackathonwinners.jpg", alt: "Hackathon winners" },
+  { src: "/images/tabling.jpg", alt: "Tabling" },
 ]
 
+const scrollImages = [...images, ...images, ...images, ...images]
+
 export function Gallery() {
-  const items = [...galleryImages, ...galleryImages]
-
   return (
-    <section className="overflow-hidden bg-surface dark:bg-dark-bg py-16 sm:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-12">
-        <h2 className="mb-10 text-center font-serif text-2xl font-bold tracking-tight text-ink dark:text-dark-text sm:mb-14 sm:text-3xl md:text-4xl">
-          Our Community in Action
-        </h2>
-      </div>
-
-      <div className="relative">
-        <div className="flex animate-scroll gap-4">
-          {items.map((img, i) => (
-            <div
-              key={i}
-              className={`h-48 w-72 flex-shrink-0 rounded-2xl bg-gradient-to-br ${img.gradient} sm:h-56 sm:w-80 md:h-64 md:w-96`}
-            >
-              <div className="flex h-full w-full items-center justify-center rounded-2xl">
-                <span className="text-sm font-medium text-stone/60 dark:text-dark-muted/60">
-                  {img.alt}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+    <section className="overflow-hidden bg-pampas pb-16 pt-10 sm:pb-20 sm:pt-14 md:pb-24 md:pt-16">
+      <h2 className="mb-6 px-4 text-center text-xl font-bold text-ink sm:mb-8 sm:text-2xl md:text-3xl">
+        What we&apos;ve been up to...
+      </h2>
+      <style>{`
+        @keyframes gallery-scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .gallery-track { animation: gallery-scroll 8s linear infinite; }
+        @media (min-width: 640px) { .gallery-track { animation-duration: 25s; } }
+        @media (min-width: 768px) { .gallery-track { animation-duration: 30s; } }
+      `}</style>
+      <div className="gallery-track flex gap-4 sm:gap-6">
+        {scrollImages.map((img, i) => (
+          <img
+            key={i}
+            src={img.src}
+            alt={img.alt}
+            style={{ height: "clamp(16rem, 30vw, 100rem)" }}
+            className="w-auto flex-shrink-0 rounded-lg object-cover"
+          />
+        ))}
       </div>
     </section>
   )

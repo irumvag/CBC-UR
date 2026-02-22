@@ -12,17 +12,12 @@ export default function Home() {
       <Benefits />
       <Gallery />
       <Outreach />
-
-      {/* Keep Thinking Section */}
-      <section className="bg-surface dark:bg-dark-bg py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 text-center sm:px-8 md:px-12">
-          <p className="font-serif text-3xl font-bold text-ink dark:text-dark-text sm:text-4xl md:text-5xl">
-            Keep thinking.
-          </p>
-          <p className="mx-auto mt-4 max-w-lg text-base text-stone dark:text-dark-muted sm:text-lg">
-            Building with Claude, one project at a time.
-          </p>
-        </div>
+      <section className="bg-claude-terracotta-deep px-[8%] py-16 sm:py-20 md:py-28">
+        <p className="text-center text-5xl font-light leading-tight text-pampas sm:text-6xl md:text-left md:text-7xl lg:text-8xl">
+          Keep
+          <br />
+          thinking.
+        </p>
       </section>
     </>
   )

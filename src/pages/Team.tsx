@@ -1,119 +1,152 @@
-import { Mail } from 'lucide-react'
+import { Linkedin, Mail, UserCircle } from 'lucide-react'
 import { SEO } from '@/components/SEO'
 
-const teamMembers = [
+// ============================================================
+// TEAM DATA - Update with actual team member information
+// ============================================================
+// TO ADD YOUR PHOTO:
+// 1. Save your photo as: public/images/team/firstname-lastname.jpg
+// 2. Change image: null to image: "/images/team/firstname-lastname.jpg"
+// ============================================================
+const TEAM_MEMBERS = [
   {
-    name: 'Kaio Mugisha',
-    role: 'Club President',
-    bio: 'Computer Science, Year 4. Passionate about making AI accessible to all Rwandan students.',
-    initials: 'KM',
+    id: "1",
+    name: "Team Member 1",
+    role: "Ambassador",
+    bio: "Passionate about building the future with AI at the University of Rwanda. Excited to help bring Claude to the UR community.",
+    image: null as string | null,
+    linkedin: "",
+    email: "member1@ur.ac.rw",
   },
   {
-    name: 'Sandrine Niyonzima',
-    role: 'Vice President',
-    bio: 'Information Technology, Year 3. Organizes workshops and community events.',
-    initials: 'SN',
+    id: "2",
+    name: "Team Member 2",
+    role: "Ambassador",
+    bio: "Passionate about the intersection of technology and AI. Excited to help make Claude accessible to the UR community.",
+    image: null as string | null,
+    linkedin: "",
+    email: "member2@ur.ac.rw",
   },
   {
-    name: 'Jean Baptiste K.',
-    role: 'Technical Lead',
-    bio: 'Software Engineering, Year 4. Leads hackathon planning and technical mentorship.',
-    initials: 'JB',
+    id: "3",
+    name: "Team Member 3",
+    role: "Ambassador",
+    bio: "Loves competing in hackathons and building innovative projects. Excited to help students grow with Claude.",
+    image: null as string | null,
+    linkedin: "",
+    email: "member3@ur.ac.rw",
   },
   {
-    name: 'Grace Uwimana',
-    role: 'Outreach Lead',
-    bio: 'Business Administration, Year 3. Builds partnerships and handles communications.',
-    initials: 'GU',
-  },
-  {
-    name: 'Patrick Mugabo',
-    role: 'Events Coordinator',
-    bio: 'Computer Engineering, Year 2. Manages logistics and venue arrangements.',
-    initials: 'PM',
-  },
-  {
-    name: 'Alice Nyirahabimana',
-    role: 'Content Lead',
-    bio: 'Digital Media, Year 3. Creates educational content and social media strategy.',
-    initials: 'AN',
+    id: "4",
+    name: "Team Member 4",
+    role: "Ambassador",
+    bio: "Eager to explore how AI can transform industries. Thrilled to bring new ideas and energy to the Claude Builder Club.",
+    image: null as string | null,
+    linkedin: "",
+    email: "member4@ur.ac.rw",
   },
 ]
+
+interface TeamMember {
+  id: string
+  name: string
+  role: string
+  bio: string
+  image: string | null
+  linkedin?: string
+  email?: string
+}
+
+function TeamCard({ member }: { member: TeamMember }) {
+  return (
+    <div className="group rounded-xl border border-cloudy/20 bg-white p-4 shadow-sm transition-all hover:border-claude-terracotta-deep/30 hover:shadow-md sm:p-6">
+      {/* Profile Image */}
+      <div className="mb-4 flex justify-center">
+        {member.image ? (
+          <img
+            src={member.image}
+            alt={member.name}
+            className="h-24 w-24 rounded-full object-cover ring-2 ring-cloudy/20 transition-all group-hover:ring-claude-terracotta-deep/30 sm:h-32 sm:w-32"
+          />
+        ) : (
+          <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-claude-terracotta-deep/10 to-pampas ring-2 ring-cloudy/20 transition-all group-hover:ring-claude-terracotta-deep/30 sm:h-32 sm:w-32">
+            <UserCircle className="h-16 w-16 text-claude-terracotta-deep/40 sm:h-20 sm:w-20" />
+          </div>
+        )}
+      </div>
+
+      {/* Info */}
+      <div className="text-center">
+        <h3 className="text-base font-bold text-ink sm:text-lg">
+          {member.name}
+        </h3>
+        <p className="mt-1 text-xs font-medium text-claude-terracotta-deep sm:text-sm">
+          {member.role}
+        </p>
+        <p className="mt-2 text-xs text-stone sm:mt-3 sm:text-sm">
+          {member.bio}
+        </p>
+      </div>
+
+      {/* Social Links */}
+      <div className="mt-4 flex justify-center gap-3">
+        {member.linkedin && (
+          <a
+            href={member.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-cloudy/10 text-stone/50 transition-colors hover:bg-[#0077B5]/10 hover:text-[#0077B5]"
+            aria-label={`${member.name}'s LinkedIn`}
+          >
+            <Linkedin className="h-4 w-4 sm:h-5 sm:w-5" />
+          </a>
+        )}
+        {member.email && (
+          <a
+            href={`mailto:${member.email}`}
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-cloudy/10 text-stone/50 transition-colors hover:bg-claude-terracotta-deep/10 hover:text-claude-terracotta-deep"
+            aria-label={`Email ${member.name}`}
+          >
+            <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
+          </a>
+        )}
+      </div>
+    </div>
+  )
+}
 
 export default function Team() {
   return (
     <>
       <SEO
         title="Team"
-        description="Meet the leadership team behind Claude Builder Club at University of Rwanda."
+        description="Meet the Claude Ambassadors leading the Builder Club at the University of Rwanda."
         url="/team"
       />
 
-      {/* Header */}
-      <section className="bg-surface dark:bg-dark-bg py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-12">
-          <p className="text-sm font-semibold uppercase tracking-widest text-claude-terracotta">
-            Our Team
-          </p>
-          <h1 className="mt-3 font-serif text-3xl font-bold tracking-tight text-ink dark:text-dark-text sm:text-4xl md:text-5xl">
-            Meet the Team
-          </h1>
-          <p className="mt-4 max-w-2xl text-base text-stone dark:text-dark-muted sm:text-lg">
-            The students driving the Claude Builder Club at University of Rwanda forward.
-          </p>
-        </div>
+      {/* Page Hero */}
+      <section className="border-b border-cloudy/20 bg-white px-4 py-10 text-center sm:px-8 sm:py-16 md:py-20">
+        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl md:text-4xl lg:text-5xl">
+          Meet the Team
+        </h1>
+        <p className="mx-auto mt-4 max-w-2xl text-sm text-stone sm:mt-6 sm:text-base md:text-lg">
+          The Claude Ambassadors leading the Builder Club at the University of Rwanda
+        </p>
       </section>
 
       {/* Team Grid */}
-      <section className="bg-pampas dark:bg-dark-surface py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-12">
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {teamMembers.map((member) => (
-              <div
-                key={member.name}
-                className="rounded-2xl border border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-card p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-              >
-                {/* Avatar */}
-                <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-claude-terracotta to-claude-terracotta-light shadow-md">
-                  <span className="font-serif text-2xl font-semibold text-white">
-                    {member.initials}
-                  </span>
-                </div>
-
-                <h3 className="font-serif text-lg font-semibold text-ink dark:text-dark-text">
-                  {member.name}
-                </h3>
-                <p className="mt-1 text-sm font-medium text-claude-terracotta">
-                  {member.role}
-                </p>
-                <p className="mt-3 text-sm leading-relaxed text-stone dark:text-dark-muted">
-                  {member.bio}
-                </p>
-              </div>
-            ))}
-          </div>
+      <section className="mx-auto max-w-5xl px-4 py-10 sm:px-8 sm:py-16">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {TEAM_MEMBERS.map((member) => (
+            <TeamCard key={member.id} member={member} />
+          ))}
         </div>
       </section>
 
-      {/* Contact */}
-      <section className="bg-surface dark:bg-dark-bg py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 text-center sm:px-8 md:px-12">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-claude-terracotta/10">
-            <Mail className="h-7 w-7 text-claude-terracotta" />
-          </div>
-          <h2 className="mt-4 font-serif text-2xl font-bold text-ink dark:text-dark-text sm:text-3xl">
-            Want to Get Involved?
-          </h2>
-          <p className="mx-auto mt-3 max-w-lg text-base text-stone dark:text-dark-muted">
-            Reach out to us if you&apos;re interested in joining the team, mentoring, or partnering with the club.
-          </p>
-          <a
-            href="mailto:claudebuilderclub.ur@gmail.com"
-            className="mt-6 inline-flex items-center justify-center rounded-md bg-claude-terracotta px-8 py-3 text-sm font-semibold text-white transition-colors hover:bg-claude-terracotta-deep sm:text-base"
-          >
-            Contact Us
-          </a>
-        </div>
+      <section className="px-4 pb-10 sm:px-8 sm:pb-16">
+        <p className="mx-auto max-w-2xl text-center text-sm leading-relaxed text-stone sm:text-base md:max-w-4xl md:text-lg">
+          This club is by students, for students. If you have any questions, please don&apos;t hesitate to reach out.
+        </p>
       </section>
     </>
   )

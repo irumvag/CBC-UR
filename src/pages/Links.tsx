@@ -1,88 +1,127 @@
-import { ExternalLink } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { FileText, Calendar, Mail, ExternalLink, Users, type LucideIcon } from 'lucide-react'
 import { SEO } from '@/components/SEO'
 
-const links = [
+// ============================================================
+// LINKS CONFIGURATION
+// ============================================================
+// To add a new link: Copy a link object and update the fields
+// To hide a link: Set visible: false (keeps it in code for later)
+// ============================================================
+
+interface LinkItem {
+  id: string
+  title: string
+  description?: string
+  url: string
+  icon: LucideIcon
+  visible: boolean
+  isInternal?: boolean
+}
+
+const LINKS: LinkItem[] = [
   {
-    title: 'Claude AI',
-    description: 'Try Claude — the AI assistant by Anthropic.',
-    url: 'https://claude.ai',
+    id: "membership-form",
+    title: "Membership Sign-Up",
+    description: "Join the Claude Builder Club",
+    url: "https://www.jotform.com/253555944387168",
+    icon: FileText,
+    visible: true,
   },
   {
-    title: 'Anthropic',
-    description: 'Learn about the AI safety company behind Claude.',
-    url: 'https://www.anthropic.com',
+    id: "events",
+    title: "Upcoming Events",
+    description: "See what's happening",
+    url: "/events",
+    icon: Calendar,
+    visible: true,
+    isInternal: true,
   },
   {
-    title: 'Claude Documentation',
-    description: 'Official API docs, guides, and tutorials for building with Claude.',
-    url: 'https://docs.anthropic.com',
-  },
-  {
-    title: 'University of Rwanda',
-    description: 'Our home institution — the largest public university in Rwanda.',
-    url: 'https://ur.ac.rw',
-  },
-  {
-    title: 'Claude Builder Club Program',
-    description: 'Learn about the global Claude Builder Club initiative.',
-    url: 'https://www.anthropic.com/claude-builder-clubs',
-  },
-  {
-    title: 'GitHub',
-    description: 'Check out our open-source projects and contributions.',
-    url: 'https://github.com/claude-builder-club-ur',
+    id: "email",
+    title: "Contact Us",
+    description: "Reach out via email",
+    url: "mailto:claudebuilderclub.ur@gmail.com",
+    icon: Mail,
+    visible: true,
   },
 ]
 
+function LinkCard({ link }: { link: LinkItem }) {
+  const Icon = link.icon
+  const isExternal = link.url.startsWith("http") || link.url.startsWith("mailto")
+
+  const content = (
+    <div className="group flex items-center gap-4 rounded-xl border border-cloudy/20 bg-white p-4 shadow-sm transition-all hover:border-claude-terracotta-deep/30 hover:shadow-md sm:p-5">
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-claude-terracotta-deep/10 transition-colors group-hover:bg-claude-terracotta-deep/20 sm:h-14 sm:w-14">
+        <Icon className="h-5 w-5 text-claude-terracotta-deep sm:h-6 sm:w-6" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <h3 className="text-sm font-semibold text-ink sm:text-base">
+          {link.title}
+        </h3>
+        {link.description && (
+          <p className="mt-0.5 truncate text-xs text-stone sm:text-sm">
+            {link.description}
+          </p>
+        )}
+      </div>
+      <ExternalLink className="h-3 w-3 shrink-0 text-stone/30 transition-colors group-hover:text-claude-terracotta-deep sm:h-4 sm:w-4" />
+    </div>
+  )
+
+  if (link.isInternal) {
+    return <Link to={link.url}>{content}</Link>
+  }
+
+  return (
+    <a
+      href={link.url}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
+    >
+      {content}
+    </a>
+  )
+}
+
 export default function Links() {
+  const visibleLinks = LINKS.filter((link) => link.visible)
+
   return (
     <>
       <SEO
         title="Links"
-        description="Quick links and resources from Claude Builder Club at University of Rwanda."
+        description="Quick access to all our resources, forms, and social media."
         url="/links"
       />
 
-      {/* Header */}
-      <section className="bg-surface dark:bg-dark-bg py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-12">
-          <p className="text-sm font-semibold uppercase tracking-widest text-claude-terracotta">
-            Resources
-          </p>
-          <h1 className="mt-3 font-serif text-3xl font-bold tracking-tight text-ink dark:text-dark-text sm:text-4xl md:text-5xl">
-            Quick Links
-          </h1>
-          <p className="mt-4 max-w-2xl text-base text-stone dark:text-dark-muted sm:text-lg">
-            Useful resources, tools, and platforms related to Claude Builder Club.
-          </p>
-        </div>
+      {/* Page Hero */}
+      <section className="border-b border-cloudy/20 bg-white px-4 py-10 text-center sm:px-8 sm:py-16 md:py-20">
+        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl md:text-4xl lg:text-5xl">
+          Links
+        </h1>
+        <p className="mx-auto mt-4 max-w-2xl text-sm text-stone sm:mt-6 sm:text-base md:text-lg">
+          Quick access to all our resources, forms, and social media
+        </p>
       </section>
 
       {/* Links Grid */}
-      <section className="bg-pampas dark:bg-dark-surface py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-8 md:px-12">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {links.map((link) => (
-              <a
-                key={link.title}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-start gap-4 rounded-2xl border border-pampas-warm dark:border-dark-border bg-white dark:bg-dark-card p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-              >
-                <div className="flex-1">
-                  <h3 className="flex items-center gap-2 font-serif text-lg font-semibold text-ink dark:text-dark-text">
-                    {link.title}
-                    <ExternalLink className="h-4 w-4 text-stone/50 transition-colors group-hover:text-claude-terracotta" />
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-stone dark:text-dark-muted">
-                    {link.description}
-                  </p>
-                </div>
-              </a>
+      <section className="mx-auto max-w-2xl px-4 py-8 sm:px-8 sm:py-12">
+        {visibleLinks.length > 0 ? (
+          <div className="flex flex-col gap-3 sm:gap-4">
+            {visibleLinks.map((link) => (
+              <LinkCard key={link.id} link={link} />
             ))}
           </div>
-        </div>
+        ) : (
+          <div className="rounded-xl border border-cloudy/20 bg-white p-8 text-center">
+            <Users className="mx-auto h-12 w-12 text-stone/20" />
+            <p className="mt-4 text-stone">
+              Links coming soon! Check back later.
+            </p>
+          </div>
+        )}
       </section>
     </>
   )
