@@ -41,12 +41,12 @@ const mockMember: Member = {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  // Initialize state instantly for mock mode - no loading delay
+  const [user, setUser] = useState<User | null>(!isSupabaseConfigured ? mockUser : null)
   const [session, setSession] = useState<Session | null>(null)
-  const [member, setMember] = useState<Member | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [member, setMember] = useState<Member | null>(!isSupabaseConfigured ? mockMember : null)
+  const [loading, setLoading] = useState(isSupabaseConfigured)
 
-  // Fetch member profile from database
   const fetchMember = useCallback(async (userId: string, signal?: AbortSignal) => {
     if (!isSupabaseConfigured) {
       setMember(mockMember)
@@ -82,20 +82,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [user?.id, fetchMember])
 
   useEffect(() => {
+    // Skip all async setup for mock mode - already initialized
+    if (!isSupabaseConfigured) return
+
     const abortController = new AbortController()
 
-    if (!isSupabaseConfigured) {
-      // For development without Supabase, auto-login as mock admin
-      setUser(mockUser)
-      setMember(mockMember)
-      setLoading(false)
-      return
-    }
-
-    // Get initial session with a timeout to prevent infinite loading
+    // Fast timeout - 3 seconds max
     const sessionTimeout = setTimeout(() => {
       setLoading(false)
-    }, 5000)
+    }, 3000)
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (abortController.signal.aborted) return
@@ -112,7 +107,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false)
     })
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
         if (abortController.signal.aborted) return
@@ -135,8 +129,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async (email: string, password: string) => {
     if (!isSupabaseConfigured) {
-      // Mock sign in for development
-      await new Promise(resolve => setTimeout(resolve, 500))
+      // Instant mock sign in - no delay
       setUser(mockUser)
       setMember(mockMember)
       return { error: null }
@@ -145,7 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const signInPromise = supabase.auth.signInWithPassword({ email, password })
       const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Sign in request timed out. Please check your connection and try again.')), 10000)
+        setTimeout(() => reject(new Error('Sign in timed out. Please try again.')), 8000)
       )
 
       const { error } = await Promise.race([signInPromise, timeoutPromise])
@@ -157,18 +150,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signOut = async () => {
-    // Clear state immediately so UI reflects sign-out right away
     setUser(null)
     setSession(null)
     setMember(null)
 
     if (!isSupabaseConfigured) return
 
-    // Fire-and-forget Supabase sign out with timeout so it never hangs
     try {
       const signOutPromise = supabase.auth.signOut()
       const timeoutPromise = new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Sign out timed out')), 5000)
+        setTimeout(() => reject(new Error('Sign out timed out')), 3000)
       )
       await Promise.race([signOutPromise, timeoutPromise])
     } catch (err) {
