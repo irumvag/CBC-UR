@@ -12,10 +12,10 @@ import { RouteLoader } from '@/components/ui/PageLoader'
 // Lazy load pages for better performance
 const Home = lazy(() => import('@/pages/Home'))
 const About = lazy(() => import('@/pages/About'))
+const Team = lazy(() => import('@/pages/Team'))
 const Events = lazy(() => import('@/pages/Events'))
 const Projects = lazy(() => import('@/pages/Projects'))
-const Blog = lazy(() => import('@/pages/Blog'))
-const Article = lazy(() => import('@/pages/Article'))
+const Links = lazy(() => import('@/pages/Links'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 
 // Admin pages
@@ -38,12 +38,10 @@ export default function App() {
                 {/* Public Routes */}
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/team" element={<Team />} />
                 <Route path="/events" element={<Events />} />
                 <Route path="/projects" element={<Projects />} />
-
-                {/* Blog Routes */}
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<Article />} />
+                <Route path="/links" element={<Links />} />
 
                 {/* Admin Routes (require admin/lead role) */}
                 <Route

@@ -1,8 +1,7 @@
 import { Hero } from '@/components/sections/Hero'
-import { About } from '@/components/sections/About'
-import { Stats } from '@/components/sections/Stats'
-import { Features } from '@/components/sections/Features'
-import { CTA } from '@/components/sections/CTA'
+import { Benefits } from '@/components/sections/Benefits'
+import { Gallery } from '@/components/sections/Gallery'
+import { Outreach } from '@/components/sections/Outreach'
 import { HomeSEO } from '@/components/SEO'
 
 export default function Home() {
@@ -10,10 +9,16 @@ export default function Home() {
     <>
       <HomeSEO />
       <Hero />
-      <Stats />
-      <About />
-      <Features />
-      <CTA />
+      <Benefits />
+      <Gallery />
+      <Outreach />
+      <section className="bg-claude-terracotta-deep px-[8%] py-16 sm:py-20 md:py-28">
+        <p className="text-center text-5xl font-light leading-tight text-pampas sm:text-6xl md:text-left md:text-7xl lg:text-8xl">
+          Keep
+          <br />
+          thinking.
+        </p>
+      </section>
     </>
   )
 }
