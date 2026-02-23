@@ -5,38 +5,38 @@ const TEAM_MEMBERS = [
   {
     id: "1",
     name: "Gad Anaclet Irumva",
-    role: "Ambassador",
+    role: "President",
     bio: "Passionate about building the future with AI at the University of Rwanda. Excited to help bring Claude to the UR community.",
-    image: null as string | null,
-    linkedin: "www.linkedin.com/in/irumvag",
+    image: "/images/gad.jpg",
+    linkedin: "https://www.linkedin.com/in/irumvag/",
     email: "irumva_223000471@stud.ur.ac.rw",
   },
   {
     id: "2",
-    name: "Team Member 2",
-    role: "Ambassador",
+    name: "Mfuranzima Peace",
+    role: "Vice President",
     bio: "Passionate about the intersection of technology and AI. Excited to help make Claude accessible to the UR community.",
-    image: null as string | null,
-    linkedin: "",
-    email: "member2@ur.ac.rw",
+    image: "/images/peace.jpeg",
+    linkedin: "https://www.linkedin.com/in/mfuranzima-peace/",
+    email: "peacemfu03@gmail.com",
   },
   {
     id: "3",
-    name: "Team Member 3",
-    role: "Ambassador",
-    bio: "Loves competing in hackathons and building innovative projects. Excited to help students grow with Claude.",
-    image: null as string | null,
-    linkedin: "",
-    email: "member3@ur.ac.rw",
+    name: "Patrick Stration Mbabazi",
+    role: "Treasurer",
+    bio: "Strive forvBridging technology and humanity through innovation, education, and intelligent solutions.",
+    image: "/images/pazzo.jpeg",
+    linkedin: "https://www.linkedin.com/in/patrick-straton-mbabazi-14594a388/",
+    email: "smbabazipatrick@gmail.com",
   },
   {
     id: "4",
-    name: "Team Member 4",
-    role: "Ambassador",
-    bio: "Eager to explore how AI can transform industries. Thrilled to bring new ideas and energy to the Claude Builder Club.",
-    image: null as string | null,
+    name: "shimwe Nelly Ornella",
+    role: "Secretary",
+    bio: "Enthusiastic about using spatial planning and artificial intelligence to create smarter and more welcoming communities. I'm eager to support the integration of technology and practical applications.",
+    image:"/images/nelly.jpeg",
     linkedin: "",
-    email: "member4@ur.ac.rw",
+    email: "ishimwenelly2003@gmail.com",
   },
 ]
 
@@ -59,8 +59,8 @@ function TeamCard({ member }: { member: TeamMember }) {
           <img
             src={member.image}
             alt={member.name}
-            className="h-24 w-24 rounded-full object-cover ring-2 ring-muted/20 transition-all group-hover:ring-primary/30 sm:h-32 sm:w-32"
-          />
+            className="h-24 w-24 rounded-full object-cover object-[center_20%] scale-110 ring-4 ring-orange-400/40 shadow-lg transition-all duration-300 hover:scale-125 sm:h-32 sm:w-32"
+            />
         ) : (
           <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-cream ring-2 ring-muted/20 transition-all group-hover:ring-primary/30 sm:h-32 sm:w-32">
             <UserCircle className="h-16 w-16 text-primary/40 sm:h-20 sm:w-20" />
@@ -86,8 +86,7 @@ function TeamCard({ member }: { member: TeamMember }) {
         {member.linkedin && (
           <a
             href={member.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
+            target='_blank'
             className="flex h-9 w-9 items-center justify-center rounded-full bg-muted/10 text-foreground/50 transition-colors hover:bg-[#0077B5]/10 hover:text-[#0077B5]"
             aria-label={`${member.name}'s LinkedIn`}
           >
