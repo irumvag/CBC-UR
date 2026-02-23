@@ -5,38 +5,47 @@ const TEAM_MEMBERS = [
   {
     id: "1",
     name: "Gad Anaclet Irumva",
-    role: "Ambassador",
+    role: "President",
     bio: "Passionate about building the future with AI at the University of Rwanda. Excited to help bring Claude to the UR community.",
-    image: null as string | null,
-    linkedin: "www.linkedin.com/in/irumvag",
+    image: "/images/team/gad.jpg",
+    linkedin: "https://www.linkedin.com/in/irumvag/",
     email: "irumva_223000471@stud.ur.ac.rw",
   },
   {
     id: "2",
-    name: "Team Member 2",
-    role: "Ambassador",
+    name: "Mfuranzima Peace",
+    role: "Vice President",
     bio: "Passionate about the intersection of technology and AI. Excited to help make Claude accessible to the UR community.",
-    image: null as string | null,
-    linkedin: "",
-    email: "member2@ur.ac.rw",
+    image: "/images/team/peace.jpeg",
+    linkedin: "https://www.linkedin.com/in/mfuranzima-peace/",
+    email: "peacemfu03@gmail.com",
   },
   {
     id: "3",
-    name: "Team Member 3",
-    role: "Ambassador",
-    bio: "Loves competing in hackathons and building innovative projects. Excited to help students grow with Claude.",
-    image: null as string | null,
-    linkedin: "",
-    email: "member3@ur.ac.rw",
+    name: "Patrick Stration Mbabazi",
+    role: "Treasurer",
+    bio: "Strive for Bridging technology and humanity through innovation, education, and intelligent solutions.",
+    image: "/images/team/pazzo.jpeg",
+    linkedin: "https://www.linkedin.com/in/patrick-straton-mbabazi-14594a388/",
+    email: "smbabazipatrick@gmail.com",
   },
   {
     id: "4",
-    name: "Team Member 4",
-    role: "Ambassador",
-    bio: "Eager to explore how AI can transform industries. Thrilled to bring new ideas and energy to the Claude Builder Club.",
-    image: null as string | null,
-    linkedin: "",
-    email: "member4@ur.ac.rw",
+    name: "Ahadi Cyizere",
+    role: "Technical lead",
+    bio: "Passionate about building practical AI solutions and empowering students to move from learning technology to creating it. Excited to lead technical projects and help the Claude Builder Club foster a strong community of builders at the University of Rwanda.",
+    image:"/images/team/Ahadi.jpeg",
+    linkedin: "https://www.linkedin.com/in/cyizereahadi/",
+    email: "cyizereahadi@gmail.com",
+  },
+  {
+    id: "5",
+    name: "Ishimwe Nelly Ornella",
+    role: "Secretary",
+    bio: "Enthusiastic about using spatial planning and artificial intelligence to create smarter and more welcoming communities. I'm eager to support the integration of technology and practical applications.",
+    image:"/images/team/nelly.jpeg",
+    linkedin: "https://www.linkedin.com/in/nelly-ishimwe-a04028392",
+    email: "ishimwenelly2003@gmail.com",
   },
 ]
 
@@ -59,8 +68,8 @@ function TeamCard({ member }: { member: TeamMember }) {
           <img
             src={member.image}
             alt={member.name}
-            className="h-24 w-24 rounded-full object-cover ring-2 ring-muted/20 transition-all group-hover:ring-primary/30 sm:h-32 sm:w-32"
-          />
+            className="h-24 w-24 rounded-full object-cover object-[center_20%] scale-110 ring-4 ring-orange-400/40 shadow-lg transition-all duration-300 hover:scale-125 sm:h-32 sm:w-32"
+            />
         ) : (
           <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-cream ring-2 ring-muted/20 transition-all group-hover:ring-primary/30 sm:h-32 sm:w-32">
             <UserCircle className="h-16 w-16 text-primary/40 sm:h-20 sm:w-20" />
@@ -86,8 +95,7 @@ function TeamCard({ member }: { member: TeamMember }) {
         {member.linkedin && (
           <a
             href={member.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
+            target='_blank'
             className="flex h-9 w-9 items-center justify-center rounded-full bg-muted/10 text-foreground/50 transition-colors hover:bg-[#0077B5]/10 hover:text-[#0077B5]"
             aria-label={`${member.name}'s LinkedIn`}
           >
@@ -129,7 +137,7 @@ export default function Team() {
 
       {/* Team Grid */}
       <section className="mx-auto max-w-5xl px-4 py-10 sm:px-8 sm:py-16">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {TEAM_MEMBERS.map((member) => (
             <TeamCard key={member.id} member={member} />
           ))}
