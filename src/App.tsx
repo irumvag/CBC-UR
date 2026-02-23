@@ -12,6 +12,7 @@ const Team = lazy(() => import('@/pages/Team'))
 const Events = lazy(() => import('@/pages/Events'))
 const Links = lazy(() => import('@/pages/Links'))
 const Showcase = lazy(() => import('@/pages/Showcase'))
+const LogicGame = lazy(() => import('@/pages/LogicGame'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 
 function RouteLoader() {
@@ -36,6 +37,7 @@ export default function App() {
               <Route path="/events" element={<Events />} />
               <Route path="/links" element={<Links />} />
               <Route path="/showcase" element={<Showcase />} />
+              <Route path="/game" element={<LogicGame />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
