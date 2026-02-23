@@ -12,8 +12,8 @@ export default function Home() {
       <Benefits />
       <Gallery />
       <Outreach />
-      <section className="bg-claude-terracotta-deep px-[8%] py-16 sm:py-20 md:py-28">
-        <p className="text-center text-5xl font-light leading-tight text-pampas sm:text-6xl md:text-left md:text-7xl lg:text-8xl">
+      <section className="bg-primary px-[8%] py-16 sm:py-20 md:py-28">
+        <p className="text-center text-5xl font-light leading-tight text-cream sm:text-6xl md:text-left md:text-7xl lg:text-8xl">
           Keep
           <br />
           thinking.

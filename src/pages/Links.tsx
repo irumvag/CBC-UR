@@ -52,21 +52,21 @@ function LinkCard({ link }: { link: LinkItem }) {
   const isExternal = link.url.startsWith("http") || link.url.startsWith("mailto")
 
   const content = (
-    <div className="group flex items-center gap-4 rounded-xl border border-cloudy/20 bg-white p-4 shadow-sm transition-all hover:border-claude-terracotta-deep/30 hover:shadow-md sm:p-5">
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-claude-terracotta-deep/10 transition-colors group-hover:bg-claude-terracotta-deep/20 sm:h-14 sm:w-14">
-        <Icon className="h-5 w-5 text-claude-terracotta-deep sm:h-6 sm:w-6" />
+    <div className="group flex items-center gap-4 rounded-xl border border-muted/20 bg-surface p-4 shadow-sm transition-all hover:border-primary/30 hover:shadow-md sm:p-5">
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/20 sm:h-14 sm:w-14">
+        <Icon className="h-5 w-5 text-primary sm:h-6 sm:w-6" />
       </div>
       <div className="min-w-0 flex-1">
-        <h3 className="text-sm font-semibold text-ink sm:text-base">
+        <h3 className="text-sm font-semibold text-foreground sm:text-base">
           {link.title}
         </h3>
         {link.description && (
-          <p className="mt-0.5 truncate text-xs text-stone sm:text-sm">
+          <p className="mt-0.5 truncate text-xs text-foreground/70 sm:text-sm">
             {link.description}
           </p>
         )}
       </div>
-      <ExternalLink className="h-3 w-3 shrink-0 text-stone/30 transition-colors group-hover:text-claude-terracotta-deep sm:h-4 sm:w-4" />
+      <ExternalLink className="h-3 w-3 shrink-0 text-foreground/30 transition-colors group-hover:text-primary sm:h-4 sm:w-4" />
     </div>
   )
 
@@ -97,11 +97,11 @@ export default function Links() {
       />
 
       {/* Page Hero */}
-      <section className="border-b border-cloudy/20 bg-white px-4 py-10 text-center sm:px-8 sm:py-16 md:py-20">
-        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl md:text-4xl lg:text-5xl">
+      <section className="border-b border-muted/20 bg-surface px-4 py-10 text-center sm:px-8 sm:py-16 md:py-20">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
           Links
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-sm text-stone sm:mt-6 sm:text-base md:text-lg">
+        <p className="mx-auto mt-4 max-w-2xl text-sm text-foreground/70 sm:mt-6 sm:text-base md:text-lg">
           Quick access to all our resources, forms, and social media
         </p>
       </section>
@@ -115,9 +115,9 @@ export default function Links() {
             ))}
           </div>
         ) : (
-          <div className="rounded-xl border border-cloudy/20 bg-white p-8 text-center">
-            <Users className="mx-auto h-12 w-12 text-stone/20" />
-            <p className="mt-4 text-stone">
+          <div className="rounded-xl border border-muted/20 bg-surface p-8 text-center">
+            <Users className="mx-auto h-12 w-12 text-foreground/20" />
+            <p className="mt-4 text-foreground/70">
               Links coming soon! Check back later.
             </p>
           </div>

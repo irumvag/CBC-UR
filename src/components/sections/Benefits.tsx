@@ -10,10 +10,10 @@ export function Benefits() {
     <section className="mx-auto max-w-6xl px-4 py-10 sm:px-8 sm:py-12 md:py-16">
       <div className="flex flex-col gap-8 md:flex-row md:items-start md:gap-16">
         <div className="flex-1">
-          <h2 className="mb-3 text-lg font-bold text-ink sm:mb-4 sm:text-xl md:text-3xl">
+          <h2 className="mb-3 text-lg font-bold text-foreground sm:mb-4 sm:text-xl md:text-3xl">
             Fill out this form to join!
           </h2>
-          <div className="overflow-hidden rounded-lg border border-cloudy/20">
+          <div className="overflow-hidden rounded-lg border border-muted/20">
             <iframe
               id="JotFormIFrame-CBC-UR"
               title="Registration Form"
@@ -31,16 +31,16 @@ export function Benefits() {
         </div>
 
         <div className="flex-1">
-          <h2 className="text-xl font-semibold text-ink sm:text-2xl md:text-2xl">
+          <h2 className="text-xl font-semibold text-foreground sm:text-2xl md:text-2xl">
             What&apos;s in it for you?
           </h2>
           <div className="mt-4 grid grid-cols-2 gap-3 sm:mt-6 sm:gap-4 md:flex md:flex-col md:items-start">
             {cards.map((item, i) => (
-              <div key={item.title} className={`flex items-start gap-2.5 rounded-lg border border-cloudy/20 bg-pampas/30 p-3 sm:gap-3 sm:p-4 md:w-[80%] ${i % 2 === 1 ? "md:self-end" : ""}`}>
+              <div key={item.title} className={`flex items-start gap-2.5 rounded-lg border border-muted/20 bg-cream/30 p-3 sm:gap-3 sm:p-4 md:w-[80%] ${i % 2 === 1 ? "md:self-end" : ""}`}>
                 <img src={item.icon} alt="" className="h-12 w-12 flex-shrink-0 sm:h-12 sm:w-12" />
                 <div>
-                  <p className="text-sm font-semibold text-ink sm:text-base">{item.title}</p>
-                  <p className="text-xs text-stone sm:text-sm">{item.desc}</p>
+                  <p className="text-sm font-semibold text-foreground sm:text-base">{item.title}</p>
+                  <p className="text-xs text-foreground/70 sm:text-sm">{item.desc}</p>
                 </div>
               </div>
             ))}

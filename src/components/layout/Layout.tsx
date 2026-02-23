@@ -12,7 +12,7 @@ export function Layout({ children }: LayoutProps) {
   const isAdminPage = location.pathname.startsWith('/admin')
 
   return (
-    <div className="min-h-screen flex flex-col bg-surface dark:bg-dark-bg transition-colors">
+    <div className="min-h-screen flex flex-col bg-cream">
       {!isAdminPage && <Header />}
       <main className="flex-1">
         {children}

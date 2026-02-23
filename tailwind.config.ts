@@ -9,6 +9,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // TX template color system (primary colors for public pages)
+        primary: {
+          DEFAULT: '#c15f3c',
+          dark: '#a84f31',
+          light: '#d4783a',
+        },
+        foreground: '#1a1a1a',
+        cream: '#f4f3ee',
+        muted: '#b1ada1',
+        surface: '#ffffff',
+        background: '#f4f3ee',
+        // Keep existing names for admin pages
         claude: {
           terracotta: '#da7756',
           'terracotta-deep': '#C15F3C',
@@ -22,8 +34,7 @@ const config: Config = {
         ink: '#1A1714',
         sage: '#7C9A82',
         teal: '#4A8B8C',
-        surface: '#FAFAF7',
-        // Dark mode specific colors
+        // Dark mode colors (admin only)
         dark: {
           bg: '#1A1714',
           surface: '#232220',
@@ -34,29 +45,25 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ['Newsreader', 'ui-serif', 'Georgia', 'serif'],
-        sans: ['DM Sans', 'system-ui', 'sans-serif'],
-      },
-      backgroundImage: {
-        'grain': "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E\")",
+        serif: ['"Source Serif 4"', 'Georgia', '"Times New Roman"', 'serif'],
       },
       animation: {
-        'fade-in': 'fadeIn 0.5s ease-out forwards',
-        'slide-up': 'slideUp 0.5s ease-out forwards',
+        'fade-in': 'fadeIn 0.2s ease-out',
+        'slide-up': 'slideUp 0.3s ease-out',
         'slide-down': 'slideDown 0.3s ease-out forwards',
       },
       keyframes: {
         fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+          'from': { opacity: '0' },
+          'to': { opacity: '1' },
         },
         slideUp: {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          'from': { transform: 'translateY(100%)' },
+          'to': { transform: 'translateY(0)' },
         },
         slideDown: {
-          '0%': { opacity: '0', transform: 'translateY(-10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          'from': { opacity: '0', transform: 'translateY(-10px)' },
+          'to': { opacity: '1', transform: 'translateY(0)' },
         },
       },
     },

@@ -17,7 +17,7 @@ export default function NotFound() {
           <div className="max-w-lg mx-auto text-center">
             {/* 404 Illustration */}
             <div className="relative mb-8">
-              <div className="text-[150px] md:text-[200px] font-serif font-bold text-pampas-warm leading-none select-none">
+              <div className="text-[150px] md:text-[200px] font-serif font-bold text-cream-warm leading-none select-none">
                 404
               </div>
               <div className="absolute inset-0 flex items-center justify-center">
@@ -28,10 +28,10 @@ export default function NotFound() {
             </div>
 
             {/* Message */}
-            <h1 className="font-serif font-semibold text-ink text-2xl md:text-3xl mb-4">
+            <h1 className="font-serif font-semibold text-foreground text-2xl md:text-3xl mb-4">
               Page Not Found
             </h1>
-            <p className="text-stone text-lg mb-8 leading-relaxed">
+            <p className="text-foreground/70 text-lg mb-8 leading-relaxed">
               Oops! The page you're looking for seems to have wandered off.
               It might have been moved, deleted, or perhaps never existed.
             </p>
@@ -46,7 +46,7 @@ export default function NotFound() {
               </Link>
               <button
                 onClick={() => window.history.back()}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border-2 border-pampas-warm text-stone hover:text-ink hover:bg-pampas-warm transition-all font-medium"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border-2 border-muted/20 text-foreground/70 hover:text-foreground hover:bg-cream-warm transition-all font-medium"
               >
                 <ArrowLeft size={18} />
                 Go Back
@@ -54,8 +54,8 @@ export default function NotFound() {
             </div>
 
             {/* Quick Links */}
-            <div className="mt-12 pt-8 border-t border-pampas-warm">
-              <p className="text-stone text-sm mb-4">Maybe you were looking for:</p>
+            <div className="mt-12 pt-8 border-t border-muted/20">
+              <p className="text-foreground/70 text-sm mb-4">Maybe you were looking for:</p>
               <div className="flex flex-wrap justify-center gap-3">
                 {[
                   { label: 'About Us', href: '/about' },
@@ -66,7 +66,7 @@ export default function NotFound() {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="px-4 py-2 rounded-lg bg-pampas text-stone text-sm hover:text-ink hover:bg-pampas-warm transition-colors"
+                    className="px-4 py-2 rounded-lg bg-cream text-foreground/70 text-sm hover:text-foreground hover:bg-cream-warm transition-colors"
                   >
                     {link.label}
                   </Link>

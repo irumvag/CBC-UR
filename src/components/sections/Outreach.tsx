@@ -3,14 +3,14 @@ export function Outreach() {
     <section className="mx-auto max-w-6xl px-4 py-10 sm:px-8 sm:py-12 md:py-16">
       <div className="flex flex-col items-center gap-6 md:flex-row md:gap-16">
         <div className="flex-1">
-          <h2 className="mb-3 text-lg font-bold text-ink sm:mb-4 sm:text-xl md:text-3xl">
+          <h2 className="mb-3 text-lg font-bold text-foreground sm:mb-4 sm:text-xl md:text-3xl">
             Partner With Us
           </h2>
-          <p className="text-sm leading-relaxed text-stone sm:text-base md:text-lg">
+          <p className="text-sm leading-relaxed text-foreground/70 sm:text-base md:text-lg">
             Are you interested in partnering with Claude for your organization or an event in Rwanda? Reach out at{" "}
             <a
               href="mailto:claudebuilderclub.ur@gmail.com"
-              className="font-semibold text-claude-terracotta-deep underline transition-colors hover:text-claude-terracotta"
+              className="font-semibold text-primary underline transition-colors hover:text-claude-terracotta"
             >
               claudebuilderclub.ur@gmail.com
             </a>
