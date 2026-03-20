@@ -97,12 +97,19 @@ export default function Team() {
               Try again
             </button>
           </div>
+        ) : loading ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 5 }).map((_, i) => <SkeletonTeamCard key={i} />)}
+          </div>
+        ) : members.length === 0 ? (
+          <div className="rounded-xl border border-muted/20 bg-surface p-8 text-center sm:p-12">
+            <p className="text-foreground/60">
+              Team members will appear here soon. Check back later!
+            </p>
+          </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {loading
-              ? Array.from({ length: 5 }).map((_, i) => <SkeletonTeamCard key={i} />)
-              : members.map((member) => <TeamCard key={member.id} member={member} />)
-            }
+            {members.map((member) => <TeamCard key={member.id} member={member} />)}
           </div>
         )}
       </section>

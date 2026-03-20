@@ -29,12 +29,24 @@ export default function AdminHackathon() {
 
   useEffect(() => {
     async function fetchHackathon() {
-      const { data } = await supabase
+      // Prefer active hackathon; fall back to most recently created
+      let { data } = await supabase
         .from('hackathons')
         .select('*')
+        .eq('is_active', true)
         .order('created_at', { ascending: false })
         .limit(1)
-        .single()
+        .maybeSingle()
+
+      if (!data) {
+        const fallback = await supabase
+          .from('hackathons')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+        data = fallback.data
+      }
 
       if (data) {
         setHackathon(data)

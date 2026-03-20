@@ -90,6 +90,10 @@ export default function AdminEvents() {
       showToast('Please select a start date and time.', 'error')
       return
     }
+    if (form.end_date && new Date(form.end_date) <= new Date(form.date)) {
+      showToast('End date must be after the start date.', 'error')
+      return
+    }
     setSubmitting(true)
     try {
       const payload = {
