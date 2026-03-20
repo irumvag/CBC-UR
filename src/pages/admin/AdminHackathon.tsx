@@ -71,15 +71,33 @@ export default function AdminHackathon() {
         registration_url: form.registration_url || null,
       }
 
+      // If setting this hackathon as active, deactivate all others first
+      if (payload.is_active) {
+        const deactivateQuery = supabase
+          .from('hackathons')
+          .update({ is_active: false })
+          .eq('is_active', true)
+        if (hackathon) {
+          await deactivateQuery.neq('id', hackathon.id)
+        } else {
+          await deactivateQuery
+        }
+      }
+
       if (hackathon) {
         const { error } = await supabase.from('hackathons').update(payload).eq('id', hackathon.id)
         if (error) throw error
       } else {
         const { data, error } = await supabase.from('hackathons').insert(payload).select().single()
         if (error) throw error
-        setHackathon(data)
+        setHackathon(data as typeof hackathon)
       }
-      showToast('Hackathon saved successfully.', 'success')
+      showToast(
+        payload.is_active
+          ? 'Hackathon saved and set as active. Other hackathons were deactivated.'
+          : 'Hackathon saved successfully.',
+        'success'
+      )
     } catch (err) {
       showToast(err instanceof Error ? err.message : 'Save failed.', 'error')
     } finally {
