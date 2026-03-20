@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { MapPin, Clock, CalendarPlus, Star } from 'lucide-react'
 import { EventsSEO } from '@/components/SEO'
+import { useEvents } from '@/hooks/useEvents'
+import { SkeletonEventCard } from '@/components/ui/Skeleton'
 
 type EventType = 'meetup' | 'hackathon' | 'workshop' | 'demo_day'
 
@@ -89,34 +91,14 @@ function getAddToCalendarUrl(event: Event) {
   return `https://calendar.google.com/calendar/render?${params}`
 }
 
-const STATIC_EVENTS: Event[] = [
-  {
-    id: '1',
-    title: 'Club Kickoff Meeting',
-    description: 'Join us for the inaugural Claude Builder Club meeting at University of Rwanda. Learn about Claude, meet fellow builders, and discover what we have planned for the semester.',
-    date: '2026-02-26T17:30:00',
-    end_date: '2026-02-26T18:30:00',
-    location: 'University of Rwanda, Muhazi Conference hall',
-    event_type: 'meetup',
-  },
-  {
-    id: '2',
-    title: 'Intro to Claude Workshop',
-    description: 'A hands-on workshop covering the basics of building with Claude. Bring your laptop and get ready to build your first AI-powered project.',
-    date: '2026-03-29T10:00:00',
-    end_date: '2026-03-29T13:00:00',
-    location: 'University of Rwanda, CST Campus',
-    event_type: 'workshop',
-  },
-]
-
 export default function Events() {
   const today = new Date()
   const [currentMonth, setCurrentMonth] = useState(today.getMonth())
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
 
-  const events = STATIC_EVENTS
+  const { events: fetchedEvents, loading } = useEvents()
+  const events = fetchedEvents
 
   // Parse events into Date objects for calendar rendering
   const parsedEvents = events.map((e) => ({
@@ -183,7 +165,18 @@ export default function Events() {
       </section>
 
       {/* Calendar Section */}
-      {(
+      {loading ? (
+        <section className="mx-auto max-w-7xl px-4 py-6 sm:py-10 md:px-8 lg:px-12">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <SkeletonEventCard />
+            </div>
+            <div className="space-y-3">
+              {Array.from({ length: 3 }).map((_, i) => <SkeletonEventCard key={i} />)}
+            </div>
+          </div>
+        </section>
+      ) : (
         <section className="mx-auto max-w-7xl px-4 py-6 sm:py-10 md:px-8 lg:px-12">
           {/* Event Type Legend */}
           {activeEventTypes.length > 0 && (
