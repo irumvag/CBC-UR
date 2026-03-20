@@ -144,7 +144,7 @@ export default function Showcase() {
             Submit your project to our GitHub repository and it will be featured here.
           </p>
           <a
-            href="https://github.com/irumvag/CBC-UR/tree/main/projects"
+            href="https://github.com/irumvag/CBC-UR/issues"
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-primary-dark"

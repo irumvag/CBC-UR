@@ -1,5 +1,5 @@
 import { Link as RouterLink } from 'react-router-dom'
-import { ExternalLink, Users } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
 import { SEO } from '@/components/SEO'
 import { useLinks } from '@/hooks/useLinks'
 import type { Link } from '@/lib/types'
@@ -93,11 +93,14 @@ export default function Links() {
             ))}
           </div>
         ) : (
-          <div className="rounded-xl border border-muted/20 bg-surface p-8 text-center">
-            <Users className="mx-auto h-12 w-12 text-foreground/20" />
-            <p className="mt-4 text-foreground/70">
-              Links coming soon! Check back later.
+          <div className="rounded-xl border border-muted/20 bg-surface p-10 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+              <ExternalLink className="h-6 w-6 text-primary/60" />
+            </div>
+            <p className="mt-4 text-base font-medium text-foreground/70">
+              Links coming soon!
             </p>
+            <p className="mt-1 text-sm text-foreground/50">Check back later for resources and useful links.</p>
           </div>
         )}
       </section>

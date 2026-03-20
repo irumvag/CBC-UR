@@ -29,8 +29,10 @@ const STAT_ITEMS = [
 const QUICK_LINKS = [
   { to: '/admin/team', icon: Users, label: 'Manage Team' },
   { to: '/admin/events', icon: Calendar, label: 'Manage Events' },
-  { to: '/admin/hackathon', icon: Trophy, label: 'Hackathon' },
+  { to: '/admin/projects', icon: FolderOpen, label: 'Manage Projects' },
+  { to: '/admin/hackathon', icon: Trophy, label: 'Hackathon Page' },
   { to: '/admin/content', icon: FileText, label: 'Site Content' },
+  { to: '/admin/links', icon: LinkIcon, label: 'Quick Links' },
 ]
 
 export default function AdminDashboard() {
