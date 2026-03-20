@@ -86,6 +86,10 @@ export default function AdminEvents() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!form.date) {
+      showToast('Please select a start date and time.', 'error')
+      return
+    }
     setSubmitting(true)
     try {
       const payload = {

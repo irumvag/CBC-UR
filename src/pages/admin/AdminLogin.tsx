@@ -55,9 +55,10 @@ export default function AdminLogin() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={loading}
                 autoComplete="email"
                 placeholder="admin@example.com"
-                className="w-full rounded-lg border border-muted/30 bg-cream px-3 py-2.5 text-sm text-foreground placeholder-foreground/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full rounded-lg border border-muted/30 bg-cream px-3 py-2.5 text-sm text-foreground placeholder-foreground/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
               />
             </div>
 
@@ -70,9 +71,10 @@ export default function AdminLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={loading}
                 autoComplete="current-password"
                 placeholder="••••••••"
-                className="w-full rounded-lg border border-muted/30 bg-cream px-3 py-2.5 text-sm text-foreground placeholder-foreground/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full rounded-lg border border-muted/30 bg-cream px-3 py-2.5 text-sm text-foreground placeholder-foreground/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
               />
             </div>
 

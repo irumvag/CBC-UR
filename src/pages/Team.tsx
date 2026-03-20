@@ -65,7 +65,7 @@ function TeamCard({ member }: { member: TeamMember }) {
 }
 
 export default function Team() {
-  const { members, loading, error } = useTeam()
+  const { members, loading, error, refetch } = useTeam()
 
   return (
     <>
@@ -89,7 +89,13 @@ export default function Team() {
       <section className="mx-auto max-w-5xl px-4 py-10 sm:px-8 sm:py-16">
         {error ? (
           <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700">
-            Failed to load team members. Please try again later.
+            <p>Failed to load team members.</p>
+            <button
+              onClick={refetch}
+              className="mt-3 rounded-md bg-red-100 px-4 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition-colors"
+            >
+              Try again
+            </button>
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -103,7 +109,14 @@ export default function Team() {
 
       <section className="px-4 pb-10 sm:px-8 sm:pb-16">
         <p className="mx-auto max-w-2xl text-center text-sm leading-relaxed text-foreground/70 sm:text-base md:max-w-4xl md:text-lg">
-          This club is by students, for students. If you have any questions, please don&apos;t hesitate to reach out.
+          This club is by students, for students. If you have any questions, please don&apos;t hesitate to{' '}
+          <a
+            href="mailto:claudebuilderclub.urcst@gmail.com"
+            className="font-semibold text-primary underline transition-colors hover:text-primary/80"
+          >
+            reach out
+          </a>
+          .
         </p>
       </section>
     </>

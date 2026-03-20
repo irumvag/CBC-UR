@@ -97,7 +97,7 @@ export default function Events() {
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
 
-  const { events: fetchedEvents, loading } = useEvents()
+  const { events: fetchedEvents, loading, error, refetch } = useEvents()
   const events = fetchedEvents
 
   // Parse events into Date objects for calendar rendering
@@ -165,7 +165,19 @@ export default function Events() {
       </section>
 
       {/* Calendar Section */}
-      {loading ? (
+      {error ? (
+        <section className="mx-auto max-w-7xl px-4 py-10 md:px-8 lg:px-12">
+          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700">
+            <p>Failed to load events.</p>
+            <button
+              onClick={refetch}
+              className="mt-3 rounded-md bg-red-100 px-4 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition-colors"
+            >
+              Try again
+            </button>
+          </div>
+        </section>
+      ) : loading ? (
         <section className="mx-auto max-w-7xl px-4 py-6 sm:py-10 md:px-8 lg:px-12">
           <div className="grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2">

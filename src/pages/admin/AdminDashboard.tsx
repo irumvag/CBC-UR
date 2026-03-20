@@ -40,7 +40,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     async function fetchStats() {
-      const [teamRes, eventsRes, projectsRes, linksRes, recentRes] = await Promise.all([
+      const [teamRes, eventsRes, projectsRes, linksRes, recentRes] = await Promise.allSettled([
         supabase.from('team_members').select('id', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('events').select('id', { count: 'exact', head: true }),
         supabase.from('projects').select('id', { count: 'exact', head: true }).eq('is_published', true),
@@ -49,12 +49,12 @@ export default function AdminDashboard() {
       ])
 
       setStats({
-        team: teamRes.count || 0,
-        events: eventsRes.count || 0,
-        projects: projectsRes.count || 0,
-        links: linksRes.count || 0,
+        team: teamRes.status === 'fulfilled' ? (teamRes.value.count || 0) : 0,
+        events: eventsRes.status === 'fulfilled' ? (eventsRes.value.count || 0) : 0,
+        projects: projectsRes.status === 'fulfilled' ? (projectsRes.value.count || 0) : 0,
+        links: linksRes.status === 'fulfilled' ? (linksRes.value.count || 0) : 0,
       })
-      setRecentEvents(recentRes.data || [])
+      setRecentEvents(recentRes.status === 'fulfilled' ? (recentRes.value.data || []) : [])
       setLoading(false)
     }
 

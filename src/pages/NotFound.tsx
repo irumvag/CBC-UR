@@ -61,7 +61,8 @@ export default function NotFound() {
                   { label: 'About Us', href: '/about' },
                   { label: 'Team', href: '/team' },
                   { label: 'Events', href: '/events' },
-                  { label: 'Projects', href: '/projects' },
+                  { label: 'Showcase', href: '/showcase' },
+                  { label: 'Hackathon', href: '/hackathon' },
                 ].map((link) => (
                   <Link
                     key={link.href}

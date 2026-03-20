@@ -81,7 +81,7 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 export default function Showcase() {
-  const { projects, loading, error } = useProjects()
+  const { projects, loading, error, refetch } = useProjects()
 
   return (
     <>
@@ -105,7 +105,13 @@ export default function Showcase() {
       <section className="mx-auto max-w-6xl px-4 py-8 sm:px-8 sm:py-12 md:py-16">
         {error ? (
           <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700">
-            Failed to load projects. Please try again later.
+            <p>Failed to load projects.</p>
+            <button
+              onClick={refetch}
+              className="mt-3 rounded-md bg-red-100 px-4 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition-colors"
+            >
+              Try again
+            </button>
           </div>
         ) : loading ? (
           <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
