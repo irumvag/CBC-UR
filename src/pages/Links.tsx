@@ -2,7 +2,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import {
   ExternalLink, Instagram, Linkedin, Github, Mail, Calendar,
   Globe, Youtube, Twitter, MessageCircle, FileText, Link as LinkIcon,
-  BookOpen, Video, Users, Megaphone, Trophy, Code, Rocket, Star,
+  BookOpen, Video, Users, UserPlus, Megaphone, Trophy, Code, Rocket, Star, FolderOpen,
 } from 'lucide-react'
 import type { LucideProps } from 'lucide-react'
 import { SEO } from '@/components/SEO'
@@ -38,6 +38,11 @@ const ICON_MAP: Record<string, IconComponent> = {
   video: Video,
   community: Users,
   members: Users,
+  userplus: UserPlus,
+  user: UserPlus,
+  join: UserPlus,
+  signup: UserPlus,
+  'sign-up': UserPlus,
   announce: Megaphone,
   announcement: Megaphone,
   hackathon: Trophy,
@@ -45,6 +50,10 @@ const ICON_MAP: Record<string, IconComponent> = {
   rocket: Rocket,
   star: Star,
   link: LinkIcon,
+  folderopen: FolderOpen,
+  folder: FolderOpen,
+  files: FolderOpen,
+  resources: FolderOpen,
 }
 
 function resolveIcon(iconStr: string | null): React.ReactNode {
