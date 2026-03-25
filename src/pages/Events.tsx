@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { MapPin, Clock, CalendarPlus, Star } from 'lucide-react'
 import { EventsSEO } from '@/components/SEO'
+import { useEvents } from '@/hooks/useEvents'
+import { SkeletonEventCard } from '@/components/ui/Skeleton'
 
 type EventType = 'meetup' | 'hackathon' | 'workshop' | 'demo_day'
 
@@ -12,6 +14,7 @@ interface Event {
   end_date: string | null
   location: string | null
   event_type: EventType
+  registration_url: string | null
 }
 
 const EVENT_TYPE_STYLES: Record<EventType, { bg: string; border: string; badge: string; label: string }> = {
@@ -68,6 +71,10 @@ function isToday(date: Date): boolean {
   return isSameDay(date, new Date())
 }
 
+function isPast(dateStr: string): boolean {
+  return new Date(dateStr) < new Date()
+}
+
 function getAddToCalendarUrl(event: Event) {
   const startDate = new Date(event.date).toISOString().replace(/-|:|\.\d+/g, '')
   const endDate = event.end_date
@@ -89,34 +96,14 @@ function getAddToCalendarUrl(event: Event) {
   return `https://calendar.google.com/calendar/render?${params}`
 }
 
-const STATIC_EVENTS: Event[] = [
-  {
-    id: '1',
-    title: 'Club Kickoff Meeting',
-    description: 'Join us for the inaugural Claude Builder Club meeting at University of Rwanda. Learn about Claude, meet fellow builders, and discover what we have planned for the semester.',
-    date: '2026-02-26T17:30:00',
-    end_date: '2026-02-26T18:30:00',
-    location: 'University of Rwanda, Muhazi Conference hall',
-    event_type: 'meetup',
-  },
-  {
-    id: '2',
-    title: 'Intro to Claude Workshop',
-    description: 'A hands-on workshop covering the basics of building with Claude. Bring your laptop and get ready to build your first AI-powered project.',
-    date: '2026-03-29T10:00:00',
-    end_date: '2026-03-29T13:00:00',
-    location: 'University of Rwanda, CST Campus',
-    event_type: 'workshop',
-  },
-]
-
 export default function Events() {
   const today = new Date()
   const [currentMonth, setCurrentMonth] = useState(today.getMonth())
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null)
 
-  const events = STATIC_EVENTS
+  const { events: fetchedEvents, loading, error, refetch } = useEvents()
+  const events = fetchedEvents
 
   // Parse events into Date objects for calendar rendering
   const parsedEvents = events.map((e) => ({
@@ -183,7 +170,30 @@ export default function Events() {
       </section>
 
       {/* Calendar Section */}
-      {(
+      {error ? (
+        <section className="mx-auto max-w-7xl px-4 py-10 md:px-8 lg:px-12">
+          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700">
+            <p>Failed to load events.</p>
+            <button
+              onClick={refetch}
+              className="mt-3 rounded-md bg-red-100 px-4 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition-colors"
+            >
+              Try again
+            </button>
+          </div>
+        </section>
+      ) : loading ? (
+        <section className="mx-auto max-w-7xl px-4 py-6 sm:py-10 md:px-8 lg:px-12">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <SkeletonEventCard />
+            </div>
+            <div className="space-y-3">
+              {Array.from({ length: 3 }).map((_, i) => <SkeletonEventCard key={i} />)}
+            </div>
+          </div>
+        </section>
+      ) : (
         <section className="mx-auto max-w-7xl px-4 py-6 sm:py-10 md:px-8 lg:px-12">
           {/* Event Type Legend */}
           {activeEventTypes.length > 0 && (
@@ -322,6 +332,7 @@ export default function Events() {
                     const dayEvents = getEventsForDay(day)
                     const isCurrentDay = isToday(dayDate)
                     const hasHackathon = dayEvents.some((e) => e.event_type === 'hackathon')
+                    const isDayPast = dayDate < new Date(new Date().setHours(0, 0, 0, 0))
 
                     return (
                       <div
@@ -336,7 +347,7 @@ export default function Events() {
                       >
                         <span
                           className={`text-[10px] font-medium sm:text-xs md:text-sm ${
-                            isCurrentDay ? 'font-bold text-primary' : 'text-foreground/70'
+                            isCurrentDay ? 'font-bold text-primary' : isDayPast ? 'text-foreground/30' : 'text-foreground/70'
                           }`}
                         >
                           {day}
@@ -445,6 +456,7 @@ export default function Events() {
       {selectedEvent && (() => {
         const selType = selectedEvent.event_type || 'meetup'
         const selStyles = EVENT_TYPE_STYLES[selType]
+        const eventIsPast = isPast(selectedEvent.date)
         return (
           <div
             className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/50 p-0 animate-fade-in sm:items-center sm:p-4"
@@ -458,6 +470,11 @@ export default function Events() {
 
               <div className="mb-3 flex items-start justify-between sm:mb-4">
                 <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                  {eventIsPast && (
+                    <span className="rounded-full bg-muted/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground/50 sm:py-1 sm:text-xs">
+                      Past Event
+                    </span>
+                  )}
                   {selectedEvent.event_type === 'hackathon' && (
                     <span className="flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary sm:py-1 sm:text-xs">
                       <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
@@ -507,15 +524,32 @@ export default function Events() {
               )}
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={getAddToCalendarUrl(selectedEvent)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-primary-dark"
-                >
-                  <CalendarPlus className="h-4 w-4" />
-                  Add to Calendar
-                </a>
+                {!eventIsPast && selectedEvent.registration_url && (
+                  <a
+                    href={selectedEvent.registration_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-primary-dark"
+                  >
+                    Register Now
+                  </a>
+                )}
+                {!eventIsPast ? (
+                  <a
+                    href={getAddToCalendarUrl(selectedEvent)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-md border border-primary px-5 py-2.5 text-sm font-semibold text-primary transition-all hover:bg-primary/5"
+                  >
+                    <CalendarPlus className="h-4 w-4" />
+                    Add to Calendar
+                  </a>
+                ) : (
+                  <span className="inline-flex items-center justify-center gap-2 rounded-md border border-muted/20 bg-muted/10 px-5 py-2.5 text-sm font-medium text-foreground/40 cursor-not-allowed">
+                    <CalendarPlus className="h-4 w-4" />
+                    Event Ended
+                  </span>
+                )}
                 <button
                   onClick={() => setSelectedEvent(null)}
                   className="inline-flex items-center justify-center rounded-md border border-muted/30 px-5 py-2.5 text-sm font-medium text-foreground/70 transition-colors hover:bg-cream"

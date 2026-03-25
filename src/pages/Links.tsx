@@ -1,69 +1,80 @@
-import { Link } from 'react-router-dom'
-import { FileText, Calendar, Mail, ExternalLink, Users, Rocket, type LucideIcon } from 'lucide-react'
+import { Link as RouterLink } from 'react-router-dom'
+import {
+  ExternalLink, Instagram, Linkedin, Github, Mail, Calendar,
+  Globe, Youtube, Twitter, MessageCircle, FileText, Link as LinkIcon,
+  BookOpen, Video, Users, UserPlus, Megaphone, Trophy, Code, Rocket, Star, FolderOpen,
+} from 'lucide-react'
+import type { LucideProps } from 'lucide-react'
 import { SEO } from '@/components/SEO'
+import { useLinks } from '@/hooks/useLinks'
+import type { Link } from '@/lib/types'
+import { Skeleton } from '@/components/ui/Skeleton'
 
-// ============================================================
-// LINKS CONFIGURATION
-// ============================================================
-// To add a new link: Copy a link object and update the fields
-// To hide a link: Set visible: false (keeps it in code for later)
-// ============================================================
+type IconComponent = React.ComponentType<LucideProps>
 
-interface LinkItem {
-  id: string
-  title: string
-  description?: string
-  url: string
-  icon: LucideIcon
-  visible: boolean
-  isInternal?: boolean
+// Map common names (case-insensitive) → Lucide icon
+const ICON_MAP: Record<string, IconComponent> = {
+  instagram: Instagram,
+  linkedin: Linkedin,
+  github: Github,
+  mail: Mail,
+  email: Mail,
+  gmail: Mail,
+  calendar: Calendar,
+  globe: Globe,
+  website: Globe,
+  youtube: Youtube,
+  twitter: Twitter,
+  x: Twitter,
+  whatsapp: MessageCircle,
+  chat: MessageCircle,
+  form: FileText,
+  jotform: FileText,
+  register: FileText,
+  registration: FileText,
+  docs: BookOpen,
+  document: BookOpen,
+  book: BookOpen,
+  video: Video,
+  community: Users,
+  members: Users,
+  userplus: UserPlus,
+  user: UserPlus,
+  join: UserPlus,
+  signup: UserPlus,
+  'sign-up': UserPlus,
+  announce: Megaphone,
+  announcement: Megaphone,
+  hackathon: Trophy,
+  code: Code,
+  rocket: Rocket,
+  star: Star,
+  link: LinkIcon,
+  folderopen: FolderOpen,
+  folder: FolderOpen,
+  files: FolderOpen,
+  resources: FolderOpen,
 }
 
-const LINKS: LinkItem[] = [
-  {
-    id: "membership-form",
-    title: "Membership Sign-Up",
-    description: "Join the Claude Builder Club",
-    url: "https://www.jotform.com/253555944387168",
-    icon: FileText,
-    visible: true,
-  },
-  {
-    id: "showcase",
-    title: "Project Showcase",
-    description: "Projects & demos built with Claude",
-    url: "/showcase",
-    icon: Rocket,
-    visible: true,
-    isInternal: true,
-  },
-  {
-    id: "events",
-    title: "Upcoming Events",
-    description: "See what's happening",
-    url: "/events",
-    icon: Calendar,
-    visible: true,
-    isInternal: true,
-  },
-  {
-    id: "email",
-    title: "Contact Us",
-    description: "Reach out via email",
-    url: "mailto:claudebuilderclub.urcst@gmail.com",
-    icon: Mail,
-    visible: true,
-  },
-]
+function resolveIcon(iconStr: string | null): React.ReactNode {
+  if (!iconStr) return <ExternalLink className="h-5 w-5 text-primary" />
 
-function LinkCard({ link }: { link: LinkItem }) {
-  const Icon = link.icon
-  const isExternal = link.url.startsWith("http") || link.url.startsWith("mailto")
+  // Check name map first (e.g. "Instagram", "calendar")
+  const LucideIcon = ICON_MAP[iconStr.toLowerCase().trim()]
+  if (LucideIcon) return <LucideIcon className="h-5 w-5 text-primary" />
+
+  // Otherwise render as emoji / text
+  return <span className="text-2xl leading-none">{iconStr}</span>
+}
+
+function LinkCard({ link }: { link: Link }) {
+  const isExternal = link.url.startsWith('http') || link.url.startsWith('mailto')
+  const isInternal = link.url.startsWith('/')
 
   const content = (
     <div className="group flex items-center gap-4 rounded-xl border border-muted/20 bg-surface p-4 shadow-sm transition-all hover:border-primary/30 hover:shadow-md sm:p-5">
       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/20 sm:h-14 sm:w-14">
-        <Icon className="h-5 w-5 text-primary sm:h-6 sm:w-6" />
+        {resolveIcon(link.icon)}
       </div>
       <div className="min-w-0 flex-1">
         <h3 className="text-sm font-semibold text-foreground sm:text-base">
@@ -79,15 +90,15 @@ function LinkCard({ link }: { link: LinkItem }) {
     </div>
   )
 
-  if (link.isInternal) {
-    return <Link to={link.url}>{content}</Link>
+  if (isInternal) {
+    return <RouterLink to={link.url}>{content}</RouterLink>
   }
 
   return (
     <a
       href={link.url}
-      target={isExternal ? "_blank" : undefined}
-      rel={isExternal ? "noopener noreferrer" : undefined}
+      target={isExternal ? '_blank' : undefined}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
     >
       {content}
     </a>
@@ -95,7 +106,7 @@ function LinkCard({ link }: { link: LinkItem }) {
 }
 
 export default function Links() {
-  const visibleLinks = LINKS.filter((link) => link.visible)
+  const { links, loading, error, refetch } = useLinks()
 
   return (
     <>
@@ -117,18 +128,37 @@ export default function Links() {
 
       {/* Links Grid */}
       <section className="mx-auto max-w-2xl px-4 py-8 sm:px-8 sm:py-12">
-        {visibleLinks.length > 0 ? (
+        {error ? (
+          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700">
+            <p>Failed to load links.</p>
+            <button
+              onClick={refetch}
+              className="mt-3 rounded-md bg-red-100 px-4 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition-colors"
+            >
+              Try again
+            </button>
+          </div>
+        ) : loading ? (
           <div className="flex flex-col gap-3 sm:gap-4">
-            {visibleLinks.map((link) => (
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-20 w-full rounded-xl" />
+            ))}
+          </div>
+        ) : links.length > 0 ? (
+          <div className="flex flex-col gap-3 sm:gap-4">
+            {links.map((link) => (
               <LinkCard key={link.id} link={link} />
             ))}
           </div>
         ) : (
-          <div className="rounded-xl border border-muted/20 bg-surface p-8 text-center">
-            <Users className="mx-auto h-12 w-12 text-foreground/20" />
-            <p className="mt-4 text-foreground/70">
-              Links coming soon! Check back later.
+          <div className="rounded-xl border border-muted/20 bg-surface p-10 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+              <ExternalLink className="h-6 w-6 text-primary/60" />
+            </div>
+            <p className="mt-4 text-base font-medium text-foreground/70">
+              Links coming soon!
             </p>
+            <p className="mt-1 text-sm text-foreground/50">Check back later for resources and useful links.</p>
           </div>
         )}
       </section>

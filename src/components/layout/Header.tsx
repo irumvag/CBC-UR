@@ -1,30 +1,44 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
-
 
 const navLinks = [
   { label: 'About', href: '/about' },
   { label: 'Team', href: '/team' },
   { label: 'Events', href: '/events' },
+  { label: 'Hackathon', href: '/hackathon' },
+  { label: 'Showcase', href: '/showcase' },
   { label: 'Links', href: '/links' },
 ]
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
-
 
   useEffect(() => {
     setMobileMenuOpen(false)
   }, [location.pathname])
 
+  useEffect(() => {
+    function handleScroll() {
+      setScrolled(window.scrollY > 8)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-surface">
+      <header
+        className={`sticky top-0 z-50 transition-all duration-200 ${
+          scrolled
+            ? 'bg-surface/95 backdrop-blur-md shadow-sm'
+            : 'bg-surface'
+        }`}
+      >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-8 sm:py-2.5 md:px-12">
-          <Link to="/" className="group flex items-center gap-1.5 sm:gap-2">
+          <NavLink to="/" className="group flex items-center gap-1.5 sm:gap-2">
             <img
               src="/images/claude_logo.svg"
               alt="Claude logo"
@@ -38,19 +52,24 @@ export function Header() {
                 Claude Builder Club
               </span>
             </div>
-          </Link>
+          </NavLink>
 
           {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-6 text-sm font-medium text-foreground/70 md:flex lg:gap-8 lg:text-base">
+          <nav className="hidden items-center gap-1 md:flex lg:gap-1">
             {navLinks.map((link) => (
-              <Link
+              <NavLink
                 key={link.href}
                 to={link.href}
-                className="group relative transition-colors hover:text-primary"
+                className={({ isActive }) =>
+                  `relative rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200 lg:text-base ${
+                    isActive
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-foreground/70 hover:bg-cream hover:text-foreground'
+                  }`
+                }
               >
                 {link.label}
-                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-primary transition-all duration-300 ease-out group-hover:w-full" />
-              </Link>
+              </NavLink>
             ))}
           </nav>
 
@@ -71,17 +90,23 @@ export function Header() {
           }`}
         >
           <div className="overflow-hidden">
-            <div className="border-t border-muted/20 bg-surface px-4 pb-4">
-              <nav className="flex flex-col gap-1">
+            <div className="border-t border-muted/20 bg-surface px-4 pb-4 pt-2">
+              <nav className="flex flex-col gap-0.5">
                 {navLinks.map((link) => (
-                  <Link
+                  <NavLink
                     key={link.href}
                     to={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-md px-4 py-3 text-base font-medium text-foreground/70 transition-colors hover:bg-cream hover:text-primary"
+                    className={({ isActive }) =>
+                      `rounded-md px-4 py-2.5 text-base font-medium transition-colors ${
+                        isActive
+                          ? 'bg-primary/10 text-primary'
+                          : 'text-foreground/70 hover:bg-cream hover:text-primary'
+                      }`
+                    }
                   >
                     {link.label}
-                  </Link>
+                  </NavLink>
                 ))}
               </nav>
             </div>
