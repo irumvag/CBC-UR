@@ -1,0 +1,23 @@
+{
+  "name": "campus-event-cli",
+  "version": "1.0.0",
+  "description": "A CLI tool for managing campus events",
+  "main": "index.js",
+  "bin": {
+    "campus-events": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "serve": "node server.js",
+    "test": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
+  }
+}
