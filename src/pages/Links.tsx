@@ -1,9 +1,62 @@
 import { Link as RouterLink } from 'react-router-dom'
-import { ExternalLink } from 'lucide-react'
+import {
+  ExternalLink, Instagram, Linkedin, Github, Mail, Calendar,
+  Globe, Youtube, Twitter, MessageCircle, FileText, Link as LinkIcon,
+  BookOpen, Video, Users, Megaphone, Trophy, Code, Rocket, Star,
+} from 'lucide-react'
+import type { LucideProps } from 'lucide-react'
 import { SEO } from '@/components/SEO'
 import { useLinks } from '@/hooks/useLinks'
 import type { Link } from '@/lib/types'
 import { Skeleton } from '@/components/ui/Skeleton'
+
+type IconComponent = React.ComponentType<LucideProps>
+
+// Map common names (case-insensitive) → Lucide icon
+const ICON_MAP: Record<string, IconComponent> = {
+  instagram: Instagram,
+  linkedin: Linkedin,
+  github: Github,
+  mail: Mail,
+  email: Mail,
+  gmail: Mail,
+  calendar: Calendar,
+  globe: Globe,
+  website: Globe,
+  youtube: Youtube,
+  twitter: Twitter,
+  x: Twitter,
+  whatsapp: MessageCircle,
+  chat: MessageCircle,
+  form: FileText,
+  jotform: FileText,
+  register: FileText,
+  registration: FileText,
+  docs: BookOpen,
+  document: BookOpen,
+  book: BookOpen,
+  video: Video,
+  community: Users,
+  members: Users,
+  announce: Megaphone,
+  announcement: Megaphone,
+  hackathon: Trophy,
+  code: Code,
+  rocket: Rocket,
+  star: Star,
+  link: LinkIcon,
+}
+
+function resolveIcon(iconStr: string | null): React.ReactNode {
+  if (!iconStr) return <ExternalLink className="h-5 w-5 text-primary" />
+
+  // Check name map first (e.g. "Instagram", "calendar")
+  const LucideIcon = ICON_MAP[iconStr.toLowerCase().trim()]
+  if (LucideIcon) return <LucideIcon className="h-5 w-5 text-primary" />
+
+  // Otherwise render as emoji / text
+  return <span className="text-2xl leading-none">{iconStr}</span>
+}
 
 function LinkCard({ link }: { link: Link }) {
   const isExternal = link.url.startsWith('http') || link.url.startsWith('mailto')
@@ -12,11 +65,7 @@ function LinkCard({ link }: { link: Link }) {
   const content = (
     <div className="group flex items-center gap-4 rounded-xl border border-muted/20 bg-surface p-4 shadow-sm transition-all hover:border-primary/30 hover:shadow-md sm:p-5">
       <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-colors group-hover:bg-primary/20 sm:h-14 sm:w-14">
-        {link.icon ? (
-          <span className="text-xl">{link.icon}</span>
-        ) : (
-          <ExternalLink className="h-5 w-5 text-primary" />
-        )}
+        {resolveIcon(link.icon)}
       </div>
       <div className="min-w-0 flex-1">
         <h3 className="text-sm font-semibold text-foreground sm:text-base">

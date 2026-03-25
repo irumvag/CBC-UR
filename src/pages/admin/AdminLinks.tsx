@@ -173,7 +173,7 @@ export default function AdminLinks() {
             />
           </FormField>
 
-          <FormField label="Icon" hint="Emoji or icon name (e.g. 📅 or Calendar)">
+          <FormField label="Icon" hint="Emoji (📅 📝 🔗) or name: instagram, linkedin, github, mail, calendar, youtube, twitter, form, docs, video, globe, hackathon, code">
             <AdminInput
               value={form.icon || ''}
               onChange={(e) => setForm({ ...form, icon: e.target.value })}
