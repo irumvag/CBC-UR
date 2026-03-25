@@ -1,3 +1,4 @@
+import { Instagram, Linkedin } from 'lucide-react'
 import { useSiteContent } from '@/hooks/useSiteContent'
 
 export function Outreach() {
@@ -24,6 +25,27 @@ export function Outreach() {
             </a>
             .
           </p>
+          <div className="mt-5 flex items-center gap-3">
+            <span className="text-sm text-foreground/50">Follow us:</span>
+            <a
+              href="https://www.instagram.com/claudebuilderclub.urcst/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground/5 text-foreground/50 transition-all hover:bg-[#E1306C]/10 hover:text-[#E1306C]"
+            >
+              <Instagram className="h-4 w-4" />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/cbc-ur-cst/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground/5 text-foreground/50 transition-all hover:bg-[#0077B5]/10 hover:text-[#0077B5]"
+            >
+              <Linkedin className="h-4 w-4" />
+            </a>
+          </div>
         </div>
 
         <div className="flex shrink-0 items-center justify-center">

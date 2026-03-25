@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Github, Mail } from 'lucide-react'
+import { Github, Mail, Instagram, Linkedin } from 'lucide-react'
 
 const footerLinks = [
   { label: 'About', href: '/about' },
@@ -27,7 +27,25 @@ export function Footer() {
             <p className="max-w-xs text-xs leading-relaxed text-white/50">
               A student-led AI club building with Claude at the University of Rwanda, supported by Anthropic.
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <a
+                href="https://www.instagram.com/claudebuilderclub.urcst/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white/60 transition-colors hover:bg-[#E1306C]/80 hover:text-white"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-4 w-4" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/cbc-ur-cst/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white/60 transition-colors hover:bg-[#0077B5]/80 hover:text-white"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="h-4 w-4" />
+              </a>
               <a
                 href="https://github.com/irumvag/CBC-UR"
                 target="_blank"
