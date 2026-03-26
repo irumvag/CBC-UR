@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { Home, ArrowLeft, Search } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
 import { SEO } from '@/components/SEO'
 
 export default function NotFound() {
@@ -12,66 +11,66 @@ export default function NotFound() {
         noIndex
       />
 
-      <div className="min-h-[80vh] flex items-center justify-center bg-surface">
-        <div className="container-main">
-          <div className="max-w-lg mx-auto text-center">
-            {/* 404 Illustration */}
-            <div className="relative mb-8">
-              <div className="text-[150px] md:text-[200px] font-serif font-bold text-cream-warm leading-none select-none">
-                404
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-24 h-24 rounded-full bg-claude-terracotta/10 flex items-center justify-center">
-                  <Search className="w-12 h-12 text-claude-terracotta" />
-                </div>
+      <div className="flex min-h-[80vh] items-center justify-center bg-surface px-4">
+        <div className="mx-auto w-full max-w-lg text-center">
+          {/* 404 Illustration */}
+          <div className="relative mb-8">
+            <div className="select-none font-serif text-[130px] font-bold leading-none text-cream md:text-[180px]">
+              404
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
+                <Search className="h-10 w-10 text-primary" />
               </div>
             </div>
+          </div>
 
-            {/* Message */}
-            <h1 className="font-serif font-semibold text-foreground text-2xl md:text-3xl mb-4">
-              Page Not Found
-            </h1>
-            <p className="text-foreground/70 text-lg mb-8 leading-relaxed">
-              Oops! The page you're looking for seems to have wandered off.
-              It might have been moved, deleted, or perhaps never existed.
-            </p>
+          {/* Message */}
+          <h1 className="mb-4 font-serif text-2xl font-semibold text-foreground md:text-3xl">
+            Page Not Found
+          </h1>
+          <p className="mb-8 text-base leading-relaxed text-foreground/70 md:text-lg">
+            Oops! The page you're looking for seems to have wandered off.
+            It might have been moved, deleted, or perhaps never existed.
+          </p>
 
-            {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/">
-                <Button variant="primary" size="lg">
-                  <Home size={18} />
-                  Go Home
-                </Button>
-              </Link>
-              <button
-                onClick={() => window.history.back()}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border-2 border-muted/20 text-foreground/70 hover:text-foreground hover:bg-cream-warm transition-all font-medium"
-              >
-                <ArrowLeft size={18} />
-                Go Back
-              </button>
-            </div>
+          {/* Actions */}
+          <div className="flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              to="/"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-base font-semibold text-white transition-all hover:bg-primary-dark hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/25"
+            >
+              <Home className="h-4 w-4" />
+              Go Home
+            </Link>
+            <button
+              onClick={() => window.history.back()}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-muted/30 px-6 py-3 text-base font-medium text-foreground/70 transition-all hover:border-primary/30 hover:bg-pampas-warm hover:text-foreground"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Go Back
+            </button>
+          </div>
 
-            {/* Quick Links */}
-            <div className="mt-12 pt-8 border-t border-muted/20">
-              <p className="text-foreground/70 text-sm mb-4">Maybe you were looking for:</p>
-              <div className="flex flex-wrap justify-center gap-3">
-                {[
-                  { label: 'About Us', href: '/about' },
-                  { label: 'Team', href: '/team' },
-                  { label: 'Events', href: '/events' },
-                  { label: 'Projects', href: '/projects' },
-                ].map((link) => (
-                  <Link
-                    key={link.href}
-                    to={link.href}
-                    className="px-4 py-2 rounded-lg bg-cream text-foreground/70 text-sm hover:text-foreground hover:bg-cream-warm transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
+          {/* Quick Links */}
+          <div className="mt-12 border-t border-muted/20 pt-8">
+            <p className="mb-4 text-sm text-foreground/60">Maybe you were looking for:</p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {[
+                { label: 'About Us', href: '/about' },
+                { label: 'Team', href: '/team' },
+                { label: 'Events', href: '/events' },
+                { label: 'Showcase', href: '/showcase' },
+                { label: 'Hackathon', href: '/hackathon' },
+              ].map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="rounded-lg bg-cream px-4 py-2 text-sm text-foreground/70 transition-colors hover:bg-pampas-warm hover:text-primary"
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
           </div>
         </div>

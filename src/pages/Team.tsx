@@ -1,75 +1,20 @@
 import { Linkedin, Mail, UserCircle } from 'lucide-react'
 import { SEO } from '@/components/SEO'
-
-const TEAM_MEMBERS = [
-  {
-    id: "1",
-    name: "Gad Anaclet Irumva",
-    role: "President",
-    bio: "Passionate about building the future with AI at the University of Rwanda. Excited to help bring Claude to the UR community.",
-    image: "/images/team/gad.jpg",
-    linkedin: "https://www.linkedin.com/in/irumvag/",
-    email: "irumva_223000471@stud.ur.ac.rw",
-  },
-  {
-    id: "2",
-    name: "Mfuranzima Peace",
-    role: "Vice President",
-    bio: "Passionate about the intersection of technology and AI. Excited to help make Claude accessible to the UR community.",
-    image: "/images/team/peace.jpeg",
-    linkedin: "https://www.linkedin.com/in/mfuranzima-peace/",
-    email: "peacemfu03@gmail.com",
-  },
-  {
-    id: "3",
-    name: "Patrick Stration Mbabazi",
-    role: "Treasurer",
-    bio: "Strive for Bridging technology and humanity through innovation, education, and intelligent solutions.",
-    image: "/images/team/pazzo.jpeg",
-    linkedin: "https://www.linkedin.com/in/patrick-straton-mbabazi-14594a388/",
-    email: "smbabazipatrick@gmail.com",
-  },
-  {
-    id: "4",
-    name: "Ahadi Cyizere",
-    role: "Technical lead",
-    bio: "Passionate about building practical AI solutions and empowering students to move from learning technology to creating it. Excited to lead technical projects and help the Claude Builder Club foster a strong community of builders at the University of Rwanda.",
-    image:"/images/team/Ahadi.jpeg",
-    linkedin: "https://www.linkedin.com/in/cyizereahadi/",
-    email: "cyizereahadi@gmail.com",
-  },
-  {
-    id: "5",
-    name: "Ishimwe Nelly Ornella",
-    role: "Secretary",
-    bio: "Enthusiastic about using spatial planning and artificial intelligence to create smarter and more welcoming communities. I'm eager to support the integration of technology and practical applications.",
-    image:"/images/team/nelly.jpeg",
-    linkedin: "https://www.linkedin.com/in/nelly-ishimwe-a04028392",
-    email: "ishimwenelly2003@gmail.com",
-  },
-]
-
-interface TeamMember {
-  id: string
-  name: string
-  role: string
-  bio: string
-  image: string | null
-  linkedin?: string
-  email?: string
-}
+import { useTeam } from '@/hooks/useTeam'
+import type { TeamMember } from '@/lib/types'
+import { SkeletonTeamCard } from '@/components/ui/Skeleton'
 
 function TeamCard({ member }: { member: TeamMember }) {
   return (
     <div className="group rounded-xl border border-muted/20 bg-surface p-4 shadow-sm transition-all hover:border-primary/30 hover:shadow-md sm:p-6">
       {/* Profile Image */}
       <div className="mb-4 flex justify-center">
-        {member.image ? (
+        {member.image_path ? (
           <img
-            src={member.image}
+            src={member.image_path}
             alt={member.name}
             className="h-24 w-24 rounded-full object-cover object-[center_20%] scale-110 ring-4 ring-orange-400/40 shadow-lg transition-all duration-300 hover:scale-125 sm:h-32 sm:w-32"
-            />
+          />
         ) : (
           <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-cream ring-2 ring-muted/20 transition-all group-hover:ring-primary/30 sm:h-32 sm:w-32">
             <UserCircle className="h-16 w-16 text-primary/40 sm:h-20 sm:w-20" />
@@ -85,17 +30,20 @@ function TeamCard({ member }: { member: TeamMember }) {
         <p className="mt-1 text-xs font-medium text-primary sm:text-sm">
           {member.role}
         </p>
-        <p className="mt-2 text-xs text-foreground/70 sm:mt-3 sm:text-sm">
-          {member.bio}
-        </p>
+        {member.bio && (
+          <p className="mt-2 text-xs text-foreground/70 sm:mt-3 sm:text-sm">
+            {member.bio}
+          </p>
+        )}
       </div>
 
       {/* Social Links */}
       <div className="mt-4 flex justify-center gap-3">
-        {member.linkedin && (
+        {member.linkedin_url && (
           <a
-            href={member.linkedin}
-            target='_blank'
+            href={member.linkedin_url}
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex h-9 w-9 items-center justify-center rounded-full bg-muted/10 text-foreground/50 transition-colors hover:bg-[#0077B5]/10 hover:text-[#0077B5]"
             aria-label={`${member.name}'s LinkedIn`}
           >
@@ -117,6 +65,8 @@ function TeamCard({ member }: { member: TeamMember }) {
 }
 
 export default function Team() {
+  const { members, loading, error, refetch } = useTeam()
+
   return (
     <>
       <SEO
@@ -137,16 +87,43 @@ export default function Team() {
 
       {/* Team Grid */}
       <section className="mx-auto max-w-5xl px-4 py-10 sm:px-8 sm:py-16">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {TEAM_MEMBERS.map((member) => (
-            <TeamCard key={member.id} member={member} />
-          ))}
-        </div>
+        {error ? (
+          <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-700">
+            <p>Failed to load team members.</p>
+            <button
+              onClick={refetch}
+              className="mt-3 rounded-md bg-red-100 px-4 py-1.5 text-xs font-medium text-red-700 hover:bg-red-200 transition-colors"
+            >
+              Try again
+            </button>
+          </div>
+        ) : loading ? (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 5 }).map((_, i) => <SkeletonTeamCard key={i} />)}
+          </div>
+        ) : members.length === 0 ? (
+          <div className="rounded-xl border border-muted/20 bg-surface p-8 text-center sm:p-12">
+            <p className="text-foreground/60">
+              Team members will appear here soon. Check back later!
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {members.map((member) => <TeamCard key={member.id} member={member} />)}
+          </div>
+        )}
       </section>
 
       <section className="px-4 pb-10 sm:px-8 sm:pb-16">
         <p className="mx-auto max-w-2xl text-center text-sm leading-relaxed text-foreground/70 sm:text-base md:max-w-4xl md:text-lg">
-          This club is by students, for students. If you have any questions, please don&apos;t hesitate to reach out.
+          This club is by students, for students. If you have any questions, please don&apos;t hesitate to{' '}
+          <a
+            href="mailto:claudebuilderclub.urcst@gmail.com"
+            className="font-semibold text-primary underline transition-colors hover:text-primary/80"
+          >
+            reach out
+          </a>
+          .
         </p>
       </section>
     </>

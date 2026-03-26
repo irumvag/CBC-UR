@@ -8,7 +8,7 @@ export default function About() {
       <AboutSEO />
 
       {/* Page Hero */}
-      <section className="bg-surface px-4 py-10 text-center sm:px-8 sm:py-16 md:py-20">
+      <section className="border-b border-muted/20 bg-surface px-4 py-10 text-center sm:px-8 sm:py-16 md:py-20">
         <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl lg:text-5xl">
           About the Claude Builder Club
         </h1>
