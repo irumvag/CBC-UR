@@ -8,6 +8,7 @@ const footerLinks = [
   { label: 'Showcase', href: '/showcase' },
   { label: 'Hackathon', href: '/hackathon' },
   { label: 'Links', href: '/links' },
+  { label: 'Credentials', href: '/credentials' },
 ]
 
 export function Footer() {

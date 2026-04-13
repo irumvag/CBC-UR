@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, Users, Calendar, FolderOpen,
-  Trophy, FileText, Link, LogOut, Menu, X
+  Trophy, FileText, Link, LogOut, Menu, X, KeyRound
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { to: '/admin/hackathon', label: 'Hackathon', icon: Trophy },
   { to: '/admin/content', label: 'Site Content', icon: FileText },
   { to: '/admin/links', label: 'Links', icon: Link },
+  { to: '/admin/credentials', label: 'Credentials', icon: KeyRound },
 ]
 
 function getCurrentPageLabel(pathname: string): string {

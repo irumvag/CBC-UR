@@ -100,6 +100,38 @@ export interface Link {
   updated_at: string
 }
 
+export interface CredentialFile {
+  id: string
+  filename: string
+  display_name: string
+  row_count: number
+  priority: number
+  created_at: string
+  updated_at: string
+}
+
+export interface EmailCredential {
+  id: string
+  file_id: string
+  name: string
+  email: string
+  password: string
+  claimed_at: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface CredentialWithSource extends EmailCredential {
+  credential_file: Pick<CredentialFile, 'display_name' | 'priority'>
+}
+
+export interface VerificationResult {
+  match: boolean
+  confidence: number
+  method: 'faceapi' | 'gemini' | 'none'
+  error?: string
+}
+
 // Database type for Supabase client
 export interface Database {
   public: {
@@ -133,6 +165,16 @@ export interface Database {
         Row: Link
         Insert: Omit<Link, 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Omit<Link, 'id' | 'created_at' | 'updated_at'>>
+      }
+      credential_files: {
+        Row: CredentialFile
+        Insert: Omit<CredentialFile, 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Omit<CredentialFile, 'id' | 'created_at' | 'updated_at'>>
+      }
+      email_credentials: {
+        Row: EmailCredential
+        Insert: Omit<EmailCredential, 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Omit<EmailCredential, 'id' | 'created_at' | 'updated_at'>>
       }
     }
   }
