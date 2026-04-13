@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import type { CredentialWithSource } from '@/lib/types'
 import { cn, extractRegNumber } from '@/lib/utils'
 
-type Step = 'search' | 'verify' | 'result'
+type Step = 'search' | 'verify' | 'acknowledge' | 'result'
 
 function StepIndicator({ current, total }: { current: number; total: number }) {
   return (
@@ -68,14 +68,19 @@ export default function EmailLookup() {
   }
 
   const claimAndShow = () => {
-    // Mark the credential as claimed in Supabase (fire and forget — UI updates immediately)
+    // Go to acknowledgement step first — credentials are NOT claimed yet
+    setVerified(true)
+    setVerifyError(null)
+    setStep('acknowledge')
+  }
+
+  const handleAcknowledgeAndReveal = () => {
+    // NOW mark as claimed in Supabase and show credentials
     supabase
       .from('email_credentials')
       .update({ claimed_at: new Date().toISOString() })
       .eq('id', selectedCredential!.id)
       .then(() => {})
-    setVerified(true)
-    setVerifyError(null)
     setStep('result')
   }
 
@@ -261,7 +266,7 @@ export default function EmailLookup() {
               <ArrowLeft className="h-4 w-4" /> Back to search
             </button>
 
-            <StepIndicator current={2} total={3} />
+            <StepIndicator current={2} total={4} />
 
             <div className="rounded-xl border border-muted/20 bg-surface p-6 text-center">
               <h2 className="text-xl font-bold text-foreground">Verify Your Identity</h2>
@@ -272,7 +277,7 @@ export default function EmailLookup() {
               <input
                 type="text"
                 autoFocus
-                placeholder="e.g. 223019918"
+                placeholder="Enter your registration number"
                 value={regNumber}
                 onChange={e => { setRegNumber(e.target.value); setVerifyError(null) }}
                 onKeyDown={e => { if (e.key === 'Enter' && regNumber.trim()) handleVerifyRegNumber() }}
@@ -298,22 +303,64 @@ export default function EmailLookup() {
           </div>
         )}
 
+        {/* ═══ ACKNOWLEDGE STEP ═══ */}
+        {step === 'acknowledge' && verified && selectedCredential && (
+          <div className="mx-auto max-w-md">
+            <StepIndicator current={3} total={4} />
+
+            <div className="rounded-xl border border-amber-200 bg-surface p-6 text-center">
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-100">
+                <AlertTriangle className="h-7 w-7 text-amber-600" />
+              </div>
+              <h2 className="text-xl font-bold text-foreground">Before you continue</h2>
+              <p className="mt-3 text-sm text-foreground/60">
+                You are about to view your credentials for <span className="font-semibold text-primary">{selectedCredential.name}</span>.
+              </p>
+
+              <div className="mt-4 space-y-2 text-left">
+                <div className="flex items-start gap-2 rounded-lg bg-amber-50 px-4 py-3">
+                  <span className="mt-0.5 text-amber-600 font-bold">1.</span>
+                  <p className="text-sm text-amber-900">Your password will only be shown <span className="font-bold">once</span>. After you leave this page, it cannot be viewed again.</p>
+                </div>
+                <div className="flex items-start gap-2 rounded-lg bg-amber-50 px-4 py-3">
+                  <span className="mt-0.5 text-amber-600 font-bold">2.</span>
+                  <p className="text-sm text-amber-900">Copy and save your credentials immediately — write them down or save them somewhere safe.</p>
+                </div>
+                <div className="flex items-start gap-2 rounded-lg bg-amber-50 px-4 py-3">
+                  <span className="mt-0.5 text-amber-600 font-bold">3.</span>
+                  <p className="text-sm text-amber-900">If you lose your credentials, you will need to contact the club administration to have them reset.</p>
+                </div>
+              </div>
+
+              <button
+                onClick={handleAcknowledgeAndReveal}
+                className="mt-6 w-full rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-dark"
+              >
+                I understand — show my credentials
+              </button>
+              <button
+                onClick={handleStartOver}
+                className="mt-2 w-full rounded-lg border border-muted/30 px-4 py-2.5 text-sm font-medium text-foreground/60 transition-colors hover:bg-cream"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* ═══ RESULT STEP ═══ */}
         {step === 'result' && verified && selectedCredential && (
           <div className="mx-auto max-w-md">
-            <StepIndicator current={3} total={3} />
+            <StepIndicator current={4} total={4} />
 
             <div className="text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
                 <CheckCircle className="h-8 w-8 text-emerald-600" />
               </div>
-              <h2 className="text-xl font-bold text-foreground">Identity Verified!</h2>
-              <div className="mx-auto mt-3 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-left">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
-                <p className="text-sm text-amber-800">
-                  <span className="font-semibold">Save these credentials now</span> — they won't be shown again. This credential is now marked as claimed.
-                </p>
-              </div>
+              <h2 className="text-xl font-bold text-foreground">Here are your credentials</h2>
+              <p className="mt-1 text-sm text-foreground/50">
+                Copy and save them now — this is the only time they will be shown.
+              </p>
 
               {/* Credential card */}
               <div className="mt-6 rounded-xl border border-emerald-200 bg-surface p-5 text-left shadow-sm">
