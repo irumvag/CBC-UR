@@ -27,6 +27,10 @@ const AdminProjects = lazy(() => import('@/pages/admin/AdminProjects'))
 const AdminHackathon = lazy(() => import('@/pages/admin/AdminHackathon'))
 const AdminContent = lazy(() => import('@/pages/admin/AdminContent'))
 const AdminLinks = lazy(() => import('@/pages/admin/AdminLinks'))
+const AdminCredentials = lazy(() => import('@/pages/admin/AdminCredentials'))
+
+// Lazy load public credential page
+const EmailLookup = lazy(() => import('@/pages/EmailLookup'))
 
 function RouteLoader() {
   return (
@@ -53,6 +57,7 @@ export default function App() {
               <Route path="/showcase" element={<Showcase />} />
               <Route path="/game" element={<LogicGame />} />
               <Route path="/hackathon" element={<Hackathon />} />
+              <Route path="/credentials" element={<EmailLookup />} />
 
               {/* Admin routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
@@ -71,6 +76,7 @@ export default function App() {
                 <Route path="hackathon" element={<AdminHackathon />} />
                 <Route path="content" element={<AdminContent />} />
                 <Route path="links" element={<AdminLinks />} />
+                <Route path="credentials" element={<AdminCredentials />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />

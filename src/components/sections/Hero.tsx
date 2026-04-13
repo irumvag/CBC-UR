@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { KeyRound } from 'lucide-react'
 import { useSiteContent } from '@/hooks/useSiteContent'
 
 export function Hero() {
@@ -34,6 +35,21 @@ export function Hero() {
             {ctaSecondary}
           </Link>
         </div>
+
+        {/* Credentials CTA */}
+        <Link
+          to="/credentials"
+          className="mt-8 flex w-full items-center gap-3 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3 transition-all hover:border-primary/40 hover:bg-primary/10 sm:mt-10 sm:w-auto sm:px-5 sm:py-3.5"
+        >
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+            <KeyRound className="h-4.5 w-4.5 text-primary" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-foreground">Get your email credentials</p>
+            <p className="text-xs text-foreground/50">Look up your university email and password</p>
+          </div>
+          <span className="ml-auto text-primary">&rarr;</span>
+        </Link>
       </div>
 
       <div className="hidden flex-1 items-center justify-center md:flex">

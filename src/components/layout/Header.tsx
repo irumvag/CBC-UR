@@ -9,6 +9,7 @@ const navLinks = [
   { label: 'Hackathon', href: '/hackathon' },
   { label: 'Showcase', href: '/showcase' },
   { label: 'Links', href: '/links' },
+  { label: 'Credentials', href: '/credentials' },
 ]
 
 export function Header() {

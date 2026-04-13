@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Users, Calendar, FolderOpen, ExternalLink, Trophy, FileText, Link as LinkIcon } from 'lucide-react'
+import { Users, Calendar, FolderOpen, ExternalLink, Trophy, FileText, Link as LinkIcon, KeyRound } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { Skeleton } from '@/components/ui/Skeleton'
 
@@ -9,6 +9,7 @@ interface Stats {
   events: number
   projects: number
   links: number
+  credentials: number
 }
 
 interface RecentEvent {
@@ -24,6 +25,7 @@ const STAT_ITEMS = [
   { key: 'events' as keyof Stats, label: 'Events', icon: Calendar, to: '/admin/events', color: 'bg-sky-50 text-sky-600' },
   { key: 'projects' as keyof Stats, label: 'Projects', icon: FolderOpen, to: '/admin/projects', color: 'bg-emerald-50 text-emerald-600' },
   { key: 'links' as keyof Stats, label: 'Active Links', icon: LinkIcon, to: '/admin/links', color: 'bg-amber-50 text-amber-600' },
+  { key: 'credentials' as keyof Stats, label: 'Credentials', icon: KeyRound, to: '/admin/credentials', color: 'bg-orange-50 text-orange-600' },
 ]
 
 const QUICK_LINKS = [
@@ -33,6 +35,7 @@ const QUICK_LINKS = [
   { to: '/admin/hackathon', icon: Trophy, label: 'Hackathon Page' },
   { to: '/admin/content', icon: FileText, label: 'Site Content' },
   { to: '/admin/links', icon: LinkIcon, label: 'Quick Links' },
+  { to: '/admin/credentials', icon: KeyRound, label: 'Email Credentials' },
 ]
 
 export default function AdminDashboard() {
@@ -42,11 +45,12 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     async function fetchStats() {
-      const [teamRes, eventsRes, projectsRes, linksRes, recentRes] = await Promise.allSettled([
+      const [teamRes, eventsRes, projectsRes, linksRes, credentialsRes, recentRes] = await Promise.allSettled([
         supabase.from('team_members').select('id', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('events').select('id', { count: 'exact', head: true }),
         supabase.from('projects').select('id', { count: 'exact', head: true }).eq('is_published', true),
         supabase.from('links').select('id', { count: 'exact', head: true }).eq('is_active', true),
+        supabase.from('email_credentials').select('id', { count: 'exact', head: true }),
         supabase.from('events').select('id, title, date, event_type, is_published').order('date', { ascending: false }).limit(5),
       ])
 
@@ -55,6 +59,7 @@ export default function AdminDashboard() {
         events: eventsRes.status === 'fulfilled' ? (eventsRes.value.count || 0) : 0,
         projects: projectsRes.status === 'fulfilled' ? (projectsRes.value.count || 0) : 0,
         links: linksRes.status === 'fulfilled' ? (linksRes.value.count || 0) : 0,
+        credentials: credentialsRes.status === 'fulfilled' ? (credentialsRes.value.count || 0) : 0,
       })
       setRecentEvents(recentRes.status === 'fulfilled' ? (recentRes.value.data || []) : [])
       setLoading(false)
