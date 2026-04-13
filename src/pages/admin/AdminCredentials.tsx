@@ -3,12 +3,13 @@ import { supabase } from '@/lib/supabase'
 import { extractRowsFromPDF } from '@/lib/pdf-extract'
 import type { CredentialFile, EmailCredential } from '@/lib/types'
 import { PageHeader } from '@/components/admin/AdminTable'
-import { AdminSelect } from '@/components/admin/AdminModal'
+import { AdminModal, FormField, AdminInput, AdminSelect } from '@/components/admin/AdminModal'
 import { useToast } from '@/components/ui/Toast'
 import { Skeleton } from '@/components/ui/Skeleton'
 import {
   Upload, Settings2, Database, Trash2, GripVertical,
-  Eye, EyeOff, Search, AlertTriangle, FileText, Loader2
+  Eye, EyeOff, Search, AlertTriangle, FileText, Loader2,
+  Pencil, RotateCcw
 } from 'lucide-react'
 
 // ── Color palette for source file badges ──
@@ -51,6 +52,10 @@ export default function AdminCredentials() {
   const [credsLoading, setCredsLoading] = useState(true)
   const [credSearch, setCredSearch] = useState('')
   const [visiblePasswords, setVisiblePasswords] = useState<Set<string>>(new Set())
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [editingCred, setEditingCred] = useState<(EmailCredential & { source: string }) | null>(null)
+  const [editForm, setEditForm] = useState({ name: '', email: '', password: '' })
+  const [editSubmitting, setEditSubmitting] = useState(false)
 
   // ── Data fetching ──
   const fetchFiles = useCallback(async () => {
@@ -259,6 +264,44 @@ export default function AdminCredentials() {
       if (error) { showToast(error.message, 'error'); return }
     }
     showToast('Priority order updated.', 'success')
+  }
+
+  // ── Credential edit/unclaim ──
+  const openEditCred = (cred: EmailCredential & { source: string }) => {
+    setEditingCred(cred)
+    setEditForm({ name: cred.name, email: cred.email, password: cred.password })
+    setEditModalOpen(true)
+  }
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!editingCred) return
+    setEditSubmitting(true)
+    try {
+      const { error } = await supabase
+        .from('email_credentials')
+        .update({ name: editForm.name, email: editForm.email, password: editForm.password })
+        .eq('id', editingCred.id)
+      if (error) throw error
+      showToast('Credential updated.', 'success')
+      setEditModalOpen(false)
+      fetchCredentials()
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : 'Update failed.', 'error')
+    } finally {
+      setEditSubmitting(false)
+    }
+  }
+
+  const handleUnclaim = async (cred: EmailCredential) => {
+    if (!confirm(`Reset "${cred.name}" back to unclaimed? They will be able to view their credentials again.`)) return
+    const { error } = await supabase
+      .from('email_credentials')
+      .update({ claimed_at: null })
+      .eq('id', cred.id)
+    if (error) { showToast(error.message, 'error'); return }
+    showToast(`"${cred.name}" is now unclaimed.`, 'success')
+    fetchCredentials()
   }
 
   // ── Credential search filter ──
@@ -696,6 +739,7 @@ export default function AdminCredentials() {
                       <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-foreground/50">Password</th>
                       <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-foreground/50">Status</th>
                       <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-foreground/50">Source</th>
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-foreground/50">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -752,6 +796,26 @@ export default function AdminCredentials() {
                               {(cred as any).source}
                             </span>
                           </td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center justify-end gap-1">
+                              <button
+                                onClick={() => openEditCred(cred)}
+                                className="rounded-md p-1.5 text-foreground/40 transition-colors hover:bg-primary/10 hover:text-primary"
+                                title="Edit credential"
+                              >
+                                <Pencil className="h-3.5 w-3.5" />
+                              </button>
+                              {(cred as any).claimed_at && (
+                                <button
+                                  onClick={() => handleUnclaim(cred)}
+                                  className="rounded-md p-1.5 text-foreground/40 transition-colors hover:bg-amber-50 hover:text-amber-600"
+                                  title="Reset to unclaimed"
+                                >
+                                  <RotateCcw className="h-3.5 w-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          </td>
                         </tr>
                       )
                     })}
@@ -766,6 +830,40 @@ export default function AdminCredentials() {
             </div>
           )}
         </div>
+      )}
+      {/* ═══ EDIT CREDENTIAL MODAL ═══ */}
+      {editModalOpen && editingCred && (
+        <AdminModal
+          title="Edit Credential"
+          onClose={() => setEditModalOpen(false)}
+          onSubmit={handleEditSubmit}
+          submitting={editSubmitting}
+        >
+          <FormField label="Name" required>
+            <AdminInput
+              value={editForm.name}
+              onChange={e => setEditForm({ ...editForm, name: e.target.value })}
+              placeholder="Student name"
+              required
+            />
+          </FormField>
+          <FormField label="Email" required>
+            <AdminInput
+              value={editForm.email}
+              onChange={e => setEditForm({ ...editForm, email: e.target.value })}
+              placeholder="Student email"
+              required
+            />
+          </FormField>
+          <FormField label="Password" required>
+            <AdminInput
+              value={editForm.password}
+              onChange={e => setEditForm({ ...editForm, password: e.target.value })}
+              placeholder="Password"
+              required
+            />
+          </FormField>
+        </AdminModal>
       )}
     </div>
   )
