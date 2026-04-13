@@ -138,8 +138,9 @@ export default function AdminCredentials() {
         const hdr = parsed[0].rows[0] || []
         setHeaderRow(hdr)
         const h = hdr.map(x => x.toLowerCase())
+        const nameIdx = h.findIndex(x => x.includes('name'))
         setColMap({
-          name: String(Math.max(0, h.findIndex(x => x.includes('name')))),
+          name: nameIdx >= 0 ? String(nameIdx) : 'auto',
           email: String(Math.max(0, h.findIndex(x => x.includes('user') || x.includes('email') || x.includes('login')))),
           password: String(Math.max(0, h.findIndex(x => x.includes('pass') || x.includes('pwd')))),
         })
@@ -157,13 +158,23 @@ export default function AdminCredentials() {
   }, [addFiles])
 
   // ── Save to Supabase ──
+  // Extract name from email prefix: "KAMIKAZIRAKOZE_223018402@..." → "Kamikazirakoze"
+  const extractNameFromEmail = (email: string): string => {
+    const username = email.split('@')[0]
+    const namePart = username.split('_')[0]
+    if (!namePart) return '—'
+    return namePart.charAt(0).toUpperCase() + namePart.slice(1).toLowerCase()
+  }
+
   const handleSave = async () => {
     const { name, email, password } = colMap
-    if (!name || !email || !password) {
-      setUploadError('Please select all three columns.')
+    if (!email || !password) {
+      setUploadError('Please select at least the Email and Password columns.')
       return
     }
-    const ni = parseInt(name), ei = parseInt(email), pi = parseInt(password)
+    const nameIsAuto = name === 'auto' || name === ''
+    const ni = nameIsAuto ? -1 : parseInt(name)
+    const ei = parseInt(email), pi = parseInt(password)
 
     setSaving(true)
     setUploadError('')
@@ -174,7 +185,7 @@ export default function AdminCredentials() {
 
       for (const file of parsedFiles) {
         const displayName = file.name.replace(/\.pdf$/i, '')
-        const dataRows = file.rows.slice(1).filter(row => row[ni] || row[ei])
+        const dataRows = file.rows.slice(1).filter(row => row[ei])
 
         // Create file record — new files auto-get highest priority
         const { data: fileRecord, error: fileErr } = await supabase
@@ -193,7 +204,7 @@ export default function AdminCredentials() {
         // Bulk insert credentials in chunks of 500
         const credRows = dataRows.map(row => ({
           file_id: fileRecord.id,
-          name: row[ni] || '—',
+          name: nameIsAuto ? extractNameFromEmail(row[ei] || '') : (row[ni] || '—'),
           email: row[ei] || '—',
           password: row[pi] || '—',
         }))
@@ -445,10 +456,32 @@ export default function AdminCredentials() {
                 </p>
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  {(['name', 'email', 'password'] as const).map(field => (
+                  {/* Name — optional, can auto-detect from email */}
+                  <div>
+                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">
+                      Name <span className="text-foreground/40 font-normal normal-case">(optional)</span>
+                    </label>
+                    <AdminSelect
+                      value={colMap.name}
+                      onChange={e => setColMap(prev => ({ ...prev, name: e.target.value }))}
+                    >
+                      <option value="auto">Auto-detect from email</option>
+                      {colOptions.map(i => (
+                        <option key={i} value={String(i)}>{headerRow[i] || `Col ${i + 1}`}</option>
+                      ))}
+                    </AdminSelect>
+                    {colMap.name === 'auto' && (
+                      <p className="mt-1 text-[11px] text-foreground/40">
+                        Extracts name from email prefix (e.g. kamikazirakoze_223...@stud.ur.ac.rw)
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Email — required */}
+                  {(['email', 'password'] as const).map(field => (
                     <div key={field}>
                       <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-primary">
-                        {field}
+                        {field} <span className="text-red-500">*</span>
                       </label>
                       <AdminSelect
                         value={colMap[field]}
@@ -487,6 +520,11 @@ export default function AdminCredentials() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-muted/20">
+                        {colMap.name === 'auto' && (
+                          <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-primary">
+                            Name (auto)
+                          </th>
+                        )}
                         {headerRow.map((h, i) => (
                           <th key={i} className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-foreground/50">
                             {h}
@@ -495,13 +533,21 @@ export default function AdminCredentials() {
                       </tr>
                     </thead>
                     <tbody>
-                      {(parsedFiles[0]?.rows || []).slice(1, 5).map((row, i) => (
+                      {(parsedFiles[0]?.rows || []).slice(1, 5).map((row, i) => {
+                        const emailCol = parseInt(colMap.email)
+                        return (
                         <tr key={i} className="border-b border-muted/10">
+                          {colMap.name === 'auto' && (
+                            <td className="px-3 py-2 font-medium text-primary">
+                              {extractNameFromEmail(row[emailCol] || '')}
+                            </td>
+                          )}
                           {row.map((c, j) => (
                             <td key={j} className="px-3 py-2 text-foreground/70">{c}</td>
                           ))}
                         </tr>
-                      ))}
+                        )
+                      })}
                     </tbody>
                   </table>
                 </div>
