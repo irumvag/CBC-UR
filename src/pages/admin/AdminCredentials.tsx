@@ -9,7 +9,7 @@ import { Skeleton } from '@/components/ui/Skeleton'
 import {
   Upload, Settings2, Database, Trash2, GripVertical,
   Eye, EyeOff, Search, AlertTriangle, FileText, Loader2,
-  Pencil, RotateCcw
+  Pencil, RotateCcw, Copy, Check
 } from 'lucide-react'
 
 // ── Color palette for source file badges ──
@@ -57,6 +57,7 @@ export default function AdminCredentials() {
   const [editingCred, setEditingCred] = useState<(EmailCredential & { source: string }) | null>(null)
   const [editForm, setEditForm] = useState({ name: '', email: '', password: '' })
   const [editSubmitting, setEditSubmitting] = useState(false)
+  const [emailsCopied, setEmailsCopied] = useState(false)
 
   // ── Data fetching ──
   const fetchFiles = useCallback(async () => {
@@ -810,6 +811,24 @@ export default function AdminCredentials() {
                   {duplicateEmails.size} duplicate email{duplicateEmails.size > 1 ? 's' : ''}
                 </span>
               )}
+              {/* Copy all unique emails */}
+              <button
+                onClick={() => {
+                  const uniqueEmails = [...new Set(credentials.map(c => c.email.toLowerCase()))].sort()
+                  navigator.clipboard.writeText(uniqueEmails.join('\n')).then(() => {
+                    setEmailsCopied(true)
+                    showToast(`Copied ${uniqueEmails.length} unique emails to clipboard.`, 'success')
+                    setTimeout(() => setEmailsCopied(false), 2000)
+                  })
+                }}
+                className="ml-auto flex items-center gap-1.5 rounded-full border border-muted/20 bg-surface px-3 py-1 text-xs font-medium text-foreground/60 transition-colors hover:border-primary/30 hover:text-primary"
+              >
+                {emailsCopied ? (
+                  <><Check className="h-3 w-3 text-emerald-600" /> Copied!</>
+                ) : (
+                  <><Copy className="h-3 w-3" /> Copy all emails</>
+                )}
+              </button>
             </div>
           )}
 
