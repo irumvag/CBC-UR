@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase'
 import { extractRowsFromPDF } from '@/lib/pdf-extract'
 import type { CredentialFile, EmailCredential } from '@/lib/types'
 import { PageHeader } from '@/components/admin/AdminTable'
-import { AdminModal, FormField, AdminInput, AdminSelect } from '@/components/admin/AdminModal'
+import { AdminModal, FormField, AdminInput, AdminSelect, AdminToggle } from '@/components/admin/AdminModal'
 import { useToast } from '@/components/ui/Toast'
 import { Skeleton } from '@/components/ui/Skeleton'
 import {
@@ -40,6 +40,7 @@ export default function AdminCredentials() {
   const [processing, setProcessing] = useState<Set<string>>(new Set())
   const [headerRow, setHeaderRow] = useState<string[]>([])
   const [colMap, setColMap] = useState({ name: '', email: '', password: '' })
+  const [hasHeaderRow, setHasHeaderRow] = useState(true)
   const [saving, setSaving] = useState(false)
   const [uploadError, setUploadError] = useState('')
 
@@ -101,6 +102,49 @@ export default function AdminCredentials() {
     return (data?.[0]?.priority ?? 0) + 1
   }
 
+  // ── Header detection + smart column defaults ──
+  const HEADER_KEYWORDS = ['name', 'email', 'user', 'login', 'pass', 'pwd', 'password']
+
+  const detectAndApplyColumns = (rows: string[][], forceHasHeader?: boolean) => {
+    const firstRow = rows[0] || []
+    const lowerCells = firstRow.map(x => x.toLowerCase())
+    const looksLikeHeader = forceHasHeader ?? lowerCells.some(cell =>
+      HEADER_KEYWORDS.some(kw => cell.includes(kw))
+    )
+
+    setHasHeaderRow(looksLikeHeader)
+
+    if (looksLikeHeader) {
+      setHeaderRow(firstRow)
+      const h = lowerCells
+      const nameIdx = h.findIndex(x => x.includes('name'))
+      setColMap({
+        name: nameIdx >= 0 ? String(nameIdx) : 'auto',
+        email: String(Math.max(0, h.findIndex(x => x.includes('user') || x.includes('email') || x.includes('login')))),
+        password: String(Math.max(0, h.findIndex(x => x.includes('pass') || x.includes('pwd')))),
+      })
+    } else {
+      // Headerless PDF — smart defaults
+      setHeaderRow([])
+      const numCols = firstRow.length
+      if (numCols === 2) {
+        const emailIdx = firstRow.findIndex(cell => cell.includes('@'))
+        const passIdx = emailIdx === 0 ? 1 : 0
+        setColMap({
+          name: 'auto',
+          email: String(emailIdx >= 0 ? emailIdx : 0),
+          password: String(emailIdx >= 0 ? passIdx : 1),
+        })
+      } else {
+        setColMap({
+          name: numCols >= 3 ? '0' : 'auto',
+          email: String(Math.min(1, numCols - 1)),
+          password: String(Math.min(2, numCols - 1)),
+        })
+      }
+    }
+  }
+
   // ── PDF Upload Logic ──
   const addFiles = useCallback(async (fileList: FileList) => {
     const pdfs = Array.from(fileList).filter(f => f.name.toLowerCase().endsWith('.pdf'))
@@ -135,15 +179,7 @@ export default function AdminCredentials() {
     setParsedFiles(prev => {
       const updated = [...prev, ...parsed]
       if (prev.length === 0 && parsed.length > 0) {
-        const hdr = parsed[0].rows[0] || []
-        setHeaderRow(hdr)
-        const h = hdr.map(x => x.toLowerCase())
-        const nameIdx = h.findIndex(x => x.includes('name'))
-        setColMap({
-          name: nameIdx >= 0 ? String(nameIdx) : 'auto',
-          email: String(Math.max(0, h.findIndex(x => x.includes('user') || x.includes('email') || x.includes('login')))),
-          password: String(Math.max(0, h.findIndex(x => x.includes('pass') || x.includes('pwd')))),
-        })
+        detectAndApplyColumns(parsed[0].rows)
       }
       return updated
     })
@@ -185,7 +221,7 @@ export default function AdminCredentials() {
 
       for (const file of parsedFiles) {
         const displayName = file.name.replace(/\.pdf$/i, '')
-        const dataRows = file.rows.slice(1).filter(row => row[ei])
+        const dataRows = file.rows.slice(hasHeaderRow ? 1 : 0).filter(row => row[ei])
 
         // Create file record — new files auto-get highest priority
         const { data: fileRecord, error: fileErr } = await supabase
@@ -233,6 +269,7 @@ export default function AdminCredentials() {
   const resetUpload = () => {
     setParsedFiles([])
     setHeaderRow([])
+    setHasHeaderRow(true)
     setColMap({ name: '', email: '', password: '' })
     setUploadStep('pick')
     setUploadError('')
@@ -328,7 +365,7 @@ export default function AdminCredentials() {
   credentials.forEach(c => { emailCounts[c.email.toLowerCase()] = (emailCounts[c.email.toLowerCase()] || 0) + 1 })
   Object.entries(emailCounts).forEach(([email, count]) => { if (count > 1) duplicateEmails.add(email) })
 
-  const totalStudents = parsedFiles.reduce((a, f) => a + Math.max(0, f.rows.length - 1), 0)
+  const totalStudents = parsedFiles.reduce((a, f) => a + Math.max(0, f.rows.length - (hasHeaderRow ? 1 : 0)), 0)
   const maxCols = Math.max(...parsedFiles.flatMap(f => f.rows.map(r => r.length)), 0)
   const colOptions = Array.from({ length: maxCols }, (_, i) => i)
 
@@ -416,7 +453,7 @@ export default function AdminCredentials() {
                                   <Loader2 className="h-3 w-3 animate-spin" /> parsing...
                                 </span>
                               ) : (
-                                `${Math.max(0, f.rows.length - 1)} students`
+                                `${Math.max(0, f.rows.length - (hasHeaderRow ? 1 : 0))} students`
                               )}
                             </p>
                           </div>
@@ -451,9 +488,24 @@ export default function AdminCredentials() {
                 <h3 className="mb-1 text-sm font-bold uppercase tracking-wide text-foreground/50">
                   Map Columns
                 </h3>
-                <p className="mb-4 text-xs text-foreground/40">
-                  Detected header: <span className="text-primary">{headerRow.join(' · ')}</span>
-                </p>
+
+                <div className="mb-4">
+                  <AdminToggle
+                    checked={hasHeaderRow}
+                    onChange={(checked) => detectAndApplyColumns(parsedFiles[0]?.rows || [], checked)}
+                    label="First row is a header"
+                  />
+                </div>
+                {hasHeaderRow && headerRow.length > 0 && (
+                  <p className="mb-4 text-xs text-foreground/40">
+                    Detected header: <span className="text-primary">{headerRow.join(' · ')}</span>
+                  </p>
+                )}
+                {!hasHeaderRow && (
+                  <p className="mb-4 text-xs text-amber-600">
+                    No header row — first row is treated as data. Columns are shown by position.
+                  </p>
+                )}
 
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                   {/* Name — optional, can auto-detect from email */}
@@ -514,7 +566,7 @@ export default function AdminCredentials() {
               {/* Preview table */}
               <div className="rounded-xl border border-muted/20 bg-surface p-6">
                 <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-foreground/50">
-                  Preview — first file, rows 1-4
+                  Preview — first 4 data rows
                 </h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
@@ -525,15 +577,22 @@ export default function AdminCredentials() {
                             Name (auto)
                           </th>
                         )}
-                        {headerRow.map((h, i) => (
-                          <th key={i} className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-foreground/50">
-                            {h}
-                          </th>
-                        ))}
+                        {hasHeaderRow && headerRow.length > 0
+                          ? headerRow.map((h, i) => (
+                              <th key={i} className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-foreground/50">
+                                {h}
+                              </th>
+                            ))
+                          : colOptions.map(i => (
+                              <th key={i} className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-foreground/50">
+                                Col {i + 1}
+                              </th>
+                            ))
+                        }
                       </tr>
                     </thead>
                     <tbody>
-                      {(parsedFiles[0]?.rows || []).slice(1, 5).map((row, i) => {
+                      {(parsedFiles[0]?.rows || []).slice(hasHeaderRow ? 1 : 0, hasHeaderRow ? 5 : 4).map((row, i) => {
                         const emailCol = parseInt(colMap.email)
                         return (
                         <tr key={i} className="border-b border-muted/10">
