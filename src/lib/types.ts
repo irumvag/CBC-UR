@@ -125,6 +125,21 @@ export interface CredentialWithSource extends EmailCredential {
   credential_file: Pick<CredentialFile, 'display_name' | 'priority'>
 }
 
+// Public search result from the search_credentials RPC — never includes email or password
+export interface CredentialSearchResult {
+  id: string
+  name: string
+  claimed_at: string | null
+  source: string | null
+  priority: number
+}
+
+// Returned once by the claim_credential RPC after server-side verification
+export interface ClaimedCredential {
+  cred_email: string
+  cred_password: string
+}
+
 export interface VerificationResult {
   match: boolean
   confidence: number
