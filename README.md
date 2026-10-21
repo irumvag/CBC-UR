@@ -24,8 +24,7 @@ Based on the Anthropic/Claude brand guidelines:
 - **Teal**: `#4A8B8C` - Info/accent
 
 ### Typography
-- **Serif**: Newsreader (headings)
-- **Sans**: DM Sans (body text)
+- **Serif**: Source Serif 4 (headings and body), falling back to Georgia
 
 ## Getting Started
 
@@ -38,8 +37,8 @@ Based on the Anthropic/Claude brand guidelines:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/claude-builder-club-ur/cbc-ur.git
-cd cbc-ur
+git clone https://github.com/irumvag/CBC-UR.git
+cd CBC-UR
 ```
 
 2. Install dependencies:
@@ -52,3 +51,25 @@ npm install
 npm run dev
 ```
 
+4. Open http://localhost:5173 in your browser.
+
+### Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```bash
+VITE_SUPABASE_URL=your-supabase-project-url
+VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+VITE_GEMINI_API_KEY=your-gemini-api-key   # optional, used for face verification
+```
+
+Never commit `.env` files; they are already listed in `.gitignore`.
+
+## Available Scripts
+
+| Command           | Description                              |
+| ----------------- | ---------------------------------------- |
+| `npm run dev`     | Start the Vite development server        |
+| `npm run build`   | Type-check and build for production      |
+| `npm run preview` | Preview the production build locally     |
+| `npm run lint`    | Run ESLint over the project              |
