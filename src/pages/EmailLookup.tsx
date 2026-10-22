@@ -6,8 +6,8 @@ import {
 import { useCredentialLookup } from '@/hooks/useCredentialLookup'
 import { supabase } from '@/lib/supabase'
 import { Skeleton } from '@/components/ui/Skeleton'
-import type { CredentialWithSource } from '@/lib/types'
-import { cn, extractRegNumber } from '@/lib/utils'
+import type { CredentialSearchResult, ClaimedCredential } from '@/lib/types'
+import { cn } from '@/lib/utils'
 
 type Step = 'search' | 'verify' | 'acknowledge' | 'result'
 
@@ -31,10 +31,12 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
 export default function EmailLookup() {
   // ── Wizard state ──
   const [step, setStep] = useState<Step>('search')
-  const [selectedCredential, setSelectedCredential] = useState<CredentialWithSource | null>(null)
+  const [selectedCredential, setSelectedCredential] = useState<CredentialSearchResult | null>(null)
   const [regNumber, setRegNumber] = useState('')
   const [verifyError, setVerifyError] = useState<string | null>(null)
   const [verified, setVerified] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [revealed, setRevealed] = useState<ClaimedCredential | null>(null)
 
   // ── Search state ──
   const [query, setQuery] = useState('')
@@ -60,7 +62,7 @@ export default function EmailLookup() {
     })
   }
 
-  const handleSelectCredential = (cred: CredentialWithSource) => {
+  const handleSelectCredential = (cred: CredentialSearchResult) => {
     setSelectedCredential(cred)
     setRegNumber('')
     setVerifyError(null)
@@ -74,42 +76,53 @@ export default function EmailLookup() {
     setStep('acknowledge')
   }
 
-  const handleAcknowledgeAndReveal = () => {
-    // NOW mark as claimed in Supabase and show credentials
-    supabase
-      .from('email_credentials')
-      .update({ claimed_at: new Date().toISOString() })
-      .eq('id', selectedCredential!.id)
-      .then(() => {})
-    setStep('result')
-  }
-
-  const handleVerifyRegNumber = () => {
+  const handleAcknowledgeAndReveal = async () => {
     if (!selectedCredential) return
 
-    const inputReg = regNumber.trim().replace(/\s+/g, '')
-    const storedReg = extractRegNumber(selectedCredential.email)
+    // NOW claim on the server — it re-verifies the reg number and returns the credentials once
+    setSubmitting(true)
+    setVerifyError(null)
+    const { data, error } = await supabase.rpc('claim_credential', {
+      p_id: selectedCredential.id,
+      p_reg: regNumber,
+    })
+    setSubmitting(false)
 
-    if (storedReg === null) {
-      // Fallback: email doesn't have _DIGITS@ pattern (e.g. alice.m@ur.ac.rw)
-      const storedUsername = selectedCredential.email.split('@')[0].toLowerCase()
-      if (inputReg.toLowerCase() === storedUsername) {
-        claimAndShow()
-      } else {
-        setVerified(false)
-        setVerifyError(
-          'Could not match your input. Try entering the part before the @ symbol from your email address.'
-        )
-      }
+    const claimed = (data as ClaimedCredential[] | null)?.[0]
+    if (error || !claimed) {
+      setVerifyError('These credentials could not be released. They may already have been claimed — please contact the club administration.')
       return
     }
 
-    // Standard path: compare extracted reg number
-    if (inputReg === storedReg) {
+    setRevealed(claimed)
+    setStep('result')
+  }
+
+  const handleVerifyRegNumber = async () => {
+    if (!selectedCredential) return
+
+    // Checked on the server — the browser never sees the email or password before this passes
+    setSubmitting(true)
+    setVerifyError(null)
+    const { data, error } = await supabase.rpc('verify_credential', {
+      p_id: selectedCredential.id,
+      p_reg: regNumber,
+    })
+    setSubmitting(false)
+
+    if (error) {
+      setVerified(false)
+      setVerifyError('Verification failed. Please try again.')
+      return
+    }
+
+    if (data === true) {
       claimAndShow()
     } else {
       setVerified(false)
-      setVerifyError('Registration number does not match. Please check and try again.')
+      setVerifyError(
+        'Registration number does not match. Enter the number after the underscore in your student email, or the part before the @ if it has no number.'
+      )
     }
   }
 
@@ -119,6 +132,7 @@ export default function EmailLookup() {
     setRegNumber('')
     setVerifyError(null)
     setVerified(false)
+    setRevealed(null)
     setQuery('')
     setDebouncedQuery('')
   }
@@ -218,9 +232,9 @@ export default function EmailLookup() {
                           <p className="mt-0.5 text-xs text-foreground/40">
                             This credential has already been claimed and cannot be shown again.
                           </p>
-                        ) : cred.credential_file?.display_name ? (
+                        ) : cred.source ? (
                           <p className="mt-0.5 text-xs text-foreground/40">
-                            Source: {cred.credential_file.display_name}
+                            Source: {cred.source}
                           </p>
                         ) : null}
                       </div>
@@ -280,16 +294,16 @@ export default function EmailLookup() {
                 placeholder="Enter your registration number"
                 value={regNumber}
                 onChange={e => { setRegNumber(e.target.value); setVerifyError(null) }}
-                onKeyDown={e => { if (e.key === 'Enter' && regNumber.trim()) handleVerifyRegNumber() }}
+                onKeyDown={e => { if (e.key === 'Enter' && regNumber.trim() && !submitting) handleVerifyRegNumber() }}
                 className="w-full rounded-xl border border-muted/20 bg-cream py-3 px-4 text-center text-base font-medium text-foreground placeholder-foreground/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
 
               <button
                 onClick={handleVerifyRegNumber}
-                disabled={!regNumber.trim()}
+                disabled={!regNumber.trim() || submitting}
                 className="mt-4 w-full rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-dark disabled:opacity-50"
               >
-                Verify
+                {submitting ? 'Verifying…' : 'Verify'}
               </button>
 
               {verifyError && (
@@ -332,11 +346,16 @@ export default function EmailLookup() {
                 </div>
               </div>
 
+              {verifyError && (
+                <p className="mt-4 text-sm text-red-600">{verifyError}</p>
+              )}
+
               <button
                 onClick={handleAcknowledgeAndReveal}
-                className="mt-6 w-full rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-dark"
+                disabled={submitting}
+                className="mt-6 w-full rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-white transition-all hover:bg-primary-dark disabled:opacity-50"
               >
-                I understand — show my credentials
+                {submitting ? 'Loading…' : 'I understand — show my credentials'}
               </button>
               <button
                 onClick={handleStartOver}
@@ -349,7 +368,7 @@ export default function EmailLookup() {
         )}
 
         {/* ═══ RESULT STEP ═══ */}
-        {step === 'result' && verified && selectedCredential && (
+        {step === 'result' && verified && selectedCredential && revealed && (
           <div className="mx-auto max-w-md">
             <StepIndicator current={4} total={4} />
 
@@ -370,9 +389,9 @@ export default function EmailLookup() {
                 <div className="mb-3 flex items-center gap-2">
                   <Mail className="h-4 w-4 shrink-0 text-primary/60" />
                   <span className="text-sm font-medium text-foreground/70">Email</span>
-                  <span className="flex-1 truncate font-mono text-sm text-primary">{selectedCredential.email}</span>
+                  <span className="flex-1 truncate font-mono text-sm text-primary">{revealed.cred_email}</span>
                   <button
-                    onClick={() => copyToClipboard(selectedCredential.email, 'email')}
+                    onClick={() => copyToClipboard(revealed.cred_email, 'email')}
                     className="shrink-0 rounded-md p-1.5 text-foreground/30 transition-colors hover:bg-cream hover:text-foreground"
                   >
                     {copiedField === 'email' ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
@@ -383,18 +402,18 @@ export default function EmailLookup() {
                 <div className="mb-3 flex items-center gap-2">
                   <KeyRound className="h-4 w-4 shrink-0 text-primary/60" />
                   <span className="text-sm font-medium text-foreground/70">Password</span>
-                  <span className="flex-1 truncate font-mono text-sm text-foreground">{selectedCredential.password}</span>
+                  <span className="flex-1 truncate font-mono text-sm text-foreground">{revealed.cred_password}</span>
                   <button
-                    onClick={() => copyToClipboard(selectedCredential.password, 'pass')}
+                    onClick={() => copyToClipboard(revealed.cred_password, 'pass')}
                     className="shrink-0 rounded-md p-1.5 text-foreground/30 transition-colors hover:bg-cream hover:text-foreground"
                   >
                     {copiedField === 'pass' ? <Check className="h-3.5 w-3.5 text-emerald-600" /> : <Copy className="h-3.5 w-3.5" />}
                   </button>
                 </div>
 
-                {selectedCredential.credential_file?.display_name && (
+                {selectedCredential.source && (
                   <p className="text-xs text-foreground/40">
-                    Source: {selectedCredential.credential_file.display_name}
+                    Source: {selectedCredential.source}
                   </p>
                 )}
               </div>
